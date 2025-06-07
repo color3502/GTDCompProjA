@@ -4,7 +4,7 @@
         Width="250" Height="200"
         CanResize="False"
         Topmost="True"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         Background="Transparent"
         Opacity="0.9"
         SystemDecorations="None">
