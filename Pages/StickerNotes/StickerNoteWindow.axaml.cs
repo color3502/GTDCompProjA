@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using System.Globalization;
@@ -45,6 +46,10 @@ namespace GTDCompanion.Pages
             var titleBar = this.FindControl<DockPanel>("CustomTitleBar");
             if (titleBar is not null)
                 titleBar.PointerPressed += CustomTitleBar_PointerPressed;
+
+            var resizeThumb = this.FindControl<Thumb>("ResizeThumb");
+            if (resizeThumb is not null)
+                resizeThumb.DragDelta += ResizeThumb_DragDelta;
 
             _originalHeight = Height;
         }
@@ -114,6 +119,12 @@ namespace GTDCompanion.Pages
                 this.Height = _originalHeight;
                 _collapsed = false;
             }
+        }
+
+        private void ResizeThumb_DragDelta(object? sender, VectorEventArgs e)
+        {
+            Width = System.Math.Max(Width + e.Vector.X, 100);
+            Height = System.Math.Max(Height + e.Vector.Y, 50);
         }
     }
 
