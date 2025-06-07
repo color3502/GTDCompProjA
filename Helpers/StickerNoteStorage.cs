@@ -6,7 +6,7 @@ namespace GTDCompanion.Helpers
 {
     public static class StickerNoteStorage
     {
-        private static readonly string DataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+        private static readonly string DataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GTDCompanion");
 
         public static StickerNoteData Load(int index)
         {
