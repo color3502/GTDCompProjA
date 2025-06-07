@@ -16,7 +16,7 @@ namespace GTDCompanion.Pages
 
         public event Action<int, int, int>? PositionUpdated;
 
-        private double Scaling => this.PlatformImpl?.RenderScaling ?? 1.0;
+        private double Scaling => this.RenderScaling;
 
         public MacroOverlay(int stepIndex, int? x = null, int? y = null)
         {
@@ -85,8 +85,8 @@ namespace GTDCompanion.Pages
             StepIndex = newStepNumber - 1;
         }
 
-        public int CenterScreenX() => (int)PointToScreen(new Point(Width / 2, Height / 2)).X;
-        public int CenterScreenY() => (int)PointToScreen(new Point(Width / 2, Height / 2)).Y;
+        public int CenterScreenX() => (int)this.PointToScreen(new Point(Width / 2, Height / 2)).X;
+        public int CenterScreenY() => (int)this.PointToScreen(new Point(Width / 2, Height / 2)).Y;
 
         #region Click-Through Support (WinAPI)
         [DllImport("user32.dll", SetLastError = true)]
