@@ -289,7 +289,7 @@ namespace GTDCompanion.Pages
             // Se mudou a posição pelo dialog, atualize overlay
             if (step.Tipo == "Clique" && overlays.ContainsKey(idx))
             {
-                overlays[idx].Position = new PixelPoint(step.X - (int)(overlays[idx].Width / 2), step.Y - (int)(overlays[idx].Height / 2));
+                overlays[idx].SetCenterPosition(step.X, step.Y);
             }
 
             RefreshStepList();
