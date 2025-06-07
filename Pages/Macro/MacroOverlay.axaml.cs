@@ -98,6 +98,7 @@ namespace GTDCompanion.Pages
         const int GWL_EXSTYLE = -20;
         const int WS_EX_LAYERED = 0x80000;
         const int WS_EX_TRANSPARENT = 0x20;
+        const int WS_EX_TOOLWINDOW = 0x80;
 
         public void SetClickThrough(bool enable)
         {
@@ -114,6 +115,8 @@ namespace GTDCompanion.Pages
                     else
                         exStyle &= ~WS_EX_TRANSPARENT;
 
+                    exStyle |= WS_EX_TOOLWINDOW;
+
                     SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
                 }
             }
@@ -125,6 +128,18 @@ namespace GTDCompanion.Pages
             Background = Brushes.Transparent;
             SystemDecorations = SystemDecorations.None;
             Topmost = true;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var handle = this.TryGetPlatformHandle();
+                if (handle != null)
+                {
+                    IntPtr hwnd = handle.Handle;
+                    int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+                    exStyle |= WS_EX_TOOLWINDOW;
+                    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
+                }
+            }
         }
         #endregion
     }

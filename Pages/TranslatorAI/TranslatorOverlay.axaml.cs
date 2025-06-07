@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using System;
 using System.Globalization;
+using System.Runtime.InteropServices;
 
 namespace GTDCompanion.Pages
 {
@@ -88,6 +89,18 @@ namespace GTDCompanion.Pages
 
             _originalHeight = Height;
             this.PointerPressed += OnPointerPressedTitleBar;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var handle = this.TryGetPlatformHandle();
+                if (handle != null)
+                {
+                    IntPtr hwnd = handle.Handle;
+                    int style = GetWindowLong(hwnd, GWL_EXSTYLE);
+                    style |= WS_EX_TOOLWINDOW;
+                    SetWindowLong(hwnd, GWL_EXSTYLE, style);
+                }
+            }
         }
 
         private void AdjustTextBoxAndWindowHeight()
@@ -242,5 +255,14 @@ namespace GTDCompanion.Pages
                 Position = new PixelPoint(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y);
             }
         }
+
+        private const int GWL_EXSTYLE = -20;
+        private const int WS_EX_TOOLWINDOW = 0x80;
+
+        [DllImport("user32.dll")]
+        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll")]
+        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
     }
 }

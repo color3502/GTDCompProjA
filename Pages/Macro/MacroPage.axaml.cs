@@ -16,6 +16,7 @@ namespace GTDCompanion.Pages
     {
         private readonly List<MacroStep> macroSteps = new();
         private readonly Dictionary<int, MacroOverlay> overlays = new();
+        private GlobalHotkey? globalHotkey;
 
         public MacroPage()
         {
@@ -36,6 +37,8 @@ namespace GTDCompanion.Pages
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown += OnWindowKeyDown;
+                globalHotkey = new GlobalHotkey(() => ExecuteMacro(null, null));
+                globalHotkey.Register();
             };
 
             this.DetachedFromVisualTree += (_, _) =>
@@ -43,6 +46,7 @@ namespace GTDCompanion.Pages
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown -= OnWindowKeyDown;
+                globalHotkey?.Dispose();
             };
         }
 
@@ -147,9 +151,15 @@ namespace GTDCompanion.Pages
             for (int i = 0; i < macroSteps.Count; i++)
             {
                 var step = macroSteps[i];
-                items.Add(step.Tipo == "Clique"
-                    ? $"{i + 1}. Clique ({step.Botao}) x{step.Cliques} (Delay: {step.Delay}s, Rep: {step.Repeticoes}) [{step.X},{step.Y}]"
-                    : $"{i + 1}. Tecla/Combo [{step.Teclas}] (Delay: {step.Delay}s, Rep: {step.Repeticoes})");
+                if (step.Tipo == "Clique")
+                {
+                    items.Add($"{i + 1}. Clique ({step.Botao}) x{step.Cliques} (Delay: {step.Delay}s, Rep: {step.Repeticoes}) [{step.X},{step.Y}]");
+                }
+                else
+                {
+                    var label = step.Teclas.Contains('+') ? "Combo" : "Tecla";
+                    items.Add($"{i + 1}. {label} [{step.Teclas}] (Delay: {step.Delay}s, Rep: {step.Repeticoes})");
+                }
             }
             StepListBox.ItemsSource = items;
         }
@@ -297,7 +307,10 @@ namespace GTDCompanion.Pages
 
         private void OnWindowKeyDown(object? sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F8)
+            if (e.Key == Key.F8 &&
+                e.KeyModifiers.HasFlag(KeyModifiers.Control) &&
+                e.KeyModifiers.HasFlag(KeyModifiers.Alt) &&
+                e.KeyModifiers.HasFlag(KeyModifiers.Shift))
             {
                 ExecuteMacro(null, null);
             }

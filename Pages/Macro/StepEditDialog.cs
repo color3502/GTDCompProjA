@@ -54,9 +54,10 @@ namespace GTDCompanion.Pages
             }
             else
             {
+                var label = step.Teclas.Contains('+') ? "Combo" : "Tecla";
                 sp.Children.Add(new TextBlock
                 {
-                    Text = $"Tecla/Combo: {step.Teclas}",
+                    Text = $"{label}: {step.Teclas}",
                     Margin = new Thickness(0, 4, 0, 4),
                     HorizontalAlignment = HorizontalAlignment.Center
                 });
