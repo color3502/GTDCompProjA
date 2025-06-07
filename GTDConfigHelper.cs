@@ -154,14 +154,5 @@ namespace GTDCompanion
                 PosY = GetInt(section, "PosY", -1)
             };
         }
-
-        public static void SaveStickerNoteConfig(int index, StickerNoteConfig config)
-        {
-            string section = $"StickerNote{index}";
-            Set(section, "Text", config.Text);
-            Set(section, "Opacity", config.Opacity.ToString(CultureInfo.InvariantCulture));
-            Set(section, "PosX", config.PosX.ToString());
-            Set(section, "PosY", config.PosY.ToString());
-        }
     }
 }
