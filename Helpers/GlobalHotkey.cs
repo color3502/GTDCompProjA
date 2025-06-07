@@ -37,10 +37,8 @@ namespace GTDCompanion.Helpers
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 var info = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
-                bool ctrl = (GetKeyState(VK_CONTROL) & 0x8000) != 0;
-                bool alt = (GetKeyState(VK_MENU) & 0x8000) != 0;
-                bool shift = (GetKeyState(VK_SHIFT) & 0x8000) != 0;
-                if (ctrl && alt && shift && info.vkCode == VK_F8)
+                // Aciona a macro com F8 sem necessidade de modificadores
+                if (info.vkCode == VK_F8)
                 {
                     _callback();
                     return (IntPtr)1; // consume
@@ -51,9 +49,6 @@ namespace GTDCompanion.Helpers
 
         private const int WH_KEYBOARD_LL = 13;
         private const int VK_F8 = 0x77;
-        private const int VK_CONTROL = 0x11;
-        private const int VK_MENU = 0x12; // Alt
-        private const int VK_SHIFT = 0x10;
 
         [StructLayout(LayoutKind.Sequential)]
         private struct KBDLLHOOKSTRUCT
@@ -76,8 +71,6 @@ namespace GTDCompanion.Helpers
         [DllImport("user32.dll")]
         private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
-        [DllImport("user32.dll")]
-        private static extern short GetKeyState(int nVirtKey);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr GetModuleHandle(string? lpModuleName);

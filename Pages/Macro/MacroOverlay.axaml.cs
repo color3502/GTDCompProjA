@@ -29,7 +29,9 @@ namespace GTDCompanion.Pages
             PointerReleased += OnPointerReleased;
             PointerMoved += OnPointerMoved;
 
-            EnableTransparency();
+            // Habilita transparência e esconde do ALT+TAB somente após a janela
+            // estar aberta, garantindo que o handle já exista.
+            Opened += (_, _) => EnableTransparency();
 
             // Se vier x/y absolutos, posicione o centro do overlay em x/y quando abrir.
             // Caso contrário, centraliza na tela para facilitar o arraste inicial.
