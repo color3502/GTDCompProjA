@@ -46,8 +46,8 @@ namespace GTDCompanion.Pages
 
         public void SetCenterPosition(int screenX, int screenY)
         {
-            int px = (int)(screenX / Scaling - Width / 2);
-            int py = (int)(screenY / Scaling - Height / 2);
+            int px = (int)(screenX - (Width * Scaling) / 2);
+            int py = (int)(screenY - (Height * Scaling) / 2);
             Position = new PixelPoint(px, py);
         }
 
