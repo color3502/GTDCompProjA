@@ -106,6 +106,11 @@ namespace GTDCompanion
             MainContent.Content = new TranslatorPage();
         }
 
+        private void StickerNotesPage_Click(object? sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new StickerNotesPage();
+        }
+
         private void MacroPage_Click(object? sender, RoutedEventArgs e)
         {
             MainContent.Content = new MacroPage();
