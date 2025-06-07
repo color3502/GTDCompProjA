@@ -9,7 +9,7 @@ namespace GTDCompanion.Pages
         public KeyboardMouseStatsPage()
         {
             InitializeComponent();
-            StatsTracker.StatsUpdated += (_, __) => UpdateStats();
+            StatsTracker.StatsUpdated += () => UpdateStats();
             UpdateStats();
         }
 
