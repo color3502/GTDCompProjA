@@ -7,12 +7,12 @@
         <TextBlock Text="Sticker Notes Overlay" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
       </StackPanel>
       <TextBlock Text="Crie notas rápidas que ficam sobre todas as janelas." Foreground="#CCC" HorizontalAlignment="Center"/>
-      <WrapPanel HorizontalAlignment="Center" Spacing="8">
-        <Button Name="Note1Button" Content="Nota 1" Width="80" Height="30"/>
-        <Button Name="Note2Button" Content="Nota 2" Width="80" Height="30"/>
-        <Button Name="Note3Button" Content="Nota 3" Width="80" Height="30"/>
-        <Button Name="Note4Button" Content="Nota 4" Width="80" Height="30"/>
-        <Button Name="Note5Button" Content="Nota 5" Width="80" Height="30"/>
+      <WrapPanel HorizontalAlignment="Center">
+        <Button Name="Note1Button" Content="Nota 1" Width="80" Height="30" Margin="4"/>
+        <Button Name="Note2Button" Content="Nota 2" Width="80" Height="30" Margin="4"/>
+        <Button Name="Note3Button" Content="Nota 3" Width="80" Height="30" Margin="4"/>
+        <Button Name="Note4Button" Content="Nota 4" Width="80" Height="30" Margin="4"/>
+        <Button Name="Note5Button" Content="Nota 5" Width="80" Height="30" Margin="4"/>
       </WrapPanel>
     </StackPanel>
   </Border>
