@@ -4,6 +4,7 @@ using System.IO;
 using System;
 using Avalonia.Media;
 using System.Globalization;
+using GTDCompanion.Pages;
 
 namespace GTDCompanion
 {
@@ -139,6 +140,28 @@ namespace GTDCompanion
             var data = File.Exists(path) ? parser.ReadFile(path) : new IniData();
             data["Perfil"]["GtdId"] = gtdId ?? "";
             parser.WriteFile(path, data);
+        }
+
+        // ---- Sticker Notes ----
+        public static StickerNoteConfig LoadStickerNoteConfig(int index)
+        {
+            string section = $"StickerNote{index}";
+            return new StickerNoteConfig
+            {
+                Text = GetString(section, "Text", ""),
+                Opacity = GetDouble(section, "Opacity", 0.9),
+                PosX = GetInt(section, "PosX", -1),
+                PosY = GetInt(section, "PosY", -1)
+            };
+        }
+
+        public static void SaveStickerNoteConfig(int index, StickerNoteConfig config)
+        {
+            string section = $"StickerNote{index}";
+            Set(section, "Text", config.Text);
+            Set(section, "Opacity", config.Opacity.ToString(CultureInfo.InvariantCulture));
+            Set(section, "PosX", config.PosX.ToString());
+            Set(section, "PosY", config.PosY.ToString());
         }
     }
 }

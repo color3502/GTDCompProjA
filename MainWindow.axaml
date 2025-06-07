@@ -82,6 +82,7 @@
                 <MenuItem Header="Benchmark" Click="BenchmarkOverlayPage_Click"/>
                 <MenuItem Header="Mira Overlay" Click="MenuMira_Click"/>
                 <MenuItem Header="Tradução IA Overlay" Click="TranslatorOverlay_Click"/>
+                <MenuItem Header="Sticker Notes" Click="StickerNotesPage_Click"/>
                 <MenuItem Header="Macro Experience" Click="MacroPage_Click"/>
             </MenuItem>
             <MenuItem Header="Links">
