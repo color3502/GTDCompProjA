@@ -307,10 +307,7 @@ namespace GTDCompanion.Pages
 
         private void OnWindowKeyDown(object? sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F8 &&
-                e.KeyModifiers.HasFlag(KeyModifiers.Control) &&
-                e.KeyModifiers.HasFlag(KeyModifiers.Alt) &&
-                e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+            if (e.Key == Key.F8)
             {
                 ExecuteMacro(null, null);
             }
