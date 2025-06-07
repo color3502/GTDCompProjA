@@ -4,6 +4,8 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using System.Globalization;
+using System;
+using System.Reactive.Linq;
 
 namespace GTDCompanion.Pages
 {
