@@ -7,6 +7,7 @@ using GTDCompanion.Helpers;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Linq;
 
 namespace GTDCompanion.Pages
@@ -29,6 +30,20 @@ namespace GTDCompanion.Pages
             ExecuteMacroButton.Click += ExecuteMacro;
 
             StepListBox.DoubleTapped += StepListBox_DoubleTapped;
+
+            this.AttachedToVisualTree += (_, _) =>
+            {
+                var win = GetWindow();
+                if (win != null)
+                    win.KeyDown += OnWindowKeyDown;
+            };
+
+            this.DetachedFromVisualTree += (_, _) =>
+            {
+                var win = GetWindow();
+                if (win != null)
+                    win.KeyDown -= OnWindowKeyDown;
+            };
         }
 
         private void AddStep(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -199,16 +214,45 @@ namespace GTDCompanion.Pages
             }
         }
 
-        private void ExecuteMacro(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private CancellationTokenSource? macroCts;
+        private bool isRunning = false;
+
+        private async void ExecuteMacro(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
+            if (isRunning)
+            {
+                macroCts?.Cancel();
+                return;
+            }
+
+            int.TryParse(RepeatCountTextBox.Text, out var repeats);
+            if (repeats <= 0) repeats = 1;
+            double.TryParse(RepeatDelayTextBox.Text, out var repeatDelay);
+
+            isRunning = true;
+            ExecuteMacroButton.Content = "Parar Macro";
+            foreach (var ov in overlays.Values)
+                ov.SetClickThrough(true);
+
+            macroCts = new CancellationTokenSource();
             var runner = new MacroRunner(macroSteps);
-            runner.Execute();
+            try
+            {
+                await runner.ExecuteAsync(repeats, repeatDelay, macroCts.Token);
+            }
+            catch (TaskCanceledException) { }
+
+            foreach (var ov in overlays.Values)
+                ov.SetClickThrough(false);
+            isRunning = false;
+            ExecuteMacroButton.Content = "Executar Macro";
         }
 
         private void UpdateOverlayPosition(int idx, int x, int y)
         {
             macroSteps[idx].X = x;
             macroSteps[idx].Y = y;
+            RefreshStepList();
         }
 
         private Window GetWindow() => (Window)VisualRoot!;
@@ -230,9 +274,17 @@ namespace GTDCompanion.Pages
             var idx = StepListBox.SelectedIndex;
             if (idx < 0 || idx >= macroSteps.Count) return;
             var step = macroSteps[idx];
-            var dlg = new StepEditDialog(step);
+            overlays.TryGetValue(idx, out var overlay);
+            var dlg = new StepEditDialog(step, overlay);
             var win = GetWindow();
             await dlg.ShowDialog(win);
+
+            if (dlg.Deleted)
+            {
+                StepListBox.SelectedIndex = idx;
+                RemoveStep(null, null);
+                return;
+            }
 
             // Se mudou a posição pelo dialog, atualize overlay
             if (step.Tipo == "Clique" && overlays.ContainsKey(idx))
@@ -241,6 +293,14 @@ namespace GTDCompanion.Pages
             }
 
             RefreshStepList();
+        }
+
+        private void OnWindowKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F8)
+            {
+                ExecuteMacro(null, null);
+            }
         }
     }
 }

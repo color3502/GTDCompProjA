@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using GTDCompanion.Helpers;
+using System;
 
 namespace GTDCompanion.Pages
 {
@@ -10,10 +11,14 @@ namespace GTDCompanion.Pages
         private MacroStep step;
         private TextBox tbDelay, tbRep, tbCliques, tbX, tbY;
         private ComboBox? cbBotao;
+        private readonly MacroOverlay? overlay;
 
-        public StepEditDialog(MacroStep step)
+        public bool Deleted { get; private set; }
+
+        public StepEditDialog(MacroStep step, MacroOverlay? overlay = null)
         {
             this.step = step;
+            this.overlay = overlay;
 
             Title = "Editar Passo";
             Width = 350;
@@ -60,11 +65,18 @@ namespace GTDCompanion.Pages
             sp.Children.Add(tbRep);
 
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12, HorizontalAlignment = HorizontalAlignment.Center };
+            var btnDelete = new Button { Content = "Deletar", Width = 90 };
             var btnOk = new Button { Content = "OK", Width = 90 };
             var btnCancel = new Button { Content = "Cancelar", Width = 90 };
+            panel.Children.Add(btnDelete);
             panel.Children.Add(btnOk);
             panel.Children.Add(btnCancel);
             sp.Children.Add(panel);
+
+            if (overlay != null)
+            {
+                overlay.PositionUpdated += Overlay_PositionUpdated;
+            }
 
             btnOk.Click += (s, e) =>
             {
@@ -86,9 +98,30 @@ namespace GTDCompanion.Pages
                 Close();
             };
 
+            btnDelete.Click += (s, e) =>
+            {
+                Deleted = true;
+                Close();
+            };
+
             btnCancel.Click += (s, e) => Close();
 
             Content = sp;
+        }
+
+        private void Overlay_PositionUpdated(int idx, int x, int y)
+        {
+            tbX.Text = x.ToString();
+            tbY.Text = y.ToString();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            if (overlay != null)
+            {
+                overlay.PositionUpdated -= Overlay_PositionUpdated;
+            }
+            base.OnClosed(e);
         }
     }
 }

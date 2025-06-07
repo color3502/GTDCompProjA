@@ -19,19 +19,27 @@ namespace GTDCompanion.Helpers
             _inputSimulator = new InputSimulator();
         }
 
-        public async void Execute()
+        public async Task ExecuteAsync(int repetitions, double delayBetweenRuns, CancellationToken token)
         {
-            foreach (var step in _steps)
-            {
-                for (int r = 0; r < step.Repeticoes; r++)
-                {
-                    if (step.Tipo == "Clique")
-                        ExecuteMouseClick(step);
-                    else if (step.Tipo == "Tecla")
-                        ExecuteKeyPress(step);
+            if (repetitions <= 0) repetitions = 1;
 
-                    await Task.Delay(TimeSpan.FromSeconds(step.Delay));
+            for (int run = 0; run < repetitions && !token.IsCancellationRequested; run++)
+            {
+                foreach (var step in _steps)
+                {
+                    for (int r = 0; r < step.Repeticoes && !token.IsCancellationRequested; r++)
+                    {
+                        if (step.Tipo == "Clique")
+                            ExecuteMouseClick(step);
+                        else if (step.Tipo == "Tecla")
+                            ExecuteKeyPress(step);
+
+                        await Task.Delay(TimeSpan.FromSeconds(step.Delay), token);
+                    }
                 }
+
+                if (run < repetitions - 1)
+                    await Task.Delay(TimeSpan.FromSeconds(delayBetweenRuns), token);
             }
         }
 
@@ -92,7 +100,7 @@ namespace GTDCompanion.Helpers
                 ? screen.Bounds.Width
                 : screen.Bounds.Height;
 
-            return coordinate * (65535.0 / screenDimension);
+            return coordinate * (65535.0 / (screenDimension - 1));
         }
     }
 }

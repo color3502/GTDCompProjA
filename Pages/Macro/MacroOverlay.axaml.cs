@@ -70,6 +70,7 @@ namespace GTDCompanion.Pages
         public void UpdateStepNumber(int newStepNumber)
         {
             NumeroPasso.Text = newStepNumber.ToString();
+            StepIndex = newStepNumber - 1;
         }
 
         public int CenterScreenX() => Position.X + (int)(Width / 2);
