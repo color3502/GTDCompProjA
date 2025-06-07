@@ -9,7 +9,8 @@ namespace GTDCompanion.Pages
     public class StepEditDialog : Window
     {
         private MacroStep step;
-        private TextBox tbDelay, tbRep, tbCliques, tbX, tbY;
+        private TextBox tbDelay, tbRep;
+        private TextBox? tbCliques, tbX, tbY;
         private ComboBox? cbBotao;
         private readonly MacroOverlay? overlay;
 
@@ -93,9 +94,14 @@ namespace GTDCompanion.Pages
                 if (step.Tipo == "Clique")
                 {
                     step.Botao = cbBotao?.SelectedItem?.ToString() ?? "Left";
-                    int.TryParse(tbCliques.Text, out var c);
-                    int.TryParse(tbX.Text, out var x);
-                    int.TryParse(tbY.Text, out var y);
+                    int c = 0;
+                    if (tbCliques != null)
+                        int.TryParse(tbCliques.Text, out c);
+                    int x = 0, y = 0;
+                    if (tbX != null)
+                        int.TryParse(tbX.Text, out x);
+                    if (tbY != null)
+                        int.TryParse(tbY.Text, out y);
                     step.Cliques = c;
                     step.X = x;
                     step.Y = y;
@@ -116,8 +122,10 @@ namespace GTDCompanion.Pages
 
         private void Overlay_PositionUpdated(int idx, int x, int y)
         {
-            tbX.Text = x.ToString();
-            tbY.Text = y.ToString();
+            if (tbX != null)
+                tbX.Text = x.ToString();
+            if (tbY != null)
+                tbY.Text = y.ToString();
         }
 
         protected override void OnClosed(EventArgs e)

@@ -37,7 +37,7 @@ namespace GTDCompanion.Pages
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown += OnWindowKeyDown;
-                globalHotkey = new GlobalHotkey(() => ExecuteMacro(null, null));
+                globalHotkey = new GlobalHotkey(() => ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs()));
                 globalHotkey.Register();
             };
 
@@ -292,7 +292,7 @@ namespace GTDCompanion.Pages
             if (dlg.Deleted)
             {
                 StepListBox.SelectedIndex = idx;
-                RemoveStep(null, null);
+                RemoveStep(this, new Avalonia.Interactivity.RoutedEventArgs());
                 return;
             }
 
@@ -309,7 +309,7 @@ namespace GTDCompanion.Pages
         {
             if (e.Key == Key.F8)
             {
-                ExecuteMacro(null, null);
+                ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs());
             }
         }
     }
