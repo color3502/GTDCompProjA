@@ -26,7 +26,7 @@ namespace GTDCompanion
             }
             if (closeBtn is not null)
             {
-                closeBtn.Click += (_, _) => this.Close();
+                closeBtn.Click += (_, _) => this.Hide();
             }
             if (minBtn is not null)
             {
@@ -35,6 +35,7 @@ namespace GTDCompanion
 
             // Defer until UI is fully loaded
             this.Opened += async (_, _) => await InitWithLicenseCheck();
+            this.Closing += (_, e) => { e.Cancel = true; this.Hide(); };
         }
 
         // Arrastar janela pela barra custom
@@ -114,6 +115,11 @@ namespace GTDCompanion
         private void MacroPage_Click(object? sender, RoutedEventArgs e)
         {
             MainContent.Content = new MacroPage();
+        }
+
+        private void KeyboardMouseStatsPage_Click(object? sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new KeyboardMouseStatsPage();
         }
 
         private void MenuSobre_Click(object? sender, RoutedEventArgs e)
