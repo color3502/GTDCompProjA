@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Controls;
 using GTDCompanion.Pages;
+using GTDCompanion.Helpers;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text;
@@ -20,7 +22,7 @@ namespace GTDCompanion
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnMainWindowClose;
+                desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
                 desktop.MainWindow = new MainWindow();
                 desktop.MainWindow.Closed += (_, __) =>
                 {
@@ -30,6 +32,32 @@ namespace GTDCompanion
                             w.Close();
                     }
                 };
+
+                StatsTracker.Load();
+                StatsTracker.Start();
+
+                var tray = new TrayIcon
+                {
+                    Icon = new WindowIcon("Assets/icon.ico"),
+                    ToolTipText = "GTD Companion"
+                };
+                var menu = new NativeMenu();
+                var exitItem = new NativeMenuItem("Encerrar");
+                exitItem.Click += (_, __) =>
+                {
+                    StatsTracker.Stop();
+                    desktop.Shutdown();
+                };
+                menu.Items.Add(exitItem);
+                tray.Menu = menu;
+                tray.Clicked += (_, __) =>
+                {
+                    desktop.MainWindow?.Show();
+                    if (desktop.MainWindow != null)
+                        desktop.MainWindow.WindowState = WindowState.Normal;
+                };
+                tray.IsVisible = true;
+
                 desktop.MainWindow.Show();
             }
 
