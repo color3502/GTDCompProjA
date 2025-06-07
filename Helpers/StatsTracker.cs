@@ -13,8 +13,8 @@ namespace GTDCompanion.Helpers
         public int LeftClicks { get; set; }
         public int RightClicks { get; set; }
         public int ScrollTicks { get; set; }
-        public Dictionary<int, int> KeyCounts { get; } = new();
-        public Dictionary<string, int> DailyClicks { get; } = new();
+        public Dictionary<int, int> KeyCounts { get; set; } = new();
+        public Dictionary<string, int> DailyClicks { get; set; } = new();
     }
 
     public static class StatsTracker
