@@ -8,10 +8,15 @@ namespace GTDCompanion.Helpers
         private IntPtr _hookID = IntPtr.Zero;
         private LowLevelKeyboardProc? _proc;
         private readonly Action _callback;
+        private readonly int _vk;
 
-        public GlobalHotkey(Action callback)
+        public const int VK_F7 = 0x76;
+        public const int VK_F8 = 0x77;
+
+        public GlobalHotkey(int virtualKeyCode, Action callback)
         {
             _callback = callback;
+            _vk = virtualKeyCode;
         }
 
         public void Register()
@@ -37,8 +42,8 @@ namespace GTDCompanion.Helpers
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 var info = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
-                // Aciona a macro com F8 sem necessidade de modificadores
-                if (info.vkCode == VK_F8)
+                // Aciona a ação quando a tecla configurada é pressionada
+                if (info.vkCode == _vk)
                 {
                     _callback();
                     return (IntPtr)1; // consume
@@ -48,7 +53,6 @@ namespace GTDCompanion.Helpers
         }
 
         private const int WH_KEYBOARD_LL = 13;
-        private const int VK_F8 = 0x77;
 
         [StructLayout(LayoutKind.Sequential)]
         private struct KBDLLHOOKSTRUCT

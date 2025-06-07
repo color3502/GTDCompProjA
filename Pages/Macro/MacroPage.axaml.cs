@@ -38,7 +38,7 @@ namespace GTDCompanion.Pages
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown += OnWindowKeyDown;
-                globalHotkey = new GlobalHotkey(() => ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs()));
+                globalHotkey = new GlobalHotkey(GlobalHotkey.VK_F8, () => ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs()));
                 globalHotkey.Register();
             };
 

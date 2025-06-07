@@ -2,8 +2,10 @@ using GTDCompanion; // para enxergar MiraConfig
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Interactivity;
+using Avalonia.Input;
 using System;
 using Avalonia;
+using GTDCompanion.Helpers;
 
 namespace GTDCompanion.Pages
 {
@@ -11,6 +13,7 @@ namespace GTDCompanion.Pages
     {
         private OverlayWindow? overlayWin;
         private bool isLoaded = false; // Evita trigger duplo ao carregar
+        private GlobalHotkey? globalHotkey;
 
         public MiraPage()
         {
@@ -43,6 +46,23 @@ namespace GTDCompanion.Pages
             AlphaSlider.PropertyChanged += (_, __) => OnConfigChanged(null, null);
 
             isLoaded = true;
+
+            this.AttachedToVisualTree += (_, _) =>
+            {
+                var win = GetWindow();
+                if (win != null)
+                    win.KeyDown += OnWindowKeyDown;
+                globalHotkey = new GlobalHotkey(GlobalHotkey.VK_F7, () => ToggleMira_Click(null, new RoutedEventArgs()));
+                globalHotkey.Register();
+            };
+
+            this.DetachedFromVisualTree += (_, _) =>
+            {
+                var win = GetWindow();
+                if (win != null)
+                    win.KeyDown -= OnWindowKeyDown;
+                globalHotkey?.Dispose();
+            };
         }
 
         private void ToggleMira_Click(object? sender, RoutedEventArgs e)
@@ -88,6 +108,16 @@ namespace GTDCompanion.Pages
                 Espessura = (int)EspessuraSlider.Value,
                 Alpha = (byte)AlphaSlider.Value
             };
+        }
+
+        private Window GetWindow() => (Window)VisualRoot!;
+
+        private void OnWindowKeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F7)
+            {
+                ToggleMira_Click(null, new RoutedEventArgs());
+            }
         }
     }
 }
