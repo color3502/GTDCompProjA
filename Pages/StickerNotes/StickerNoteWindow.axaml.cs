@@ -11,6 +11,8 @@ namespace GTDCompanion.Pages
         private bool dragging;
         private PixelPoint dragOffset;
         private readonly int index;
+        private bool _collapsed = false;
+        private double _originalHeight = 0;
 
         public StickerNoteWindow(int index)
         {
@@ -39,9 +41,9 @@ namespace GTDCompanion.Pages
             PointerPressed += OnPointerPressed;
             PointerReleased += OnPointerReleased;
             PointerMoved += OnPointerMoved;
+            this.PointerPressed += OnPointerPressedTitleBar;
 
-            if (this.FindControl<Button>("CloseButton") is Button closeBtn)
-                closeBtn.Click += (_, __) => this.Close();
+            _originalHeight = Height;
         }
 
         private void SaveConfig()
@@ -80,6 +82,34 @@ namespace GTDCompanion.Pages
             {
                 var screenPos = this.PointToScreen(e.GetPosition(this));
                 Position = new PixelPoint(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y);
+            }
+        }
+
+        private void OnPointerPressedTitleBar(object? sender, PointerPressedEventArgs e)
+        {
+            if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+                return;
+
+            if (e.ClickCount == 2)
+            {
+                var pos = e.GetPosition(this);
+                if (pos.Y <= 30)
+                    ToggleCollapse();
+            }
+        }
+
+        private void ToggleCollapse()
+        {
+            if (!_collapsed)
+            {
+                _originalHeight = this.Height;
+                this.Height = 50;
+                _collapsed = true;
+            }
+            else
+            {
+                this.Height = _originalHeight;
+                _collapsed = false;
             }
         }
     }
