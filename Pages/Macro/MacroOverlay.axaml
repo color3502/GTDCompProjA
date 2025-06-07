@@ -2,12 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="GTDCompanion.Pages.MacroOverlay"
         Width="100" Height="100"
+        ShowInTaskbar="False"
+        SystemDecorations="None"
+        CanResize="False"
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Topmost="True"
-        WindowStartupLocation="Manual"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome">
+        WindowStartupLocation="Manual">
     <Canvas Background="Transparent">
         <Ellipse Name="AlvoCirculo" Width="84" Height="84" Fill="#55FE6A0A" Stroke="#FE6A0A" StrokeThickness="7" Canvas.Left="8" Canvas.Top="8"/>
         <Ellipse Width="24" Height="24" Fill="#CCFFFFFF" Stroke="White" StrokeThickness="2" Canvas.Left="38" Canvas.Top="38"/>

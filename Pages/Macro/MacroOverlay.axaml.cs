@@ -31,12 +31,12 @@ namespace GTDCompanion.Pages
 
             EnableTransparency();
 
-            // Se vier x/y absolutos, posicione o centro do overlay em x/y.
+            // Se vier x/y absolutos, posicione o centro do overlay em x/y quando abrir.
             // Caso contrário, centraliza na tela para facilitar o arraste inicial.
             if (x.HasValue && y.HasValue)
             {
                 WindowStartupLocation = WindowStartupLocation.Manual;
-                SetCenterPosition(x.Value, y.Value);
+                Opened += (_, _) => SetCenterPosition(x.Value, y.Value);
             }
             else
             {
