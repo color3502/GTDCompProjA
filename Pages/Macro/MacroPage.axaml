@@ -33,6 +33,8 @@
             <Button Name="SaveMacroButton" Content="Salvar Macro"/>
             <Button Name="LoadMacroButton" Content="Importar Macro"/>
             <Button Name="ExecuteMacroButton" Content="Executar Macro"/>
+            <Button Name="ResetMacroButton" Content="Resetar Macros"/>
         </StackPanel>
+        <TextBlock Text="Pressione F8 para executar a macro" Foreground="#CCC" Margin="0,4,0,0"/>
     </StackPanel>
 </UserControl>

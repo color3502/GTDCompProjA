@@ -29,6 +29,7 @@ namespace GTDCompanion.Pages
             SaveMacroButton.Click += SaveMacro;
             LoadMacroButton.Click += LoadMacro;
             ExecuteMacroButton.Click += ExecuteMacro;
+            ResetMacroButton.Click += ResetMacros;
 
             StepListBox.DoubleTapped += StepListBox_DoubleTapped;
 
@@ -256,6 +257,15 @@ namespace GTDCompanion.Pages
                 ov.SetClickThrough(false);
             isRunning = false;
             ExecuteMacroButton.Content = "Executar Macro";
+        }
+
+        private void ResetMacros(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            foreach (var ov in overlays.Values)
+                ov.Close();
+            overlays.Clear();
+            macroSteps.Clear();
+            RefreshStepList();
         }
 
         private void UpdateOverlayPosition(int idx, int x, int y)
