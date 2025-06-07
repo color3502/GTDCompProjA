@@ -16,6 +16,8 @@ namespace GTDCompanion.Pages
 
         public event Action<int, int, int>? PositionUpdated;
 
+        private double Scaling => this.PlatformImpl?.RenderScaling ?? 1.0;
+
         public MacroOverlay(int stepIndex, int? x = null, int? y = null)
         {
             InitializeComponent();
@@ -29,13 +31,24 @@ namespace GTDCompanion.Pages
 
             EnableTransparency();
 
-            // Se vier x/y absolutos, posicione o centro do overlay em x/y
+            // Se vier x/y absolutos, posicione o centro do overlay em x/y.
+            // Caso contrário, centraliza na tela para facilitar o arraste inicial.
             if (x.HasValue && y.HasValue)
             {
-                int px = x.Value - (int)(Width / 2);
-                int py = y.Value - (int)(Height / 2);
-                Position = new PixelPoint(px, py);
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                SetCenterPosition(x.Value, y.Value);
             }
+            else
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+        }
+
+        public void SetCenterPosition(int screenX, int screenY)
+        {
+            int px = (int)(screenX / Scaling - Width / 2);
+            int py = (int)(screenY / Scaling - Height / 2);
+            Position = new PixelPoint(px, py);
         }
 
         private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -62,9 +75,8 @@ namespace GTDCompanion.Pages
             dragging = false;
             this.Cursor = new Cursor(StandardCursorType.Arrow);
 
-            var screenX = Position.X + (int)(Width / 2);
-            var screenY = Position.Y + (int)(Height / 2);
-            PositionUpdated?.Invoke(StepIndex, screenX, screenY);
+            var center = this.PointToScreen(new Point(Width / 2, Height / 2));
+            PositionUpdated?.Invoke(StepIndex, (int)center.X, (int)center.Y);
         }
 
         public void UpdateStepNumber(int newStepNumber)
@@ -73,8 +85,8 @@ namespace GTDCompanion.Pages
             StepIndex = newStepNumber - 1;
         }
 
-        public int CenterScreenX() => Position.X + (int)(Width / 2);
-        public int CenterScreenY() => Position.Y + (int)(Height / 2);
+        public int CenterScreenX() => (int)PointToScreen(new Point(Width / 2, Height / 2)).X;
+        public int CenterScreenY() => (int)PointToScreen(new Point(Width / 2, Height / 2)).Y;
 
         #region Click-Through Support (WinAPI)
         [DllImport("user32.dll", SetLastError = true)]
