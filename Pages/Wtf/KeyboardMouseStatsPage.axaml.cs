@@ -23,20 +23,30 @@ namespace GTDCompanion.Pages
             RightClickText.Text = $"Cliques direito: {s.RightClicks}";
 
             var todayKey = DateTime.Now.ToString("yyyy-MM-dd");
-            s.DailyClicks.TryGetValue(todayKey, out int today);
-            TodayClicksText.Text = $"Cliques hoje: {today}";
+            s.DailyKeyPresses.TryGetValue(todayKey, out int todayKeys);
+            TodayKeysText.Text = $"Teclas hoje: {todayKeys}";
+            s.DailyClicks.TryGetValue(todayKey, out int todayClicks);
+            TodayClicksText.Text = $"Cliques hoje: {todayClicks}";
 
             DateTime startWeek = DateTime.Now.Date.AddDays(-6);
-            int week = s.DailyClicks
+            int weekKeys = s.DailyKeyPresses
                 .Where(kv => DateTime.TryParse(kv.Key, out var d) && d >= startWeek)
                 .Sum(kv => kv.Value);
-            WeekClicksText.Text = $"Últimos 7 dias: {week}";
+            WeekKeysText.Text = $"Últimos 7 dias: {weekKeys}";
+            int weekClicks = s.DailyClicks
+                .Where(kv => DateTime.TryParse(kv.Key, out var d) && d >= startWeek)
+                .Sum(kv => kv.Value);
+            WeekClicksText.Text = $"Últimos 7 dias: {weekClicks}";
 
             DateTime startYear = DateTime.Now.Date.AddMonths(-12);
-            int year = s.DailyClicks
+            int yearKeys = s.DailyKeyPresses
                 .Where(kv => DateTime.TryParse(kv.Key, out var d) && d >= startYear)
                 .Sum(kv => kv.Value);
-            YearClicksText.Text = $"Últimos 12 meses: {year}";
+            YearKeysText.Text = $"Últimos 12 meses: {yearKeys}";
+            int yearClicks = s.DailyClicks
+                .Where(kv => DateTime.TryParse(kv.Key, out var d) && d >= startYear)
+                .Sum(kv => kv.Value);
+            YearClicksText.Text = $"Últimos 12 meses: {yearClicks}";
 
             double meters = s.ScrollTicks * 0.01;
             ScrollText.Text = $"Scroll: {meters:F2} m";

@@ -4,13 +4,24 @@
              Background="#2C2F33">
     <StackPanel Margin="10" Spacing="8">
         <TextBlock Text="Estatísticas de Teclado/Mouse" FontSize="20" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center"/>
-        <TextBlock x:Name="KeyPressText" Foreground="White"/>
-        <TextBlock x:Name="LeftClickText" Foreground="White"/>
-        <TextBlock x:Name="RightClickText" Foreground="White"/>
-        <TextBlock x:Name="TodayClicksText" Foreground="White"/>
-        <TextBlock x:Name="WeekClicksText" Foreground="White"/>
-        <TextBlock x:Name="YearClicksText" Foreground="White"/>
-        <TextBlock x:Name="ScrollText" Foreground="White"/>
-        <TextBlock x:Name="TopKeysText" Foreground="White"/>
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="20">
+            <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock Text="Teclado" FontSize="16" FontWeight="Bold" Foreground="#FE6A0A"/>
+                <TextBlock x:Name="KeyPressText" Foreground="White"/>
+                <TextBlock x:Name="TodayKeysText" Foreground="White"/>
+                <TextBlock x:Name="WeekKeysText" Foreground="White"/>
+                <TextBlock x:Name="YearKeysText" Foreground="White"/>
+                <TextBlock x:Name="TopKeysText" Foreground="White"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="4">
+                <TextBlock Text="Mouse" FontSize="16" FontWeight="Bold" Foreground="#FE6A0A"/>
+                <TextBlock x:Name="LeftClickText" Foreground="White"/>
+                <TextBlock x:Name="RightClickText" Foreground="White"/>
+                <TextBlock x:Name="TodayClicksText" Foreground="White"/>
+                <TextBlock x:Name="WeekClicksText" Foreground="White"/>
+                <TextBlock x:Name="YearClicksText" Foreground="White"/>
+                <TextBlock x:Name="ScrollText" Foreground="White"/>
+            </StackPanel>
+        </Grid>
     </StackPanel>
 </UserControl>

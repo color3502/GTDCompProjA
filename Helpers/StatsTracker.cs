@@ -15,6 +15,7 @@ namespace GTDCompanion.Helpers
         public int ScrollTicks { get; set; }
         public Dictionary<int, int> KeyCounts { get; set; } = new();
         public Dictionary<string, int> DailyClicks { get; set; } = new();
+        public Dictionary<string, int> DailyKeyPresses { get; set; } = new();
     }
 
     public static class StatsTracker
@@ -52,6 +53,12 @@ namespace GTDCompanion.Helpers
                         Stats.DailyClicks.Clear();
                         foreach (var kv in loaded.DailyClicks)
                             Stats.DailyClicks[kv.Key] = kv.Value;
+                        Stats.DailyKeyPresses.Clear();
+                        if (loaded.DailyKeyPresses != null)
+                        {
+                            foreach (var kv in loaded.DailyKeyPresses)
+                                Stats.DailyKeyPresses[kv.Key] = kv.Value;
+                        }
                         return;
                     }
                 }
@@ -97,6 +104,14 @@ namespace GTDCompanion.Helpers
             Stats.DailyClicks[key]++;
         }
 
+        private static void IncrementDailyKeyPresses()
+        {
+            var key = DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Stats.DailyKeyPresses.ContainsKey(key))
+                Stats.DailyKeyPresses[key] = 0;
+            Stats.DailyKeyPresses[key]++;
+        }
+
         public static void Start()
         {
             if (!OperatingSystem.IsWindows())
@@ -135,6 +150,7 @@ namespace GTDCompanion.Helpers
                 if (!Stats.KeyCounts.ContainsKey(info.vkCode))
                     Stats.KeyCounts[info.vkCode] = 0;
                 Stats.KeyCounts[info.vkCode]++;
+                IncrementDailyKeyPresses();
                 Save();
                 StatsUpdated?.Invoke();
             }
