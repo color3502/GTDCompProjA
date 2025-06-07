@@ -42,12 +42,24 @@ namespace GTDCompanion
                     ToolTipText = "GTD Companion"
                 };
                 var menu = new NativeMenu();
+                var discordItem = new NativeMenuItem("Acesse o Discord");
+                discordItem.Click += (_, __) =>
+                {
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = "https://discord.gg/bDNcp6cs8J",
+                        UseShellExecute = true
+                    };
+                    Process.Start(psi);
+                };
+
                 var exitItem = new NativeMenuItem("Encerrar");
                 exitItem.Click += (_, __) =>
                 {
                     StatsTracker.Stop();
                     desktop.Shutdown();
                 };
+                menu.Items.Add(discordItem);
                 menu.Items.Add(exitItem);
                 tray.Menu = menu;
                 tray.Clicked += (_, __) =>
