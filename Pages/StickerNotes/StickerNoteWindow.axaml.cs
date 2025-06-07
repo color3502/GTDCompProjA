@@ -41,7 +41,10 @@ namespace GTDCompanion.Pages
             PointerPressed += OnPointerPressed;
             PointerReleased += OnPointerReleased;
             PointerMoved += OnPointerMoved;
-            this.PointerPressed += OnPointerPressedTitleBar;
+
+            var titleBar = this.FindControl<DockPanel>("CustomTitleBar");
+            if (titleBar is not null)
+                titleBar.PointerPressed += CustomTitleBar_PointerPressed;
 
             _originalHeight = Height;
         }
@@ -85,7 +88,7 @@ namespace GTDCompanion.Pages
             }
         }
 
-        private void OnPointerPressedTitleBar(object? sender, PointerPressedEventArgs e)
+        private void CustomTitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
             if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
                 return;
