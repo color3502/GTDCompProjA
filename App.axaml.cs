@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GTDCompanion
 {
@@ -19,7 +20,16 @@ namespace GTDCompanion
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 desktop.MainWindow = new MainWindow();
+                desktop.MainWindow.Closed += (_, __) =>
+                {
+                    foreach (var w in desktop.Windows.ToArray())
+                    {
+                        if (w != desktop.MainWindow)
+                            w.Close();
+                    }
+                };
                 desktop.MainWindow.Show();
             }
 

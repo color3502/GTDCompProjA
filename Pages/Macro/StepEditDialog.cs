@@ -26,43 +26,47 @@ namespace GTDCompanion.Pages
             WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             var sp = new StackPanel { Margin = new Thickness(20), Spacing = 8 };
-            sp.Children.Add(new TextBlock { Text = $"Tipo: {step.Tipo}", FontWeight = Avalonia.Media.FontWeight.Bold });
+            sp.Children.Add(new TextBlock
+            {
+                Text = $"Tipo: {step.Tipo}",
+                FontWeight = Avalonia.Media.FontWeight.Bold,
+                HorizontalAlignment = HorizontalAlignment.Center
+            });
 
             if (step.Tipo == "Clique")
             {
-                sp.Children.Add(new TextBlock { Text = "Botão:" });
                 cbBotao = new ComboBox
                 {
                     ItemsSource = new[] { "Left", "Right", "Middle" },
                     SelectedItem = step.Botao,
                     Width = 120
                 };
-                sp.Children.Add(cbBotao);
+                sp.Children.Add(CreateRow("Botão:", cbBotao));
 
-                sp.Children.Add(new TextBlock { Text = "Cliques:" });
                 tbCliques = new TextBox { Text = step.Cliques.ToString(), Width = 80 };
-                sp.Children.Add(tbCliques);
+                sp.Children.Add(CreateRow("Cliques:", tbCliques));
 
-                sp.Children.Add(new TextBlock { Text = "Posição X:" });
                 tbX = new TextBox { Text = step.X.ToString(), Width = 100 };
-                sp.Children.Add(tbX);
+                sp.Children.Add(CreateRow("Posição X:", tbX));
 
-                sp.Children.Add(new TextBlock { Text = "Posição Y:" });
                 tbY = new TextBox { Text = step.Y.ToString(), Width = 100 };
-                sp.Children.Add(tbY);
+                sp.Children.Add(CreateRow("Posição Y:", tbY));
             }
             else
             {
-                sp.Children.Add(new TextBlock { Text = $"Tecla/Combo: {step.Teclas}", Margin = new Thickness(0, 4, 0, 4) });
+                sp.Children.Add(new TextBlock
+                {
+                    Text = $"Tecla/Combo: {step.Teclas}",
+                    Margin = new Thickness(0, 4, 0, 4),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                });
             }
 
-            sp.Children.Add(new TextBlock { Text = "Delay após passo (s):" });
             tbDelay = new TextBox { Text = step.Delay.ToString("F2"), Width = 80 };
-            sp.Children.Add(tbDelay);
+            sp.Children.Add(CreateRow("Delay após passo (s):", tbDelay));
 
-            sp.Children.Add(new TextBlock { Text = "Repetições:" });
             tbRep = new TextBox { Text = step.Repeticoes.ToString(), Width = 80 };
-            sp.Children.Add(tbRep);
+            sp.Children.Add(CreateRow("Repetições:", tbRep));
 
             var panel = new StackPanel { Orientation = Orientation.Horizontal, Spacing = 12, HorizontalAlignment = HorizontalAlignment.Center };
             var btnDelete = new Button { Content = "Deletar", Width = 90 };
@@ -122,6 +126,19 @@ namespace GTDCompanion.Pages
                 overlay.PositionUpdated -= Overlay_PositionUpdated;
             }
             base.OnClosed(e);
+        }
+
+        private static StackPanel CreateRow(string labelText, Control input)
+        {
+            var row = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Spacing = 8
+            };
+            row.Children.Add(new TextBlock { Text = labelText, VerticalAlignment = VerticalAlignment.Center });
+            row.Children.Add(input);
+            return row;
         }
     }
 }
