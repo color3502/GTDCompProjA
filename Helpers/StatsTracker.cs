@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.IO;
+using System.Linq;
 
 namespace GTDCompanion.Helpers
 {
@@ -12,11 +14,16 @@ namespace GTDCompanion.Helpers
         public int RightClicks { get; set; }
         public int ScrollTicks { get; set; }
         public Dictionary<int, int> KeyCounts { get; } = new();
+        public Dictionary<string, int> DailyClicks { get; } = new();
     }
 
     public static class StatsTracker
     {
         public static KeyboardMouseStats Stats { get; } = new();
+
+        private static readonly string StatsPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "GTDCompanion", "KeyboardMouseStats.json");
 
         private static IntPtr _keyboardHook;
         private static IntPtr _mouseHook;
@@ -27,14 +34,39 @@ namespace GTDCompanion.Helpers
 
         public static void Load()
         {
+            try
+            {
+                if (File.Exists(StatsPath))
+                {
+                    var json = File.ReadAllText(StatsPath);
+                    var loaded = JsonSerializer.Deserialize<KeyboardMouseStats>(json);
+                    if (loaded != null)
+                    {
+                        Stats.KeyPresses = loaded.KeyPresses;
+                        Stats.LeftClicks = loaded.LeftClicks;
+                        Stats.RightClicks = loaded.RightClicks;
+                        Stats.ScrollTicks = loaded.ScrollTicks;
+                        Stats.KeyCounts.Clear();
+                        foreach (var kv in loaded.KeyCounts)
+                            Stats.KeyCounts[kv.Key] = kv.Value;
+                        Stats.DailyClicks.Clear();
+                        foreach (var kv in loaded.DailyClicks)
+                            Stats.DailyClicks[kv.Key] = kv.Value;
+                        return;
+                    }
+                }
+            }
+            catch { }
+
+            // Fallback to old config if json not found
             Stats.KeyPresses = GTDConfigHelper.GetInt("Stats", "KeyPresses", 0);
             Stats.LeftClicks = GTDConfigHelper.GetInt("Stats", "LeftClicks", 0);
             Stats.RightClicks = GTDConfigHelper.GetInt("Stats", "RightClicks", 0);
             Stats.ScrollTicks = Math.Abs(GTDConfigHelper.GetInt("Stats", "ScrollTicks", 0));
-            var json = GTDConfigHelper.Get("Stats", "KeyCounts", "{}");
+            var jsonOld = GTDConfigHelper.Get("Stats", "KeyCounts", "{}");
             try
             {
-                var dict = JsonSerializer.Deserialize<Dictionary<int, int>>(json);
+                var dict = JsonSerializer.Deserialize<Dictionary<int, int>>(jsonOld);
                 if (dict != null)
                 {
                     foreach (var kv in dict)
@@ -46,12 +78,23 @@ namespace GTDCompanion.Helpers
 
         private static void Save()
         {
-            GTDConfigHelper.Set("Stats", "KeyPresses", Stats.KeyPresses.ToString());
-            GTDConfigHelper.Set("Stats", "LeftClicks", Stats.LeftClicks.ToString());
-            GTDConfigHelper.Set("Stats", "RightClicks", Stats.RightClicks.ToString());
-            GTDConfigHelper.Set("Stats", "ScrollTicks", Stats.ScrollTicks.ToString());
-            var json = JsonSerializer.Serialize(Stats.KeyCounts);
-            GTDConfigHelper.Set("Stats", "KeyCounts", json);
+            try
+            {
+                var dir = Path.GetDirectoryName(StatsPath)!;
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                var json = JsonSerializer.Serialize(Stats, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(StatsPath, json);
+            }
+            catch { }
+        }
+
+        private static void IncrementDailyClicks()
+        {
+            var key = DateTime.Now.ToString("yyyy-MM-dd");
+            if (!Stats.DailyClicks.ContainsKey(key))
+                Stats.DailyClicks[key] = 0;
+            Stats.DailyClicks[key]++;
         }
 
         public static void Start()
@@ -106,9 +149,11 @@ namespace GTDCompanion.Helpers
                 {
                     case WM_LBUTTONDOWN:
                         Stats.LeftClicks++;
+                        IncrementDailyClicks();
                         break;
                     case WM_RBUTTONDOWN:
                         Stats.RightClicks++;
+                        IncrementDailyClicks();
                         break;
                     case WM_MOUSEWHEEL:
                         var m = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);

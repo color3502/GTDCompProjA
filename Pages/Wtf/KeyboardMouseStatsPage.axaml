@@ -7,6 +7,9 @@
         <TextBlock x:Name="KeyPressText" Foreground="White"/>
         <TextBlock x:Name="LeftClickText" Foreground="White"/>
         <TextBlock x:Name="RightClickText" Foreground="White"/>
+        <TextBlock x:Name="TodayClicksText" Foreground="White"/>
+        <TextBlock x:Name="WeekClicksText" Foreground="White"/>
+        <TextBlock x:Name="YearClicksText" Foreground="White"/>
         <TextBlock x:Name="ScrollText" Foreground="White"/>
         <TextBlock x:Name="TopKeysText" Foreground="White"/>
     </StackPanel>
