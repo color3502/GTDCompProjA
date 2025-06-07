@@ -258,14 +258,14 @@ namespace GTDCompanion.Pages
                     int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
                     if (isLocked)
                     {
-                        // Torna click-through
-                        SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_TRANSPARENT | WS_EX_LAYERED);
+                        exStyle |= WS_EX_TRANSPARENT | WS_EX_LAYERED;
                     }
                     else
                     {
-                        // Remove o click-through
-                        SetWindowLong(hwnd, GWL_EXSTYLE, exStyle & ~WS_EX_TRANSPARENT);
+                        exStyle &= ~WS_EX_TRANSPARENT;
                     }
+                    exStyle |= WS_EX_TOOLWINDOW;
+                    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
                 }
             }
             this.IsHitTestVisible = !isLocked;
@@ -296,6 +296,7 @@ namespace GTDCompanion.Pages
         private const int GWL_EXSTYLE = -20;
         private const int WS_EX_TRANSPARENT = 0x00000020;
         private const int WS_EX_LAYERED = 0x00080000;
+        private const int WS_EX_TOOLWINDOW = 0x00000080;
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);

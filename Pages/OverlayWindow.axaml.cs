@@ -169,7 +169,8 @@ namespace GTDCompanion.Pages
                 if (hwnd != IntPtr.Zero)
                 {
                     int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-                    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
+                    exStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW;
+                    SetWindowLong(hwnd, GWL_EXSTYLE, exStyle);
                 }
             }
         }
@@ -177,6 +178,7 @@ namespace GTDCompanion.Pages
         const int GWL_EXSTYLE = -20;
         const int WS_EX_LAYERED = 0x80000;
         const int WS_EX_TRANSPARENT = 0x20;
+        const int WS_EX_TOOLWINDOW = 0x80;
 
         [DllImport("user32.dll")]
         static extern int GetWindowLong(IntPtr hwnd, int index);
