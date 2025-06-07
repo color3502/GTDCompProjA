@@ -19,6 +19,12 @@
                     <ComboBoxItem Content="T invertido"/>
                     <ComboBoxItem Content="Retângulo"/>
                     <ComboBoxItem Content="Triângulo"/>
+                    <ComboBoxItem Content="Sniper 1"/>
+                    <ComboBoxItem Content="Sniper 2"/>
+                    <ComboBoxItem Content="Sniper 3"/>
+                    <ComboBoxItem Content="4 cantos"/>
+                    <ComboBoxItem Content="Estrela"/>
+                    <ComboBoxItem Content="Diamante"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Spacing="2">
@@ -53,5 +59,8 @@
         </StackPanel>
         
         <Button x:Name="ToggleBtn" Content="Mostrar Mira" Width="180" Height="36" Click="ToggleMira_Click"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
+            <TextBlock Text="Pressione F7 para mostrar/ocultar a mira" Foreground="#CCC" Margin="0,4,0,0"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>

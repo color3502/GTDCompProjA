@@ -158,6 +158,210 @@ namespace GTDCompanion.Pages
                         Fill = null
                     });
                     break;
+                case 8: // Sniper 1 - círculo com cruz
+                    OverlayCanvas.Children.Add(new Ellipse
+                    {
+                        Width = size,
+                        Height = size,
+                        Stroke = brush,
+                        StrokeThickness = thick,
+                        Fill = null,
+                        [Canvas.LeftProperty] = cx - size / 2,
+                        [Canvas.TopProperty] = cy - size / 2
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx, cy - size / 2),
+                        EndPoint = new Point(cx, cy + size / 2),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - size / 2, cy),
+                        EndPoint = new Point(cx + size / 2, cy),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    break;
+                case 9: // Sniper 2 - círculo, cruz e ponto central
+                    OverlayCanvas.Children.Add(new Ellipse
+                    {
+                        Width = size,
+                        Height = size,
+                        Stroke = brush,
+                        StrokeThickness = thick,
+                        Fill = null,
+                        [Canvas.LeftProperty] = cx - size / 2,
+                        [Canvas.TopProperty] = cy - size / 2
+                    });
+                    OverlayCanvas.Children.Add(new Ellipse
+                    {
+                        Width = thick * 2,
+                        Height = thick * 2,
+                        Fill = brush,
+                        Stroke = null,
+                        [Canvas.LeftProperty] = cx - thick,
+                        [Canvas.TopProperty] = cy - thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx, cy - size / 2),
+                        EndPoint = new Point(cx, cy + size / 2),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - size / 2, cy),
+                        EndPoint = new Point(cx + size / 2, cy),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    break;
+                case 10: // Sniper 3 - cruz com espaço central
+                    double gap = size * 0.2;
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx, cy - size / 2),
+                        EndPoint = new Point(cx, cy - gap),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx, cy + gap),
+                        EndPoint = new Point(cx, cy + size / 2),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - size / 2, cy),
+                        EndPoint = new Point(cx - gap, cy),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx + gap, cy),
+                        EndPoint = new Point(cx + size / 2, cy),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    break;
+                case 11: // Quatro cantos
+                    double corner = size / 2;
+                    double length = size / 4;
+                    // Canto superior esquerdo
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - corner, cy - corner),
+                        EndPoint = new Point(cx - corner + length, cy - corner),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - corner, cy - corner),
+                        EndPoint = new Point(cx - corner, cy - corner + length),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    // Canto superior direito
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx + corner, cy - corner),
+                        EndPoint = new Point(cx + corner - length, cy - corner),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx + corner, cy - corner),
+                        EndPoint = new Point(cx + corner, cy - corner + length),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    // Canto inferior esquerdo
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - corner, cy + corner),
+                        EndPoint = new Point(cx - corner + length, cy + corner),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - corner, cy + corner),
+                        EndPoint = new Point(cx - corner, cy + corner - length),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    // Canto inferior direito
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx + corner, cy + corner),
+                        EndPoint = new Point(cx + corner - length, cy + corner),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx + corner, cy + corner),
+                        EndPoint = new Point(cx + corner, cy + corner - length),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    break;
+                case 12: // Estrela
+                    // cruz
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx, cy - size / 2),
+                        EndPoint = new Point(cx, cy + size / 2),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - size / 2, cy),
+                        EndPoint = new Point(cx + size / 2, cy),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    // diagonais
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - size / 2, cy - size / 2),
+                        EndPoint = new Point(cx + size / 2, cy + size / 2),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    OverlayCanvas.Children.Add(new Line
+                    {
+                        StartPoint = new Point(cx - size / 2, cy + size / 2),
+                        EndPoint = new Point(cx + size / 2, cy - size / 2),
+                        Stroke = brush,
+                        StrokeThickness = thick
+                    });
+                    break;
+                case 13: // Diamante
+                    var dpts = new Avalonia.Collections.AvaloniaList<Point>
+                    {
+                        new Point(cx, cy - size / 2),
+                        new Point(cx + size / 2, cy),
+                        new Point(cx, cy + size / 2),
+                        new Point(cx - size / 2, cy)
+                    };
+                    OverlayCanvas.Children.Add(new Polyline
+                    {
+                        Points = dpts,
+                        Stroke = brush,
+                        StrokeThickness = thick,
+                        Fill = null
+                    });
+                    break;
             }
         }
 
