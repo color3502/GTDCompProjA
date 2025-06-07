@@ -22,6 +22,7 @@ namespace GTDCompanion.Pages
 
             var cfg = GTDConfigHelper.LoadStickerNoteConfig(index);
             NoteTextBox.Text = cfg.Text;
+            UpdateWindowTitle(cfg.Text);
             Opacity = cfg.Opacity;
             TransparencySlider.Value = cfg.Opacity;
             if (cfg.PosX >= 0 && cfg.PosY >= 0)
@@ -37,7 +38,11 @@ namespace GTDCompanion.Pages
                 }
             };
 
-            NoteTextBox.GetObservable(TextBox.TextProperty).Subscribe(_ => SaveConfig());
+            NoteTextBox.GetObservable(TextBox.TextProperty).Subscribe(text =>
+            {
+                SaveConfig();
+                UpdateWindowTitle(text ?? string.Empty);
+            });
 
             PointerPressed += OnPointerPressed;
             PointerReleased += OnPointerReleased;
@@ -88,6 +93,14 @@ namespace GTDCompanion.Pages
                 var screenPos = this.PointToScreen(e.GetPosition(this));
                 Position = new PixelPoint(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y);
             }
+        }
+
+        private void UpdateWindowTitle(string text)
+        {
+            var sanitized = text.Replace("\n", " ").Replace("\r", " ");
+            if (sanitized.Length > 20)
+                sanitized = sanitized.Substring(0, 20);
+            Title = sanitized;
         }
 
         private void CustomTitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
