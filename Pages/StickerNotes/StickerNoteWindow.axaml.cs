@@ -2,8 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using System.Globalization;
 using System; // Needed for Action-based Subscribe
+using GTDCompanion.Helpers;
 
 namespace GTDCompanion.Pages
 {
@@ -14,19 +14,25 @@ namespace GTDCompanion.Pages
         private readonly int index;
         private bool _collapsed = false;
         private double _originalHeight = 0;
+        private readonly double lineHeight;
+        private readonly double windowOffset;
 
         public StickerNoteWindow(int index)
         {
             this.index = index;
             InitializeComponent();
 
-            var cfg = GTDConfigHelper.LoadStickerNoteConfig(index);
+            lineHeight = NoteTextBox.Height / 4;
+            windowOffset = Height - NoteTextBox.Height;
+
+            var cfg = StickerNoteStorage.Load(index);
             NoteTextBox.Text = cfg.Text;
             UpdateWindowTitle(cfg.Text);
             Opacity = cfg.Opacity;
             TransparencySlider.Value = cfg.Opacity;
             if (cfg.PosX >= 0 && cfg.PosY >= 0)
                 Position = new PixelPoint(cfg.PosX, cfg.PosY);
+            AdjustSize(cfg.Text);
 
             TransparencySlider.PropertyChanged += (_, e) =>
             {
@@ -42,6 +48,7 @@ namespace GTDCompanion.Pages
             {
                 SaveConfig();
                 UpdateWindowTitle(text ?? string.Empty);
+                AdjustSize(text ?? string.Empty);
             });
 
             PointerPressed += OnPointerPressed;
@@ -58,14 +65,14 @@ namespace GTDCompanion.Pages
 
         private void SaveConfig()
         {
-            var cfg = new StickerNoteConfig
+            var data = new StickerNoteData
             {
                 Text = NoteTextBox.Text ?? string.Empty,
                 Opacity = Opacity,
-                PosX = this.Position.X,
-                PosY = this.Position.Y
+                PosX = Position.X,
+                PosY = Position.Y
             };
-            GTDConfigHelper.SaveStickerNoteConfig(index, cfg);
+            StickerNoteStorage.Save(index, data);
         }
 
         private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -128,6 +135,19 @@ namespace GTDCompanion.Pages
             {
                 this.Height = _originalHeight;
                 _collapsed = false;
+            }
+        }
+
+        private void AdjustSize(string text)
+        {
+            var lines = text.Split('\n').Length;
+            if (lines < 4) lines = 4;
+            if (lines > 20) lines = 20;
+            var newHeight = lineHeight * lines;
+            if (Math.Abs(NoteTextBox.Height - newHeight) > 0.1)
+            {
+                NoteTextBox.Height = newHeight;
+                Height = windowOffset + newHeight;
             }
         }
     }
