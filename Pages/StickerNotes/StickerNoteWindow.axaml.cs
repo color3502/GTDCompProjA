@@ -108,7 +108,7 @@ namespace GTDCompanion.Pages
             if (!_collapsed)
             {
                 _originalHeight = this.Height;
-                this.Height = 50;
+                this.Height = 45;
                 _collapsed = true;
             }
             else
