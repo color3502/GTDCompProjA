@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text.Json;
 
@@ -5,7 +6,7 @@ namespace GTDCompanion.Helpers
 {
     public static class StickerNoteStorage
     {
-        private static readonly string DataDir = Path.Combine(AppContext.BaseDirectory, "Data");
+        private static readonly string DataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
 
         public static StickerNoteData Load(int index)
         {
