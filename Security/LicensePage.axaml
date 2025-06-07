@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.LicensePage">
+  <Border Background="#AA000000" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="15" Width="300">
+      <TextBlock Text="Informe sua Licença" Foreground="White" FontSize="20" TextAlignment="Center"/>
+      <TextBox x:Name="LicenseBox" Watermark="Digite seu GTD ID"/>
+      <Button  HorizontalAlignment="Center" Content="Verificar novamente" Click="OnVerifyClick"/>
+      <TextBlock x:Name="StatusText" Text="" Foreground="Orange" TextAlignment="Center"/>
+    </StackPanel>
+  </Border>
+</UserControl>

@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <Platforms>x64</Platforms>
+    <Version>1.0.1</Version>
+    <FileVersion>1.0.1</FileVersion>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <Product>GTD Companion</Product>
+    <Company>Next Experience</Company>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+    <!-- Habilite trimming se quiser reduzir o tamanho do build self-contained -->
+    <!-- <PublishTrimmed>true</PublishTrimmed> -->
+    <!-- Para builds self-contained únicos, descomente: -->
+    <!-- <PublishSingleFile>true</PublishSingleFile> -->
+    <!-- <SelfContained>true</SelfContained> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Controls.ColorPicker" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
+    <PackageReference Include="ini-parser" Version="2.5.2" />
+    <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
+    <PackageReference Include="InputSimulatorStandard" Version="1.0.0" />
+    <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
+    <PackageReference Include="System.Management" Version="9.0.5" />
+    <PackageReference Include="System.Reactive" Version="6.0.1" />
+    <PackageReference Include="System.Reactive.Windows.Forms" Version="6.0.1" />
+    <PackageReference Include="System.Windows.Extensions" Version="9.0.5" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
+    <!-- Avalonia.Diagnostics só no Debug -->
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0" Condition="'$(Configuration)' == 'Debug'" />
+    
+
+    <AvaloniaResource Include="Assets\logo.png" />
+    <AvaloniaResource Include="Assets\icon.ico" />
+
+
+    <Reference Include="RTSSSharedMemoryNET">
+      <HintPath>C:\GTDCompanion\GTDCompanion\libs\RTSSSharedMemoryNET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Garante que outros arquivos necessários sejam copiados na build -->
+  <ItemGroup>
+    <None Update="app.manifest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <!-- Adicione aqui outros arquivos estáticos, ícones, imagens etc, se necessário -->
+  </ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.CheckMySetupPage"
+             Background="#23272A">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16" Width="440">
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
+            <TextBlock Text="Checar Setup" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </StackPanel>
+        <Border Background="#18191C" CornerRadius="8" Padding="18" Margin="0 0 0 8">
+            <StackPanel x:Name="SpecsStack" Spacing="8"/>
+        </Border>
+        <TextBox x:Name="PinBox" Watermark="PIN da Comunidade GTD" HorizontalAlignment="Stretch"/>
+        <Button x:Name="SendBtn" Content="Enviar para o Perfil GTD" Width="210" Height="36" Click="SendBtn_Click"/>
+        <TextBlock x:Name="StatusText" FontWeight="Bold" Foreground="#fffa" Margin="0 6 0 0" HorizontalAlignment="Center"/>
+    </StackPanel>
+</UserControl>

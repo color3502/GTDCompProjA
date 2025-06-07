@@ -1,0 +1,17 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GTDCompanion.Pages.MacroOverlay"
+        Width="100" Height="100"
+        TransparencyLevelHint="Transparent"
+        Background="Transparent"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome">
+    <Canvas Background="Transparent">
+        <Ellipse Name="AlvoCirculo" Width="84" Height="84" Fill="#55FE6A0A" Stroke="#FE6A0A" StrokeThickness="7" Canvas.Left="8" Canvas.Top="8"/>
+        <Ellipse Width="24" Height="24" Fill="#CCFFFFFF" Stroke="White" StrokeThickness="2" Canvas.Left="38" Canvas.Top="38"/>
+        <Ellipse Width="32" Height="32" Fill="#DC2828" Canvas.Left="66" Canvas.Top="0"/>
+        <TextBlock Name="NumeroPasso" Text="1" Foreground="White" FontWeight="Bold" FontSize="16" Canvas.Left="76" Canvas.Top="4"/>
+    </Canvas>
+</Window>

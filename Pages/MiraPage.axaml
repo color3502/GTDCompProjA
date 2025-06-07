@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.MiraPage"
+             Background="#23272A">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="14" Width="430">        
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
+            <TextBlock Text="Mira Overlay" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
+        </StackPanel>
+        <!-- Linha: Modelo + Cor -->
+        <StackPanel Orientation="Horizontal" Spacing="24" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Spacing="2">
+                <TextBlock Text="Modelo:" FontWeight="Bold" Foreground="White"/>
+                <ComboBox x:Name="ModeloCombo" Width="120" SelectedIndex="0">
+                    <ComboBoxItem Content="Cruz simples"/>
+                    <ComboBoxItem Content="Círculo"/>
+                    <ComboBoxItem Content="Ponto"/>
+                    <ComboBoxItem Content="X"/>
+                    <ComboBoxItem Content="H"/>
+                    <ComboBoxItem Content="T invertido"/>
+                    <ComboBoxItem Content="Retângulo"/>
+                    <ComboBoxItem Content="Triângulo"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Spacing="2">
+                <TextBlock Text="Cor:" FontWeight="Bold" Foreground="White"/>
+                <ComboBox x:Name="CorCombo" Width="120" SelectedIndex="0">
+                    <ComboBoxItem Content="Ciano" Tag="#00FFFF"/>
+                    <ComboBoxItem Content="Vermelho" Tag="#FF3232"/>
+                    <ComboBoxItem Content="Verde" Tag="#43B581"/>
+                    <ComboBoxItem Content="Azul" Tag="#7289DA"/>
+                    <ComboBoxItem Content="Amarelo" Tag="#FFD700"/>
+                    <ComboBoxItem Content="Branco" Tag="#FFFFFF"/>
+                    <ComboBoxItem Content="Preto" Tag="#000000"/>
+                    <ComboBoxItem Content="Rosa" Tag="#E91E63"/>
+                </ComboBox>
+            </StackPanel>
+        </StackPanel>
+        
+        <!-- Linha: Sliders lado a lado -->
+        <StackPanel Orientation="Horizontal" Spacing="22" HorizontalAlignment="Center">
+            <StackPanel Width="120">
+                <TextBlock Text="Tamanho:" Foreground="White"/>
+                <Slider x:Name="TamanhoSlider" Minimum="10" Maximum="300" Value="60"/>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Espessura:" Foreground="White"/>
+                <Slider x:Name="EspessuraSlider" Minimum="1" Maximum="32" Value="4"/>
+            </StackPanel>
+            <StackPanel Width="120">
+                <TextBlock Text="Transparência:" Foreground="White"/>
+                <Slider x:Name="AlphaSlider" Minimum="10" Maximum="255" Value="255"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <Button x:Name="ToggleBtn" Content="Mostrar Mira" Width="180" Height="36" Click="ToggleMira_Click"/>
+    </StackPanel>
+</UserControl>

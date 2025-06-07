@@ -1,0 +1,12 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GTDCompanion.Pages.OverlayWindow"
+        Width="300" Height="300"
+        ShowInTaskbar="False"
+        SystemDecorations="None"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        CanResize="False"
+        Topmost="True">
+    <Canvas x:Name="OverlayCanvas" Background="Transparent"/>
+</Window>

@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="GTDCompanion.Pages.BenchmarkOverlayWindow"
+        CanResize="False"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Background="Transparent"
+        Topmost="True"
+        Width="240"
+        Height="350"
+        SystemDecorations="None">
+  <Border x:Name="RootBorder" Background="#FF181A20">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Image x:Name="TopImage" IsVisible="False" HorizontalAlignment="Center" Stretch="Uniform" MaxHeight="80" MaxWidth="150" Margin="0,25,0,0" Grid.Row="0"/>
+      <StackPanel x:Name="ItemsPanel" Margin="10" Spacing="4" Grid.Row="1"/>
+      <Image x:Name="BottomImage" IsVisible="False" HorizontalAlignment="Center" Stretch="Uniform" MaxHeight="80" MaxWidth="150" Margin="0,0,0,25" Grid.Row="2"/>
+    </Grid>
+  </Border>
+</Window>

@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.TranslatorPage">
+  <Border Background="#222" CornerRadius="12" Padding="20">
+    <StackPanel Spacing="12">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="Tradução Overlay por IA" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
+      </StackPanel>
+      <TextBlock Text="" FontSize="22" Foreground="#FF9800"/>
+      <TextBox Name="InputTextBox"
+               AcceptsReturn="True"
+               Height="100"
+               Watermark="Digite ou cole o texto aqui para traduzir..."/>
+      <StackPanel Orientation="Horizontal" Spacing="6">
+        <ComboBox Name="FromLangCombo" Width="120" />
+        <Button Name="SwapLangsButton" Content="⇄" Width="40"/>
+        <ComboBox Name="ToLangCombo" Width="120" />
+      </StackPanel>
+      <TextBox Name="OutputTextBox"
+               AcceptsReturn="True"
+               Height="100"
+               IsReadOnly="True"/>
+      <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <CheckBox Name="CopyOnTranslateCheck" Content="Copiar ao traduzir"/>
+        <Button Name="PasteAndTranslateButton" Content="Colar/Traduzir" Width="120"/>
+        <Button Name="TranslateButton" Content="Traduzir" Width="90"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+        <Button Name="OpenOverlayButton" Content="Abrir Overlay de Tradução" Width="200"/>
+      </StackPanel>
+    </StackPanel>
+  </Border>
+</UserControl>

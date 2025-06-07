@@ -1,0 +1,21 @@
+{
+  "passos": [
+    {
+      "tipo": "Clique",
+      "posX": 500,
+      "posY": 300,
+      "botao": "Left",
+      "qtdCliques": 2,
+      "delayEntrada": 200,
+      "delaySaida": 150,
+      "repeticoes": 3
+    },
+    {
+      "tipo": "Tecla",
+      "teclas": ["Ctrl", "Shift", "T"],
+      "delayEntrada": 100,
+      "delaySaida": 100,
+      "repeticoes": 1
+    }
+  ]
+}

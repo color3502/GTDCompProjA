@@ -1,0 +1,97 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GTDCompanion"
+    xmlns:pages="clr-namespace:GTDCompanion.Pages"
+    x:Class="GTDCompanion.MainWindow"
+    Title="GTD Companion"
+    Icon="/Assets/icon.ico"
+    Width="900" 
+    MinHeight="500"
+    WindowStartupLocation="CenterScreen"
+    Background="#23272A"
+    SystemDecorations="None"
+    >
+    <Design.PreviewWith>
+        <pages:HomePage/>
+    </Design.PreviewWith>
+    <Border Background="#1A1D22" CornerRadius="10" Padding="0">
+      <DockPanel>
+        <!-- Barra de Título Custom -->
+        <Border
+            Name="CustomTitleBar"
+            Background="#23272A"
+            Height="35"
+            DockPanel.Dock="Top"
+            Padding="0,0,0,0"
+            CornerRadius="10,10,0,0"
+            >
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                <TextBlock Text="GTD Companion"
+                    Foreground="#FE6A0A"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    VerticalAlignment="Center"
+                />
+            </StackPanel>
+            <!-- Minimizar -->
+            <Button Name="MinimizeButton"
+                    Grid.Column="1"
+                    Content="—"
+                    Width="28"
+                    Height="28"
+                    Margin="0,4,0,4"
+                    Background="#282C34"
+                    Foreground="#AAA"
+                    BorderBrush="#222"
+                    BorderThickness="0"
+                    FontSize="16"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Cursor="Hand"
+                    />
+            <!-- Fechar -->
+            <Button Name="CloseButton"
+                    Grid.Column="2"
+                    Content="✕"
+                    Width="28"
+                    Height="28"
+                    Margin="0,4,8,4"
+                    Background="#282C34"
+                    Foreground="#FE6A0A"
+                    BorderBrush="#222"
+                    BorderThickness="0"
+                    FontSize="16"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Cursor="Hand"
+                    />
+          </Grid>
+        </Border>
+        <!-- Menu superior -->
+        <Menu x:Name="MainMenuBox" DockPanel.Dock="Top" Background="#36393F" Foreground="White" >
+            <MenuItem Header="Início" Click="MenuInicio_Click"/>
+            <MenuItem Header="Funcionalidades">
+                <MenuItem Header="Meu Setup" Click="CheckMySetup_Page"/>
+                <MenuItem Header="Benchmark" Click="BenchmarkOverlayPage_Click"/>
+                <MenuItem Header="Mira Overlay" Click="MenuMira_Click"/>
+                <MenuItem Header="Tradução IA Overlay" Click="TranslatorOverlay_Click"/>
+                <MenuItem Header="Macro Experience" Click="MacroPage_Click"/>
+            </MenuItem>
+            <MenuItem Header="Links">
+                <MenuItem Header="Acessar Discord" Click="AcessarDiscord_Click"/>
+                <MenuItem Header="A GTD" Click="MenuSobre_Click"/>
+                <MenuItem Header="Suporte" Click="MenuSuporte_Click"/>
+            </MenuItem>
+        </Menu>
+        <!-- Conteúdo central dinâmico -->
+        <ContentControl x:Name="MainContent" Margin="0,1,0,0"/>
+      </DockPanel>
+    </Border>
+</Window>

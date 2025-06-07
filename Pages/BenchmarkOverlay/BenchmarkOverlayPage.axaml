@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.BenchmarkOverlayPage">
+  <StackPanel Margin="24" Spacing="16">
+    <TextBlock x:Name="RtssWarning" Text="" Foreground="Red" FontWeight="Bold" Margin="0,0,0,12" IsVisible="False"/>
+    <Button x:Name="DownloadRtssBtn" Content="Baixar RTSS (Requerido para FPS)" Width="240" Margin="0,0,0,12" IsVisible="False"/>
+    <TextBlock Text="Configuração do Overlay de Benchmark" FontSize="24" FontWeight="Bold" Margin="0,0,0,12"/>
+    <TextBlock Text="Escolha os dados para exibir:" Margin="0,0,0,6"/>
+
+    <!-- Grid de opções de dados, 2 colunas -->
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <!-- Coluna 1 -->
+      <CheckBox x:Name="FpsBox" Content="FPS (RTSS)" Grid.Row="0" Grid.Column="0" Margin="0,2"/>
+      <CheckBox x:Name="Fps1PercentBox" Content="FPS 1%" Grid.Row="1" Grid.Column="0" Margin="0,2"/>
+      <CheckBox x:Name="CpuCountBox" Content="Processadores" Grid.Row="2" Grid.Column="0" Margin="0,2"/>
+      <CheckBox x:Name="CpuUsageBox" Content="Uso CPU (%)" Grid.Row="3" Grid.Column="0" Margin="0,2"/>
+      <CheckBox x:Name="CpuTempBox" Content="Temp. CPU" Grid.Row="4" Grid.Column="0" Margin="0,2"/>
+      <CheckBox x:Name="MemTotalBox" Content="Memória Total" Grid.Row="5" Grid.Column="0" Margin="0,2"/>
+      <CheckBox x:Name="GpuNameBox" Content="GPU" Grid.Row="6" Grid.Column="0" Margin="0,2"/>
+      <!-- Coluna 2 -->
+      <CheckBox x:Name="FpsAvg1MinBox" Content="Média FPS 1 Min" Grid.Row="0" Grid.Column="1" Margin="0,2"/>
+      <CheckBox x:Name="CpuWattsBox" Content="Watts CPU" Grid.Row="1" Grid.Column="1" Margin="0,2"/>
+      <CheckBox x:Name="MemUsageBox" Content="Memória em Uso (%)" Grid.Row="2" Grid.Column="1" Margin="0,2"/>
+      <CheckBox x:Name="GpuUsageBox" Content="Uso GPU (%)" Grid.Row="3" Grid.Column="1" Margin="0,2"/>
+      <CheckBox x:Name="GpuVramClockBox" Content="Clock VRAM" Grid.Row="4" Grid.Column="1" Margin="0,2"/>
+      <CheckBox x:Name="GpuVramUsageBox" Content="Consumo VRAM" Grid.Row="5" Grid.Column="1" Margin="0,2"/>
+      <CheckBox x:Name="GpuWattsBox" Content="Watts GPU" Grid.Row="6" Grid.Column="1" Margin="0,2"/>
+    </Grid>
+
+    <!-- Opções de customização: cada linha individual com alinhamento central -->
+    <StackPanel Spacing="8">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+        <TextBlock Text="Cor da fonte:" Width="120" VerticalAlignment="Center"/>
+        <ComboBox x:Name="FontColorCombo" Width="120" SelectedIndex="0">
+          <ComboBoxItem Content="Branco"/>
+          <ComboBoxItem Content="Verde"/>
+          <ComboBoxItem Content="Vermelho"/>
+          <ComboBoxItem Content="Amarelo"/>
+          <ComboBoxItem Content="Azul"/>
+          <ComboBoxItem Content="Ciano"/>
+          <ComboBoxItem Content="Roxo"/>
+        </ComboBox>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+        <TextBlock Text="Transparência:" Width="120" VerticalAlignment="Center"/>
+        <Slider x:Name="OpacitySlider" Minimum="0.1" Maximum="1" Value="0.85" Width="120"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+        <CheckBox x:Name="ShowImageTopBox" Content="Mostrar Imagem Superior" VerticalAlignment="Center"/>
+        <Button x:Name="UploadImageTopBtn" Content="Selecionar Imagem Superior" Margin="0,0,0,0" IsVisible="False"/>
+        <TextBlock x:Name="ImageTopLabel" Text="" FontSize="11" Margin="4,0,0,0" IsVisible="False" VerticalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+        <CheckBox x:Name="ShowImageBottomBox" Content="Mostrar Imagem Inferior" VerticalAlignment="Center"/>
+        <Button x:Name="UploadImageBottomBtn" Content="Selecionar Imagem Inferior" Margin="0,0,0,0" IsVisible="False"/>
+        <TextBlock x:Name="ImageBottomLabel" Text="" FontSize="11" Margin="4,0,0,0" IsVisible="False" VerticalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+        <CheckBox x:Name="LockOverlayBox" Content="Bloquear Overlay (não clicável)" VerticalAlignment="Center"/>
+      </StackPanel>
+    </StackPanel>
+
+    <Button x:Name="ShowOverlayBtn" Content="Mostrar Benchmark" Width="200" Height="38" HorizontalAlignment="Left" Margin="0,12,0,0"/>
+  </StackPanel>
+</UserControl>
