@@ -30,7 +30,7 @@ namespace GTDCompanion.Helpers
             Stats.KeyPresses = GTDConfigHelper.GetInt("Stats", "KeyPresses", 0);
             Stats.LeftClicks = GTDConfigHelper.GetInt("Stats", "LeftClicks", 0);
             Stats.RightClicks = GTDConfigHelper.GetInt("Stats", "RightClicks", 0);
-            Stats.ScrollTicks = GTDConfigHelper.GetInt("Stats", "ScrollTicks", 0);
+            Stats.ScrollTicks = Math.Abs(GTDConfigHelper.GetInt("Stats", "ScrollTicks", 0));
             var json = GTDConfigHelper.Get("Stats", "KeyCounts", "{}");
             try
             {
@@ -113,7 +113,7 @@ namespace GTDCompanion.Helpers
                     case WM_MOUSEWHEEL:
                         var m = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
                         int delta = (short)((m.mouseData >> 16) & 0xffff);
-                        Stats.ScrollTicks += delta / 120;
+                        Stats.ScrollTicks += Math.Abs(delta) / 120;
                         break;
                 }
                 Save();
