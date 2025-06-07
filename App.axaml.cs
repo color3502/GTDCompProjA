@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using dotenv.net;
+
+
+
 
 namespace GTDCompanion
 {
@@ -36,6 +40,10 @@ namespace GTDCompanion
                 StatsTracker.Load();
                 StatsTracker.Start();
 
+                DotEnv.Load();
+
+
+
                 var tray = new TrayIcon
                 {
                     Icon = new WindowIcon("Assets/icon.ico"),
@@ -43,11 +51,12 @@ namespace GTDCompanion
                 };
                 var menu = new NativeMenu();
                 var discordItem = new NativeMenuItem("Acesse o Discord");
+                var url_discord = Environment.GetEnvironmentVariable("URL_DISCORD");
                 discordItem.Click += (_, __) =>
                 {
                     var psi = new ProcessStartInfo
                     {
-                        FileName = "https://discord.gg/bDNcp6cs8J",
+                        FileName = url_discord,
                         UseShellExecute = true
                     };
                     Process.Start(psi);

@@ -5,6 +5,9 @@ obj/
 [Bb]in/
 [Oo]bj/
 
+# Envolving files
+.env
+
 # Avalonia build results
 AppPackages/
 *.appx

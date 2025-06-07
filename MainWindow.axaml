@@ -84,14 +84,14 @@
                 <MenuItem Header="Tradução IA Overlay" Click="TranslatorOverlay_Click"/>
                 <MenuItem Header="Sticker Notes" Click="StickerNotesPage_Click"/>
                 <MenuItem Header="Macro Experience" Click="MacroPage_Click"/>
+            </MenuItem>            
+            <MenuItem Header="WTF?!">
+                <MenuItem Header="Estatísticas Teclado/Mouse" Click="KeyboardMouseStatsPage_Click"/>
             </MenuItem>
             <MenuItem Header="Links">
                 <MenuItem Header="Acessar Discord" Click="AcessarDiscord_Click"/>
                 <MenuItem Header="A GTD" Click="MenuSobre_Click"/>
                 <MenuItem Header="Suporte" Click="MenuSuporte_Click"/>
-            </MenuItem>
-            <MenuItem Header="Wtf?!">
-                <MenuItem Header="Estatísticas Teclado/Mouse" Click="KeyboardMouseStatsPage_Click"/>
             </MenuItem>
         </Menu>
         <!-- Conteúdo central dinâmico -->
