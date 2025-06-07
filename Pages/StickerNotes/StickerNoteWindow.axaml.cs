@@ -43,9 +43,10 @@ namespace GTDCompanion.Pages
             PointerReleased += OnPointerReleased;
             PointerMoved += OnPointerMoved;
 
-            var titleBar = this.FindControl<DockPanel>("CustomTitleBar");
-            if (titleBar is not null)
-                titleBar.PointerPressed += CustomTitleBar_PointerPressed;
+            // Handle double click on the title bar to collapse/expand the overlay
+            // Using the window's PointerPressed ensures the event fires even if
+            // the DockPanel has no background set.
+            this.PointerPressed += CustomTitleBar_PointerPressed;
 
             _originalHeight = Height;
         }
