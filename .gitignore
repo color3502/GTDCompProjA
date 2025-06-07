@@ -1,52 +1,60 @@
-# Prerequisites
-*.d
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# Avalonia build results
+AppPackages/
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Visual Studio Code workspace settings
+.vscode/
 
-# Precompiled Headers
-*.gch
-*.pch
+# Rider settings
+.idea/
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# VS2015 cache/options directory
+.vs/
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# Logs
+*.log
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# NuGet Packages
+*.nupkg
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# Npm/node
+node_modules/
+
+# Transient files
+*.pid
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# dotnet tools local
+.localtoolstarget
+
+# Test Results
+TestResults/
+*.TestResults/
+
+# Publish directory
+publish/
