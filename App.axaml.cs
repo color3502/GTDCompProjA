@@ -20,7 +20,7 @@ namespace GTDCompanion
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.ShutdownMode = ShutdownMode.OnMainWindowClose;
+                desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnMainWindowClose;
                 desktop.MainWindow = new MainWindow();
                 desktop.MainWindow.Closed += (_, __) =>
                 {

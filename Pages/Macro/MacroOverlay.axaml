@@ -16,3 +16,5 @@
         <TextBlock Name="NumeroPasso" Text="1" Foreground="White" FontWeight="Bold" FontSize="16" Canvas.Left="76" Canvas.Top="4"/>
     </Canvas>
 </Window>
+
+
