@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using GTDCompanion.Helpers;
 
 namespace GTDCompanion.Helpers
 {
@@ -31,6 +32,7 @@ namespace GTDCompanion.Helpers
         public int Y { get; set; }
         public string Botao { get; set; } = "Left";
         public int Cliques { get; set; } = 1;
+        public string AlvoTipo { get; set; } = "Ponto";
         public string Teclas { get; set; } = "";
         public double Delay { get; set; } = 0.2;
         public int Repeticoes { get; set; } = 1;
