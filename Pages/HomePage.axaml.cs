@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace GTDCompanion.Pages
 {
@@ -10,9 +9,13 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
 
-            // Pegando a versão FileVersion
-            var version = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly()!.Location).FileVersion;
-            VersionText.Text = $"Versão {version}";
+            // Pegando a versão FileVersion de forma segura
+            var exePath = Process.GetCurrentProcess().MainModule?.FileName;
+            if (!string.IsNullOrWhiteSpace(exePath))
+            {
+                var version = FileVersionInfo.GetVersionInfo(exePath).FileVersion;
+                VersionText.Text = $"Versão {version}";
+            }
         }
     }
 }

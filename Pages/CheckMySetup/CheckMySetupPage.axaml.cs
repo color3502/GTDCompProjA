@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management;
 using System.Runtime.InteropServices;
-using dotenv.net;
 
 namespace GTDCompanion.Pages
 {
@@ -23,7 +22,7 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
             PinBox.Text = GTDConfigHelper.LoadGtdId();
-            DotEnv.Load();
+            AppConfig.PopulateEnvironment();
             LoadSpecs();
         }
 

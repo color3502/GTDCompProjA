@@ -12,7 +12,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Avalonia.Platform;
-using dotenv.net;
 
 
 
@@ -41,7 +40,7 @@ namespace GTDCompanion
                 StatsTracker.Load();
                 StatsTracker.Start();
 
-                DotEnv.Load();
+                AppConfig.PopulateEnvironment();
 
 
 

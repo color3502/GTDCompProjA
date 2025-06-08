@@ -9,7 +9,6 @@ using Avalonia;
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using dotenv.net;
 
 namespace GTDCompanion.Pages
 {
@@ -36,7 +35,7 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
 
-            DotEnv.Load();
+            AppConfig.PopulateEnvironment();
 
             GTDTranslatorEvents.IdiomaAlterado += OnIdiomaAlterado;
 

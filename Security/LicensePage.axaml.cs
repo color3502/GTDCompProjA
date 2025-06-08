@@ -7,7 +7,6 @@ using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System;
-using dotenv.net;
 
 namespace GTDCompanion.Pages
 {
@@ -18,7 +17,7 @@ namespace GTDCompanion.Pages
         public LicensePage()
         {
             InitializeComponent();
-            DotEnv.Load();
+            AppConfig.PopulateEnvironment();
         }
 
         private async void OnVerifyClick(object? sender, RoutedEventArgs e)
