@@ -1,3 +1,6 @@
+Build 0.4.104 - Save stats in real time
+save keyboard and mouse stats to file after each event
+
 Build 0.4.103 - Improve update download flow
 show home page by default then reuse it when returning
 show optional update prompt on the home page

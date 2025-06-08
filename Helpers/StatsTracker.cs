@@ -110,6 +110,12 @@ namespace GTDCompanion.Helpers
             catch { }
         }
 
+        private static void SaveAndNotify()
+        {
+            Save();
+            StatsUpdated?.Invoke();
+        }
+
         private static void IncrementDailyClicks()
         {
             var key = DateTime.Now.ToString("yyyy-MM-dd");
@@ -144,8 +150,7 @@ namespace GTDCompanion.Helpers
                     Stats.IdleTime += TimeSpan.FromMinutes(1);
                 else
                     Stats.ActiveTime += TimeSpan.FromMinutes(1);
-                Save();
-                StatsUpdated?.Invoke();
+                SaveAndNotify();
             };
             _timer.AutoReset = true;
             _timer.Start();
@@ -176,14 +181,14 @@ namespace GTDCompanion.Helpers
         public static void ResetMaintenance()
         {
             Stats.LastMaintenance = DateTime.Now;
-            Save();
-            StatsUpdated?.Invoke();
+            SaveAndNotify();
         }
 
         private static IntPtr KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            const int WM_KEYDOWN = 0x0100;
-            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+            const int WM_KEYUP = 0x0101;
+            const int WM_SYSKEYUP = 0x0105;
+            if (nCode >= 0 && (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP))
             {
                 var info = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
                 Stats.KeyPresses++;
@@ -191,7 +196,7 @@ namespace GTDCompanion.Helpers
                     Stats.KeyCounts[info.vkCode] = 0;
                 Stats.KeyCounts[info.vkCode]++;
                 IncrementDailyKeyPresses();
-                StatsUpdated?.Invoke();
+                SaveAndNotify();
             }
             return CallNextHookEx(_keyboardHook, nCode, wParam, lParam);
         }
@@ -232,7 +237,7 @@ namespace GTDCompanion.Helpers
                         _lastMouseMove = DateTime.Now;
                         break;
                 }
-                StatsUpdated?.Invoke();
+                SaveAndNotify();
             }
             return CallNextHookEx(_mouseHook, nCode, wParam, lParam);
         }
