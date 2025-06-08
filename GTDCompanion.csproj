@@ -41,7 +41,10 @@
     
     <AvaloniaResource Include="Assets\logo.png" />
     <AvaloniaResource Include="Assets\icon.ico" />
-    <AvaloniaResource Include=".env" />
+    <!-- Copy .env to output so DotEnv can load variables at runtime -->
+    <None Update=".env">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <AvaloniaResource Include=".changelog" />
 
     <Reference Include="RTSSSharedMemoryNET">
