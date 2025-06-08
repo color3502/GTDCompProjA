@@ -5,7 +5,8 @@
     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="15" Width="300">
       <TextBlock Text="Atualização obrigatória" Foreground="White" FontSize="20" TextAlignment="Center"/>
       <TextBlock x:Name="ChangelogText" Text="" Foreground="White" TextWrapping="Wrap" TextAlignment="Center"/>
-      <Button HorizontalAlignment="Center" Content="Atualizar" Click="OnUpdateClick"/>
+      <Button x:Name="UpdateButton" HorizontalAlignment="Center" Content="Atualizar" Click="OnUpdateClick"/>
+      <TextBlock x:Name="ProgressText" Text="" Foreground="White" HorizontalAlignment="Center" IsVisible="False"/>
     </StackPanel>
   </Border>
 </UserControl>

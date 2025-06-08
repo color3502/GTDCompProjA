@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using GTDCompanion.Helpers;
 using System.Threading.Tasks;
 
 namespace GTDCompanion.Pages
@@ -28,14 +29,10 @@ namespace GTDCompanion.Pages
                 return;
             try
             {
-                using var client = new HttpClient();
-                var tempFile = Path.Combine(Path.GetTempPath(), Path.GetFileName(DownloadUrl));
-                using var resp = await client.GetAsync(DownloadUrl);
-                resp.EnsureSuccessStatusCode();
-                await using (var fs = File.Create(tempFile))
-                {
-                    await resp.Content.CopyToAsync(fs);
-                }
+                ProgressText.IsVisible = true;
+                UpdateButton.IsEnabled = false;
+                var progress = new Progress<double>(p => ProgressText.Text = $"{p:0}%");
+                var tempFile = await UpdateDownloader.DownloadAsync(DownloadUrl, progress);
                 var psi = new ProcessStartInfo
                 {
                     FileName = tempFile,
@@ -47,6 +44,8 @@ namespace GTDCompanion.Pages
             catch
             {
                 // ignore
+                UpdateButton.IsEnabled = true;
+                ProgressText.IsVisible = false;
             }
         }
     }
