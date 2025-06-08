@@ -206,7 +206,10 @@ namespace GTDCompanion
                 var exe = Process.GetCurrentProcess().MainModule?.FileName;
                 if (string.IsNullOrWhiteSpace(exe))
                     return;
-                var current = new Version(FileVersionInfo.GetVersionInfo(exe).FileVersion);
+                var fileVersion = FileVersionInfo.GetVersionInfo(exe).FileVersion;
+                if (string.IsNullOrWhiteSpace(fileVersion))
+                    return;
+                var current = new Version(fileVersion);
                 if (Version.TryParse(info.latest, out var latest) && latest > current)
                 {
                     if (info.mandatory)

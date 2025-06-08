@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Avalonia.Interactivity;
 using GTDCompanion.Helpers;
 using System.Threading.Tasks;
+using System; // Needed for Progress<T>
 
 namespace GTDCompanion.Pages
 {
