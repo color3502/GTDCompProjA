@@ -15,6 +15,7 @@ namespace GTDCompanion.Helpers
         public int ScrollTicks { get; set; }
         public double MousePixelsMoved { get; set; }
         public TimeSpan IdleTime { get; set; }
+        public TimeSpan ActiveTime { get; set; }
         public DateTime LastMaintenance { get; set; } = DateTime.Now;
         public Dictionary<int, int> KeyCounts { get; set; } = new();
         public Dictionary<string, int> DailyClicks { get; set; } = new();
@@ -57,6 +58,7 @@ namespace GTDCompanion.Helpers
                         Stats.ScrollTicks = loaded.ScrollTicks;
                         Stats.MousePixelsMoved = loaded.MousePixelsMoved;
                         Stats.IdleTime = loaded.IdleTime;
+                        Stats.ActiveTime = loaded.ActiveTime;
                         if (loaded.LastMaintenance != DateTime.MinValue)
                             Stats.LastMaintenance = loaded.LastMaintenance;
                         Stats.KeyCounts.Clear();
@@ -140,6 +142,8 @@ namespace GTDCompanion.Helpers
             _timer.Elapsed += (_, __) => {
                 if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(1))
                     Stats.IdleTime += TimeSpan.FromMinutes(1);
+                else
+                    Stats.ActiveTime += TimeSpan.FromMinutes(1);
                 Save();
                 StatsUpdated?.Invoke();
             };

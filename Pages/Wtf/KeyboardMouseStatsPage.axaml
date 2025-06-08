@@ -28,6 +28,7 @@
             <TextBlock Text="Computador" FontSize="16" FontWeight="Bold" Foreground="#FE6A0A"/>
             <TextBlock x:Name="UptimeText" Foreground="White"/>
             <TextBlock x:Name="IdleText" Foreground="White"/>
+            <TextBlock x:Name="ActiveTimeText" Foreground="White"/>
             <TextBlock x:Name="MaintenanceText" Foreground="White"/>
             <Button Content="Resetar manutenção" Click="ResetMaintenance_Click"/>
         </StackPanel>
