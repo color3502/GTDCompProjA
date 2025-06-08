@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Input;
+using dotenv.net;
+using System;
 
 namespace GTDCompanion.Pages
 {
@@ -37,6 +39,7 @@ namespace GTDCompanion.Pages
         public TranslatorPage()
         {
             InitializeComponent();
+            DotEnv.Load();
             InitCombos();
             CopyOnTranslateCheck.IsChecked = GTDConfigHelper.GetBool("Translator", "copy_on_translate", true);
 
@@ -125,17 +128,21 @@ namespace GTDCompanion.Pages
 
         private async Task<string> TranslateAsync(string text, string to)
         {
+            var nextApiEndpoint = Environment.GetEnvironmentVariable("NEXTAPI_ENDPOINT") ?? "";
+            var nextApiAppId = Environment.GetEnvironmentVariable("NEXTAPI_APPID") ?? "";
+            var nextApiAppSecret = Environment.GetEnvironmentVariable("NEXTAPI_APPSECRET") ?? "";
+            var nextApiProjectApiId = Environment.GetEnvironmentVariable("NEXTAPI_PROJECTID") ?? "";
             using var client = new HttpClient();
             var values = new Dictionary<string, string>
             {
-                { "app_id", "app_id__LEs7L2inoyalVASnhQ0y9h" },
-                { "app_secret", "app_secret__8WatGRDlgI2ZA7oDWS67l07FFzA1BMGIGtsfaDjp" },
-                { "project_api_id", "project_api_id__nPpGaZ0gFBQliQ8" },
+                { "app_id", nextApiAppId },
+                { "app_secret", nextApiAppSecret },
+                { "project_api_id", nextApiProjectApiId },
                 { "text", text },
                 { "to", to }
             };
             var content = new FormUrlEncodedContent(values);
-            var response = await client.PostAsync("https://tools.nextexperience.com.br/api/lili/tools/translater-string", content);
+            var response = await client.PostAsync(nextApiEndpoint + "/lili/tools/translater-string", content);
             string result = await response.Content.ReadAsStringAsync();
 
             try

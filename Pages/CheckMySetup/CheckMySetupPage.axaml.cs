@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management;
 using System.Runtime.InteropServices;
+using dotenv.net;
 
 namespace GTDCompanion.Pages
 {
@@ -22,6 +23,7 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
             PinBox.Text = GTDConfigHelper.LoadGtdId();
+            DotEnv.Load();
             LoadSpecs();
         }
 
@@ -184,9 +186,12 @@ namespace GTDCompanion.Pages
             GTDConfigHelper.SaveGtdId(gtdId);
 
             // Garante specs atualizadas
+            var internalCheck = Environment.GetEnvironmentVariable("INTERNAL_CHECK") ?? "";
             CollectSpecs(out var userSpecs, out var apiSpecs);
             apiSpecs["gtd_id"] = gtdId;
-            apiSpecs["internal_check"] = "KCkqjETDe7qoS6lvWbNUUWqbt0VnlI3sOj9goo2ozOo";
+            apiSpecs["internal_check"] = internalCheck;
+
+            var urlApiGtd = Environment.GetEnvironmentVariable("URL_GTD_API") ?? "";
 
             try
             {
@@ -195,7 +200,7 @@ namespace GTDCompanion.Pages
                     apiSpecs.Where(kv => !string.IsNullOrWhiteSpace(kv.Value))
                         .ToDictionary(kv => kv.Key, kv => kv.Value));
                 var resp = await http.PostAsync(
-                    "https://gametrydivision.com/api/gtd/players/setup-report",
+                    urlApiGtd + "/gtd/players/setup-report",
                     new StringContent(payload, Encoding.UTF8, "application/json")
                 );
                 var respContent = await resp.Content.ReadAsStringAsync();

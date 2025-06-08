@@ -51,12 +51,12 @@ namespace GTDCompanion
                 };
                 var menu = new NativeMenu();
                 var discordItem = new NativeMenuItem("Acesse o Discord");
-                var url_discord = Environment.GetEnvironmentVariable("URL_DISCORD");
+                var urlDiscord = Environment.GetEnvironmentVariable("URL_DISCORD")  ?? "";
                 discordItem.Click += (_, __) =>
                 {
                     var psi = new ProcessStartInfo
                     {
-                        FileName = url_discord,
+                        FileName = urlDiscord,
                         UseShellExecute = true
                     };
                     Process.Start(psi);
@@ -83,24 +83,6 @@ namespace GTDCompanion
             }
 
             base.OnFrameworkInitializationCompleted();
-        }
-
-        private async Task<bool> CheckLicenseAsync(string gtdId)
-        {
-            try
-            {
-                using var http = new HttpClient();
-                var payload = JsonSerializer.Serialize(new { app_licence = gtdId });
-                var resp = await http.PostAsync(
-                    "https://gametrydivision.com/api/gtd/gtdcompanion/check",
-                    new StringContent(payload, Encoding.UTF8, "application/json")
-                );
-                return resp.IsSuccessStatusCode;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        }      
     }
 }

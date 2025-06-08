@@ -5,7 +5,8 @@ using Avalonia.Markup.Xaml;
 using GTDCompanion.Pages;
 using System.Threading.Tasks;
 using System.Diagnostics;
-
+using dotenv.net;
+using System;
 
 namespace GTDCompanion
 {
@@ -20,6 +21,9 @@ namespace GTDCompanion
             var closeBtn = this.FindControl<Button>("CloseButton");
             var minBtn = this.FindControl<Button>("MinimizeButton");
 
+            DotEnv.Load();
+
+            
             if (customTitleBar is not null)
             {
                 customTitleBar.PointerPressed += CustomTitleBar_PointerPressed;
@@ -124,10 +128,11 @@ namespace GTDCompanion
 
         private void MenuSobre_Click(object? sender, RoutedEventArgs e)
         {
+            var key = Environment.GetEnvironmentVariable("URL_GTD") ?? "";
             // Abre o link do Discord no navegador padrão
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = "https://gametrydivision.com/",
+                FileName = key,
                 UseShellExecute = true
             };
             Process.Start(psi);
@@ -136,9 +141,10 @@ namespace GTDCompanion
         private void MenuSuporte_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             // Abre o link do Discord no navegador padrão
+            var key = Environment.GetEnvironmentVariable("URL_DISCORD_SUPPORT_CHANNEL") ?? "";
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = "https://discord.com/channels/1371779015748092015/1371837772108660847",
+                FileName = key,
                 UseShellExecute = true
             };
             Process.Start(psi);
@@ -147,9 +153,10 @@ namespace GTDCompanion
         private void AcessarDiscord_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             // Abre o link do Discord no navegador padrão
+            var key = Environment.GetEnvironmentVariable("URL_DISCORD_WELCOME_CHANNEL") ?? "";
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = "https://discord.gg/bDNcp6cs8J",
+                FileName = key,
                 UseShellExecute = true
             };
             Process.Start(psi);

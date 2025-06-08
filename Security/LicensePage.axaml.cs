@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using dotenv.net;
 
 namespace GTDCompanion.Pages
 {
@@ -17,6 +18,7 @@ namespace GTDCompanion.Pages
         public LicensePage()
         {
             InitializeComponent();
+            DotEnv.Load();
         }
 
         private async void OnVerifyClick(object? sender, RoutedEventArgs e)
@@ -31,12 +33,14 @@ namespace GTDCompanion.Pages
             StatusText.Text = "Verificando...";
             StatusText.Foreground = Brushes.Yellow;
 
+            var urlApiGtd = Environment.GetEnvironmentVariable("URL_GTD_API") ?? "";
+
             try
             {
                 using var http = new HttpClient();
                 var payload = JsonSerializer.Serialize(new { app_licence = licence });
                 var response = await http.PostAsync(
-                    "https://gametrydivision.com/api/gtd/gtdcompanion/check",
+                    urlApiGtd + "/gtd/gtdcompanion/check",
                     new StringContent(payload, Encoding.UTF8, "application/json")
                 );
                 var respContent = await response.Content.ReadAsStringAsync();
@@ -62,12 +66,14 @@ namespace GTDCompanion.Pages
 
         public async Task<bool> VerifyLicence(string licence)
         {
+
+            var urlApiGtd = Environment.GetEnvironmentVariable("URL_GTD_API") ?? "";
             try
             {
                 using var http = new HttpClient();
                 var payload = JsonSerializer.Serialize(new { app_licence = licence });
                 var response = await http.PostAsync(
-                    "https://gametrydivision.com/api/gtd/gtdcompanion/check",
+                    urlApiGtd + "/gtd/gtdcompanion/check",
                     new StringContent(payload, Encoding.UTF8, "application/json")
                 );
                 return response.IsSuccessStatusCode;
