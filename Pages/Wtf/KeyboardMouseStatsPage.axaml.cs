@@ -48,7 +48,7 @@ namespace GTDCompanion.Pages
                 .Sum(kv => kv.Value);
             YearClicksText.Text = $"Últimos 12 meses: {yearClicks}";
 
-            double meters = s.ScrollTicks * 0.01;
+            double meters = s.ScrollTicks * 0.025;
             ScrollText.Text = $"Scroll: {meters:F2} m";
             var top3 = s.KeyCounts.OrderByDescending(kv => kv.Value).Take(3)
                 .Select(kv =>
