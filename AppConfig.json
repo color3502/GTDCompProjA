@@ -1,12 +1,12 @@
 {
-  "INTERNAL_CHECK": "",
-  "URL_DISCORD": "",
-  "URL_GTD": "",
-  "URL_GTD_API": "",
-  "URL_DISCORD_SUPPORT_CHANNEL": "",
-  "URL_DISCORD_WELCOME_CHANNEL": "",
-  "NEXTAPI_ENDPOINT": "",
-  "NEXTAPI_APPID": "",
-  "NEXTAPI_APPSECRET": "",
-  "NEXTAPI_PROJECTID": ""
+  "INTERNAL_CHECK": "KCkqjETDe7qoS6lvWbNUUWqbt0VnlI3sOj9goo2ozOo",
+  "URL_DISCORD": "https://discord.gg/bDNcp6cs8J",
+  "URL_GTD": "https://gametrydivision.com",
+  "URL_GTD_API": "https://gametrydivision.com/api",
+  "URL_DISCORD_SUPPORT_CHANNEL": "https://discord.com/channels/1371779015748092015/1371837772108660847",
+  "URL_DISCORD_WELCOME_CHANNEL": "https://discord.gg/bDNcp6cs8J",
+  "NEXTAPI_ENDPOINT": "https://tools.nextexperience.com.br/api",
+  "NEXTAPI_APPID": "app_id__LEs7L2inoyalVASnhQ0y9h",
+  "NEXTAPI_APPSECRET": "app_secret__8WatGRDlgI2ZA7oDWS67l07FFzA1BMGIGtsfaDjp",
+  "NEXTAPI_PROJECTID": "project_api_id__nPpGaZ0gFBQliQ8"
 }
