@@ -64,10 +64,10 @@ namespace GTDCompanion.Pages
             TopKeysText.Text = "Top 3 teclas: " + string.Join(", ", top3);
 
             TimeSpan up = DateTime.Now - StatsTracker.StartTime;
-            UptimeText.Text = $"Tempo de atividade: {up:dd\\:hh\\:mm}";
-            IdleText.Text = $"Tempo ocioso: {s.IdleTime:dd\\:hh\\:mm}";
+            UptimeText.Text = $"Tempo de atividade: {up:dd\\:hh\\:mm\\:ss}";
+            IdleText.Text = $"Tempo ocioso: {s.IdleTime:dd\\:hh\\:mm\\:ss}";
             TimeSpan sinceMaint = DateTime.Now - s.LastMaintenance;
-            MaintenanceText.Text = $"Desde manutenção: {sinceMaint:dd\\:hh\\:mm}";
+            MaintenanceText.Text = $"Desde manutenção: {sinceMaint:dd\\:hh\\:mm\\:ss}";
         }
 
         private void ResetMaintenance_Click(object? sender, RoutedEventArgs e)
