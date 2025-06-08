@@ -5,7 +5,7 @@
     xmlns:pages="clr-namespace:GTDCompanion.Pages"
     x:Class="GTDCompanion.MainWindow"
     Title="GTD Companion"
-    Icon="/Assets/icon.ico"
+    Icon="avares://GTDCompanion/Assets/icon.ico"
     Width="900" 
     MinHeight="500"
     WindowStartupLocation="CenterScreen"
