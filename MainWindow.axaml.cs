@@ -3,6 +3,10 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using GTDCompanion.Pages;
+using System.Text.Json;
+using System.Net.Http;
+using System.IO;
+using Avalonia.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
@@ -11,6 +15,9 @@ namespace GTDCompanion
 {
     public partial class MainWindow : Window
     {
+        private DispatcherTimer? _updateTimer;
+        private string? _updateUrl;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -83,6 +90,7 @@ namespace GTDCompanion
         {
             MainMenuBox.IsVisible = true;
             MainContent.Content = new HomePage();
+            StartUpdateTimer();
         }
 
         private void MenuInicio_Click(object? sender, RoutedEventArgs e)
@@ -159,6 +167,85 @@ namespace GTDCompanion
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+
+        private async void UpdateNow_Click(object? sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(_updateUrl))
+                await DownloadAndRunUpdate(_updateUrl);
+        }
+
+        private async Task DownloadAndRunUpdate(string url)
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var temp = Path.Combine(Path.GetTempPath(), Path.GetFileName(url));
+                using var resp = await client.GetAsync(url);
+                resp.EnsureSuccessStatusCode();
+                await using (var fs = File.Create(temp))
+                {
+                    await resp.Content.CopyToAsync(fs);
+                }
+                var psi = new ProcessStartInfo { FileName = temp, UseShellExecute = true };
+                Process.Start(psi);
+                Environment.Exit(0);
+            }
+            catch { }
+        }
+
+        private void StartUpdateTimer()
+        {
+            _updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(5) };
+            _updateTimer.Tick += async (_, __) => await CheckForUpdates();
+            _updateTimer.Start();
+            _ = CheckForUpdates();
+        }
+
+        private class UpdateInfo
+        {
+            public string? latest { get; set; }
+            public string? url { get; set; }
+            public string? changelog { get; set; }
+            public bool mandatory { get; set; }
+        }
+
+        private async Task CheckForUpdates()
+        {
+            var apiUrl = Environment.GetEnvironmentVariable("URL_GTD_COMPANION_UPDATE") ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(apiUrl))
+                return;
+            try
+            {
+                using var http = new HttpClient();
+                var json = await http.GetStringAsync(apiUrl);
+                var info = JsonSerializer.Deserialize<UpdateInfo>(json);
+                if (info == null || string.IsNullOrWhiteSpace(info.latest) || string.IsNullOrWhiteSpace(info.url))
+                    return;
+
+                var exe = Process.GetCurrentProcess().MainModule?.FileName;
+                if (string.IsNullOrWhiteSpace(exe))
+                    return;
+                var current = new Version(FileVersionInfo.GetVersionInfo(exe).FileVersion);
+                if (Version.TryParse(info.latest, out var latest) && latest > current)
+                {
+                    _updateUrl = info.url;
+                    if (info.mandatory)
+                    {
+                        var page = new MandatoryUpdatePage();
+                        page.DownloadUrl = info.url;
+                        page.ChangelogText.Text = info.changelog ?? string.Empty;
+                        MainMenuBox.IsVisible = false;
+                        MainContent.Content = page;
+                    }
+                    else
+                    {
+                        UpdateText.Text = $"Nova versão {info.latest} disponível";
+                        UpdateBar.IsVisible = true;
+                    }
+                }
+            }
+            catch { }
         }
     }
 }
