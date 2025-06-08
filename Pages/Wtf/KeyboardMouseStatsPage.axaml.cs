@@ -3,6 +3,7 @@ using GTDCompanion.Helpers;
 using System.Linq;
 using System;
 using WindowsInput.Native;
+using Avalonia.Interactivity;
 
 namespace GTDCompanion.Pages
 {
@@ -50,6 +51,8 @@ namespace GTDCompanion.Pages
 
             double meters = s.ScrollTicks * 0.01;
             ScrollText.Text = $"Scroll: {meters:F2} m";
+            double dist = s.MousePixelsMoved * 0.00026;
+            DistanceText.Text = $"Distância: {dist:F2} m";
             var top3 = s.KeyCounts.OrderByDescending(kv => kv.Value).Take(3)
                 .Select(kv =>
                 {
@@ -59,6 +62,17 @@ namespace GTDCompanion.Pages
                     return $"{name} ({kv.Value})";
                 });
             TopKeysText.Text = "Top 3 teclas: " + string.Join(", ", top3);
+
+            TimeSpan up = DateTime.Now - StatsTracker.StartTime;
+            UptimeText.Text = $"Tempo de atividade: {up:dd\\:hh\\:mm}";
+            IdleText.Text = $"Tempo ocioso: {s.IdleTime:dd\\:hh\\:mm}";
+            TimeSpan sinceMaint = DateTime.Now - s.LastMaintenance;
+            MaintenanceText.Text = $"Desde manutenção: {sinceMaint:dd\\:hh\\:mm}";
+        }
+
+        private void ResetMaintenance_Click(object? sender, RoutedEventArgs e)
+        {
+            StatsTracker.ResetMaintenance();
         }
     }
 }
