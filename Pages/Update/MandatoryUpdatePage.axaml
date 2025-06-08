@@ -1,0 +1,11 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.MandatoryUpdatePage">
+  <Border Background="#AA000000" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="15" Width="300">
+      <TextBlock Text="Atualização obrigatória" Foreground="White" FontSize="20" TextAlignment="Center"/>
+      <TextBlock x:Name="ChangelogText" Text="" Foreground="White" TextWrapping="Wrap" TextAlignment="Center"/>
+      <Button HorizontalAlignment="Center" Content="Atualizar" Click="OnUpdateClick"/>
+    </StackPanel>
+  </Border>
+</UserControl>

@@ -96,6 +96,13 @@
         </Menu>
         <!-- Conteúdo central dinâmico -->
         <ContentControl x:Name="MainContent" Margin="0,1,0,0"/>
+        <!-- Barra de atualização -->
+        <Border x:Name="UpdateBar" DockPanel.Dock="Bottom" Background="#333" Padding="5" IsVisible="False">
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+            <TextBlock x:Name="UpdateText" Foreground="White"/>
+            <Button Content="Atualizar" Click="UpdateNow_Click"/>
+          </StackPanel>
+        </Border>
       </DockPanel>
     </Border>
 </Window>
