@@ -1,3 +1,9 @@
+Build 0.3.90 - Switch to embedded config and fix version check
+store API settings in an embedded JSON file
+load settings through new AppConfig helper instead of DotEnv
+fix version lookup in HomePage
+update project file to include the new config
+
 Build 0.2.86 - Fix overlay reopens
 keep overlay window references static so pages detect already open windows
 update toggle buttons for overlay windows
