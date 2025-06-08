@@ -51,8 +51,8 @@ namespace GTDCompanion.Pages
 
             double meters = s.ScrollTicks * 0.025;
             ScrollText.Text = $"Scroll: {meters:F2} m";
-            double dist = s.MousePixelsMoved * 0.00026;
-            DistanceText.Text = $"Distância: {dist:F2} m";
+            double dist = s.MousePixelsMoved * 0.00020;
+            DistanceText.Text = $"Distância: {dist:F3} m";
             var top3 = s.KeyCounts.OrderByDescending(kv => kv.Value).Take(3)
                 .Select(kv =>
                 {
