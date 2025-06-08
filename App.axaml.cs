@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using Avalonia.Platform;
 using dotenv.net;
 
 
@@ -46,7 +47,7 @@ namespace GTDCompanion
 
                 var tray = new TrayIcon
                 {
-                    Icon = new WindowIcon("Assets/icon.ico"),
+                    Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://GTDCompanion/Assets/icon.ico"))),
                     ToolTipText = "GTD Companion"
                 };
                 var menu = new NativeMenu();

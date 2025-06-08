@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="GTDCompanion.Pages.TranslatorOverlay"
         Width="400" Height="250"
-        Icon="/Assets/icon.ico"
+        Icon="avares://GTDCompanion/Assets/icon.ico"
         BorderThickness="0"
         CanResize="False"
         Topmost="True"
