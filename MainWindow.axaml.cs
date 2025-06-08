@@ -17,7 +17,7 @@ namespace GTDCompanion
     public partial class MainWindow : Window
     {
         private DispatcherTimer? _updateTimer;
-        private string? _updateUrl;
+        private HomePage? _homePage;
 
         public MainWindow()
         {
@@ -90,13 +90,16 @@ namespace GTDCompanion
         private void ShowMainContent()
         {
             MainMenuBox.IsVisible = true;
-            MainContent.Content = new HomePage();
+            _homePage = new HomePage();
+            MainContent.Content = _homePage;
             StartUpdateTimer();
         }
 
         private void MenuInicio_Click(object? sender, RoutedEventArgs e)
         {
-            MainContent.Content = new HomePage();
+            if (_homePage == null)
+                _homePage = new HomePage();
+            MainContent.Content = _homePage;
         }
 
         private void BenchmarkOverlayPage_Click(object? sender, RoutedEventArgs e)
@@ -170,30 +173,6 @@ namespace GTDCompanion
             Process.Start(psi);
         }
 
-        private async void UpdateNow_Click(object? sender, RoutedEventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(_updateUrl))
-                await DownloadAndRunUpdate(_updateUrl);
-        }
-
-        private async Task DownloadAndRunUpdate(string url)
-        {
-            try
-            {
-                UpdateProgress.IsVisible = true;
-                UpdateButton.IsEnabled = false;
-                var progress = new Progress<double>(p => UpdateProgress.Text = $"{p:0}%");
-                var temp = await UpdateDownloader.DownloadAsync(url, progress);
-                var psi = new ProcessStartInfo { FileName = temp, UseShellExecute = true };
-                Process.Start(psi);
-                Environment.Exit(0);
-            }
-            catch
-            {
-                UpdateButton.IsEnabled = true;
-                UpdateProgress.IsVisible = false;
-            }
-        }
 
         private void StartUpdateTimer()
         {
@@ -230,7 +209,6 @@ namespace GTDCompanion
                 var current = new Version(FileVersionInfo.GetVersionInfo(exe).FileVersion);
                 if (Version.TryParse(info.latest, out var latest) && latest > current)
                 {
-                    _updateUrl = info.url;
                     if (info.mandatory)
                     {
                         var page = new MandatoryUpdatePage();
@@ -241,8 +219,7 @@ namespace GTDCompanion
                     }
                     else
                     {
-                        UpdateText.Text = $"Nova versão {info.latest} disponível";
-                        UpdateBar.IsVisible = true;
+                        _homePage?.ShowOptionalUpdate(info.latest, info.url);
                     }
                 }
             }

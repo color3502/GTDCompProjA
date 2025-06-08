@@ -12,6 +12,7 @@ namespace GTDCompanion.Pages
     public partial class MandatoryUpdatePage : UserControl
     {
         public string DownloadUrl { get; set; } = string.Empty;
+        private string? _downloadedFile;
 
         public MandatoryUpdatePage()
         {
@@ -20,10 +21,13 @@ namespace GTDCompanion.Pages
 
         private async void OnUpdateClick(object? sender, RoutedEventArgs e)
         {
-            await DownloadAndRun();
+            if (_downloadedFile == null)
+                await DownloadUpdate();
+            else
+                InstallUpdate();
         }
 
-        public async Task DownloadAndRun()
+        private async Task DownloadUpdate()
         {
             if (string.IsNullOrWhiteSpace(DownloadUrl))
                 return;
@@ -32,21 +36,28 @@ namespace GTDCompanion.Pages
                 ProgressText.IsVisible = true;
                 UpdateButton.IsEnabled = false;
                 var progress = new Progress<double>(p => ProgressText.Text = $"{p:0}%");
-                var tempFile = await UpdateDownloader.DownloadAsync(DownloadUrl, progress);
-                var psi = new ProcessStartInfo
-                {
-                    FileName = tempFile,
-                    UseShellExecute = true
-                };
-                Process.Start(psi);
-                Environment.Exit(0);
+                _downloadedFile = await UpdateDownloader.DownloadAsync(DownloadUrl, progress);
+                UpdateButton.Content = "Instalar Atualização";
+                UpdateButton.IsEnabled = true;
             }
             catch
             {
-                // ignore
                 UpdateButton.IsEnabled = true;
                 ProgressText.IsVisible = false;
             }
+        }
+
+        private void InstallUpdate()
+        {
+            if (string.IsNullOrWhiteSpace(_downloadedFile))
+                return;
+            var psi = new ProcessStartInfo
+            {
+                FileName = _downloadedFile,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+            Environment.Exit(0);
         }
     }
 }
