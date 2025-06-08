@@ -1,3 +1,13 @@
+Build 0.4.105 - Fix KeyboardMouseStats realtime saving and key release tracking
+save keyboard and mouse statistics immediately when they change
+count key presses on key release instead of key down to avoid repeats
+
+Build 0.4.103 - Enable global F7/F8 hotkeys
+add GlobalHotkeyService to manage F7/F8
+register hotkeys from MainWindow
+toggle overlay and macro execution globally
+clean up page-level hotkey handling
+
 Build 0.4.103 - Improve update download flow
 show home page by default then reuse it when returning
 show optional update prompt on the home page
