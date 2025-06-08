@@ -4,16 +4,22 @@ using System.Linq;
 using System;
 using WindowsInput.Native;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 
 namespace GTDCompanion.Pages
 {
     public partial class KeyboardMouseStatsPage : UserControl
     {
+        private readonly DispatcherTimer _updateTimer;
+
         public KeyboardMouseStatsPage()
         {
             InitializeComponent();
             StatsTracker.StatsUpdated += () => UpdateStats();
             UpdateStats();
+            _updateTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _updateTimer.Tick += (_, __) => UpdateStats();
+            _updateTimer.Start();
         }
 
         private void UpdateStats()
