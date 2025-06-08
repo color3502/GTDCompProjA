@@ -65,6 +65,7 @@ namespace GTDCompanion
                 var exitItem = new NativeMenuItem("Encerrar");
                 exitItem.Click += (_, __) =>
                 {
+                    GlobalHotkeyService.Unregister();
                     StatsTracker.Stop();
                     desktop.Shutdown();
                 };

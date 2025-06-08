@@ -93,6 +93,7 @@ namespace GTDCompanion
             _homePage = new HomePage();
             MainContent.Content = _homePage;
             StartUpdateTimer();
+            GlobalHotkeyService.Register();
         }
 
         private void MenuInicio_Click(object? sender, RoutedEventArgs e)
