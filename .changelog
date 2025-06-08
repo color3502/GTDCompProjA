@@ -1,3 +1,9 @@
+Build 0.4.103 - Improve update download flow
+show home page by default then reuse it when returning
+show optional update prompt on the home page
+start download and switch button to install once ready
+use the same install flow in the mandatory update screen
+remove old update bar from MainWindow
 
 Build 0.4.98 - Implement download progress for updates
 display progress when downloading updates
