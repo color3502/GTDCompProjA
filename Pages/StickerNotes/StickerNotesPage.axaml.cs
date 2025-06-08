@@ -6,9 +6,18 @@ namespace GTDCompanion.Pages
 {
     public partial class StickerNotesPage : UserControl
     {
-        private readonly StickerNoteWindow?[] windows = new StickerNoteWindow?[5];
+        private static readonly StickerNoteWindow?[] windows = new StickerNoteWindow?[5];
         private readonly IBrush?[] defaultBackgrounds = new IBrush?[5];
         private readonly IBrush openBrush = new SolidColorBrush(Color.Parse("#FE6A0A"));
+
+        private void UpdateButtonStates()
+        {
+            for (int i = 0; i < windows.Length; i++)
+            {
+                var btn = GetButton(i);
+                btn.Background = (windows[i] != null && windows[i]!.IsVisible) ? openBrush : defaultBackgrounds[i];
+            }
+        }
 
         public StickerNotesPage()
         {
@@ -23,6 +32,8 @@ namespace GTDCompanion.Pages
             Note3Button.Click += (_, __) => ToggleWindow(2);
             Note4Button.Click += (_, __) => ToggleWindow(3);
             Note5Button.Click += (_, __) => ToggleWindow(4);
+
+            UpdateButtonStates();
         }
 
         private Button GetButton(int idx) => idx switch
@@ -36,7 +47,6 @@ namespace GTDCompanion.Pages
 
         private void ToggleWindow(int idx)
         {
-            var btn = GetButton(idx);
             if (windows[idx] == null || !windows[idx]!.IsVisible)
             {
                 var win = new StickerNoteWindow(idx + 1);
@@ -44,17 +54,17 @@ namespace GTDCompanion.Pages
                 win.Closed += (_, __) =>
                 {
                     windows[idx] = null;
-                    btn.Background = defaultBackgrounds[idx];
+                    UpdateButtonStates();
                 };
                 win.Show();
-                btn.Background = openBrush;
             }
             else
             {
                 windows[idx]!.Close();
                 windows[idx] = null;
-                btn.Background = defaultBackgrounds[idx];
             }
+
+            UpdateButtonStates();
         }
     }
 }

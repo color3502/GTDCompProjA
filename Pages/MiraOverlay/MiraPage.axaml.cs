@@ -11,9 +11,15 @@ namespace GTDCompanion.Pages
 {
     public partial class MiraPage : UserControl
     {
-        private OverlayWindow? overlayWin;
+        private static OverlayWindow? overlayWin;
         private bool isLoaded = false; // Evita trigger duplo ao carregar
         private GlobalHotkey? globalHotkey;
+
+        private void UpdateToggleButton()
+        {
+            ToggleBtn.Content = (overlayWin != null && overlayWin.IsVisible)
+                ? "Ocultar Mira" : "Mostrar Mira";
+        }
 
         public MiraPage()
         {
@@ -63,6 +69,8 @@ namespace GTDCompanion.Pages
                     win.KeyDown -= OnWindowKeyDown;
                 globalHotkey?.Dispose();
             };
+
+            UpdateToggleButton();
         }
 
         private void ToggleMira_Click(object? sender, RoutedEventArgs e)
@@ -70,16 +78,17 @@ namespace GTDCompanion.Pages
             if (overlayWin == null || !overlayWin.IsVisible)
             {
                 overlayWin = new OverlayWindow();
+                overlayWin.Closed += (_, __) => { overlayWin = null; UpdateToggleButton(); };
                 overlayWin.Show();
                 overlayWin.UpdateMira(GetCurrentConfig());
-                ToggleBtn.Content = "Ocultar Mira";
             }
             else
             {
                 overlayWin.Close();
                 overlayWin = null;
-                ToggleBtn.Content = "Mostrar Mira";
             }
+
+            UpdateToggleButton();
         }
 
         private void OnConfigChanged(object? sender, EventArgs? e)

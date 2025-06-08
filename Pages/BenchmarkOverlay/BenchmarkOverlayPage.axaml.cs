@@ -15,7 +15,7 @@ namespace GTDCompanion.Pages
 {
     public partial class BenchmarkOverlayPage : UserControl
     {
-        private BenchmarkOverlayWindow? overlayWindow;
+        private static BenchmarkOverlayWindow? overlayWindow;
         private bool rtssAvailable = false;
 
         private readonly string[] possibleRtssPaths = new[]
@@ -31,6 +31,12 @@ namespace GTDCompanion.Pages
 
         // Helper para evitar duplo-save
         private bool loadingSettings = false;
+
+        private void UpdateToggleButton()
+        {
+            ShowOverlayBtn.Content = (overlayWindow != null && overlayWindow.IsVisible)
+                ? "Ocultar Benchmark" : "Mostrar Benchmark";
+        }
 
         public BenchmarkOverlayPage()
         {
@@ -60,7 +66,10 @@ namespace GTDCompanion.Pages
             {
                 rtssAvailable = await CheckAndStartRTSS();
                 SetRtssUi(rtssAvailable);
+                UpdateToggleButton();
             });
+
+            UpdateToggleButton();
         }
 
         private async void ShowOverlayBtn_Click(object? sender, RoutedEventArgs e)
@@ -78,6 +87,7 @@ namespace GTDCompanion.Pages
                 await Task.Run(() => KillRtssProcesses());
                 rtssAvailable = false;
                 SetRtssUi(false);
+                UpdateToggleButton();
                 return;
             }
 
@@ -91,10 +101,11 @@ namespace GTDCompanion.Pages
             }
 
             overlayWindow = new BenchmarkOverlayWindow(GetOverlaySettings());
-            overlayWindow.Closed += (_, _) => overlayWindow = null;
+            overlayWindow.Closed += (_, _) => { overlayWindow = null; UpdateToggleButton(); };
             overlayWindow.Show();
             rtssAvailable = true;
             SetRtssUi(true);
+            UpdateToggleButton();
         }
 
         private void DownloadRtssBtn_Click(object? sender, RoutedEventArgs e)
