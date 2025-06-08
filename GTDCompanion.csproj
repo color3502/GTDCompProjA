@@ -7,11 +7,11 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <Platforms>x64</Platforms>
-    <Version>1.0.1</Version>
-    <FileVersion>1.0.1</FileVersion>
-    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <Version>0.2.86</Version>
+    <FileVersion>0.2.86</FileVersion>
+    <AssemblyVersion>0.2.86</AssemblyVersion>
     <Product>GTD Companion</Product>
-    <Company>Next Experience</Company>
+    <Company>Game Try Division</Company>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <!-- Habilite trimming se quiser reduzir o tamanho do build self-contained -->
     <!-- <PublishTrimmed>true</PublishTrimmed> -->
@@ -39,10 +39,10 @@
     <!-- Avalonia.Diagnostics só no Debug -->
     <PackageReference Include="Avalonia.Diagnostics" Version="11.3.0" Condition="'$(Configuration)' == 'Debug'" />
     
-
     <AvaloniaResource Include="Assets\logo.png" />
     <AvaloniaResource Include="Assets\icon.ico" />
-
+    <AvaloniaResource Include=".env" />
+    <AvaloniaResource Include=".changelog" />
 
     <Reference Include="RTSSSharedMemoryNET">
       <HintPath>C:\GTDCompanion\GTDCompanion\libs\RTSSSharedMemoryNET.dll</HintPath>
