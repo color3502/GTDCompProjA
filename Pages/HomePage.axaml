@@ -20,5 +20,10 @@
                    Foreground="#888"
                    FontSize="13"
                    FontWeight="Normal"/>
+        <StackPanel x:Name="UpdatePanel" IsVisible="False" Spacing="4" HorizontalAlignment="Center">
+            <TextBlock x:Name="UpdateText" Foreground="#ccc" FontSize="13" TextAlignment="Center"/>
+            <Button x:Name="UpdateButton" Content="Atualizar" Click="UpdateButton_Click"/>
+            <TextBlock x:Name="UpdateProgress" Foreground="#ccc" FontSize="13" TextAlignment="Center" IsVisible="False"/>
+        </StackPanel>
     </StackPanel>
 </UserControl>
