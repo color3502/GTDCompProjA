@@ -10,6 +10,7 @@ using Avalonia.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
+using GTDCompanion.Helpers;
 
 namespace GTDCompanion
 {
@@ -179,19 +180,19 @@ namespace GTDCompanion
         {
             try
             {
-                using var client = new HttpClient();
-                var temp = Path.Combine(Path.GetTempPath(), Path.GetFileName(url));
-                using var resp = await client.GetAsync(url);
-                resp.EnsureSuccessStatusCode();
-                await using (var fs = File.Create(temp))
-                {
-                    await resp.Content.CopyToAsync(fs);
-                }
+                UpdateProgress.IsVisible = true;
+                UpdateButton.IsEnabled = false;
+                var progress = new Progress<double>(p => UpdateProgress.Text = $"{p:0}%");
+                var temp = await UpdateDownloader.DownloadAsync(url, progress);
                 var psi = new ProcessStartInfo { FileName = temp, UseShellExecute = true };
                 Process.Start(psi);
                 Environment.Exit(0);
             }
-            catch { }
+            catch
+            {
+                UpdateButton.IsEnabled = true;
+                UpdateProgress.IsVisible = false;
+            }
         }
 
         private void StartUpdateTimer()
