@@ -45,7 +45,8 @@
 
 
     <Reference Include="RTSSSharedMemoryNET">
-      <HintPath>C:\GTDCompanion\GTDCompanion\libs\RTSSSharedMemoryNET.dll</HintPath>
+      <HintPath>libs\RTSSSharedMemoryNET.dll</HintPath>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 
