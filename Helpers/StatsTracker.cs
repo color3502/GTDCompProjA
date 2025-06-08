@@ -182,8 +182,8 @@ namespace GTDCompanion.Helpers
 
         private static IntPtr KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            const int WM_KEYDOWN = 0x0100;
-            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+            const int WM_KEYUP = 0x0101;
+            if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP)
             {
                 var info = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
                 Stats.KeyPresses++;
@@ -191,6 +191,7 @@ namespace GTDCompanion.Helpers
                     Stats.KeyCounts[info.vkCode] = 0;
                 Stats.KeyCounts[info.vkCode]++;
                 IncrementDailyKeyPresses();
+                Save();
                 StatsUpdated?.Invoke();
             }
             return CallNextHookEx(_keyboardHook, nCode, wParam, lParam);
@@ -232,6 +233,7 @@ namespace GTDCompanion.Helpers
                         _lastMouseMove = DateTime.Now;
                         break;
                 }
+                Save();
                 StatsUpdated?.Invoke();
             }
             return CallNextHookEx(_mouseHook, nCode, wParam, lParam);
