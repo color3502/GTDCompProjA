@@ -12,13 +12,31 @@ namespace GTDCompanion.Pages
     public partial class MiraPage : UserControl
     {
         private static OverlayWindow? overlayWin;
+        public static MiraPage? Instance { get; private set; }
         private bool isLoaded = false; // Evita trigger duplo ao carregar
-        private GlobalHotkey? globalHotkey;
 
         private void UpdateToggleButton()
         {
             ToggleBtn.Content = (overlayWin != null && overlayWin.IsVisible)
                 ? "Ocultar Mira" : "Mostrar Mira";
+        }
+
+        public static void ToggleOverlayGlobal()
+        {
+            if (overlayWin == null || !overlayWin.IsVisible)
+            {
+                overlayWin = new OverlayWindow();
+                overlayWin.Closed += (_, __) => overlayWin = null;
+                overlayWin.Show();
+                overlayWin.UpdateMira(GTDConfigHelper.LoadMiraConfig());
+            }
+            else
+            {
+                overlayWin.Close();
+                overlayWin = null;
+            }
+
+            Instance?.UpdateToggleButton();
         }
 
         public MiraPage()
@@ -55,19 +73,19 @@ namespace GTDCompanion.Pages
 
             this.AttachedToVisualTree += (_, _) =>
             {
+                Instance = this;
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown += OnWindowKeyDown;
-                globalHotkey = new GlobalHotkey(GlobalHotkey.VK_F7, () => ToggleMira_Click(null, new RoutedEventArgs()));
-                globalHotkey.Register();
             };
 
             this.DetachedFromVisualTree += (_, _) =>
             {
+                if (Instance == this)
+                    Instance = null;
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown -= OnWindowKeyDown;
-                globalHotkey?.Dispose();
             };
 
             UpdateToggleButton();
@@ -75,20 +93,7 @@ namespace GTDCompanion.Pages
 
         private void ToggleMira_Click(object? sender, RoutedEventArgs e)
         {
-            if (overlayWin == null || !overlayWin.IsVisible)
-            {
-                overlayWin = new OverlayWindow();
-                overlayWin.Closed += (_, __) => { overlayWin = null; UpdateToggleButton(); };
-                overlayWin.Show();
-                overlayWin.UpdateMira(GetCurrentConfig());
-            }
-            else
-            {
-                overlayWin.Close();
-                overlayWin = null;
-            }
-
-            UpdateToggleButton();
+            ToggleOverlayGlobal();
         }
 
         private void OnConfigChanged(object? sender, EventArgs? e)
@@ -125,7 +130,7 @@ namespace GTDCompanion.Pages
         {
             if (e.Key == Key.F7)
             {
-                ToggleMira_Click(null, new RoutedEventArgs());
+                ToggleOverlayGlobal();
             }
         }
     }

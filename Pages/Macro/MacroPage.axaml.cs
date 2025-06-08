@@ -14,9 +14,9 @@ namespace GTDCompanion.Pages
 {
     public partial class MacroPage : UserControl
     {
+        public static MacroPage? Instance { get; private set; }
         private readonly List<MacroStep> macroSteps = new();
         private readonly Dictionary<int, MacroOverlay> overlays = new();
-        private GlobalHotkey? globalHotkey;
 
         public MacroPage()
         {
@@ -35,19 +35,19 @@ namespace GTDCompanion.Pages
 
             this.AttachedToVisualTree += (_, _) =>
             {
+                Instance = this;
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown += OnWindowKeyDown;
-                globalHotkey = new GlobalHotkey(GlobalHotkey.VK_F8, () => ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs()));
-                globalHotkey.Register();
             };
 
             this.DetachedFromVisualTree += (_, _) =>
             {
+                if (Instance == this)
+                    Instance = null;
                 var win = GetWindow();
                 if (win != null)
                     win.KeyDown -= OnWindowKeyDown;
-                globalHotkey?.Dispose();
             };
         }
 
@@ -228,7 +228,7 @@ namespace GTDCompanion.Pages
         private CancellationTokenSource? macroCts;
         private bool isRunning = false;
 
-        private async void ExecuteMacro(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        public async void ExecuteMacro(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             if (isRunning)
             {
@@ -319,8 +319,13 @@ namespace GTDCompanion.Pages
         {
             if (e.Key == Key.F8)
             {
-                ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs());
+                ToggleMacroExecution();
             }
+        }
+
+        public void ToggleMacroExecution()
+        {
+            ExecuteMacro(null, new Avalonia.Interactivity.RoutedEventArgs());
         }
     }
 }
