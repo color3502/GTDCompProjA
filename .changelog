@@ -1,3 +1,16 @@
+
+Build 0.4.98 - Implement download progress for updates
+display progress when downloading updates
+save updates as GTDCompanion_Installer.exe
+show progress text on the optional update bar and mandatory page
+add helper to download update files
+
+Build 0.4.94 - Implement update check system
+add environment key placeholder for update service
+add MandatoryUpdatePage for forced updates
+display optional update bar in MainWindow
+implement periodic update check and installer download
+
 Build 0.3.90 - Switch to embedded config and fix version check
 store API settings in an embedded JSON file
 load settings through new AppConfig helper instead of DotEnv
