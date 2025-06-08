@@ -6,7 +6,6 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Input;
-using dotenv.net;
 using System;
 
 namespace GTDCompanion.Pages
@@ -39,7 +38,7 @@ namespace GTDCompanion.Pages
         public TranslatorPage()
         {
             InitializeComponent();
-            DotEnv.Load();
+            AppConfig.PopulateEnvironment();
             InitCombos();
             CopyOnTranslateCheck.IsChecked = GTDConfigHelper.GetBool("Translator", "copy_on_translate", true);
 

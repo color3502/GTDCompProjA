@@ -26,7 +26,6 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
-    <PackageReference Include="dotenv.net" Version="3.2.1" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
     <PackageReference Include="InputSimulatorStandard" Version="1.0.0" />
@@ -41,10 +40,7 @@
     
     <AvaloniaResource Include="Assets\logo.png" />
     <AvaloniaResource Include="Assets\icon.ico" />
-    <!-- Copy .env to output so DotEnv can load variables at runtime -->
-    <None Update=".env">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="AppConfig.json" />
     <AvaloniaResource Include=".changelog" />
 
     <Reference Include="RTSSSharedMemoryNET">

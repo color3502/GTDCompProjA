@@ -5,7 +5,6 @@ using Avalonia.Markup.Xaml;
 using GTDCompanion.Pages;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using dotenv.net;
 using System;
 
 namespace GTDCompanion
@@ -21,7 +20,7 @@ namespace GTDCompanion
             var closeBtn = this.FindControl<Button>("CloseButton");
             var minBtn = this.FindControl<Button>("MinimizeButton");
 
-            DotEnv.Load();
+            AppConfig.PopulateEnvironment();
 
             
             if (customTitleBar is not null)
