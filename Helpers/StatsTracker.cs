@@ -140,7 +140,7 @@ namespace GTDCompanion.Helpers
             _mouseHook = SetWindowsHookEx(WH_MOUSE_LL, _mouseProc, GetModuleHandle(null), 0);
             _timer = new System.Timers.Timer(60000);
             _timer.Elapsed += (_, __) => {
-                if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(1))
+                if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(5))
                     Stats.IdleTime += TimeSpan.FromMinutes(1);
                 else
                     Stats.ActiveTime += TimeSpan.FromMinutes(1);
