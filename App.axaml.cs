@@ -39,6 +39,7 @@ namespace GTDCompanion
 
                 StatsTracker.Load();
                 StatsTracker.Start();
+                GpuProcessMonitor.Start();
 
                 AppConfig.PopulateEnvironment();
 
@@ -67,6 +68,7 @@ namespace GTDCompanion
                 {
                     GlobalHotkeyService.Unregister();
                     StatsTracker.Stop();
+                    GpuProcessMonitor.Stop();
                     desktop.Shutdown();
                 };
                 menu.Items.Add(discordItem);
