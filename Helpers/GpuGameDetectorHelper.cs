@@ -15,8 +15,12 @@ namespace GTDCompanion.Helpers
     {
         // Configurações ajustáveis
         private const float GPU_USAGE_THRESHOLD = 10f;     // mínimo % GPU para considerar (ajuste)
-        private const int MINUTES_THRESHOLD = 1;           // minutos seguidos acima do threshold
-        private const int MONITOR_INTERVAL_SECONDS = 10;   // frequência de checagem
+        // Envia apenas processos que permanecem consumindo GPU por ao menos
+        // dois minutos acima do limite estabelecido.
+        private const int MINUTES_THRESHOLD = 2;
+
+        // Intervalo de verificação a cada 30 segundos conforme especificação.
+        private const int MONITOR_INTERVAL_SECONDS = 30;
 
         private static readonly string ApiUrl = "https://gametrydivision.com/api/gtdcompanion/getexetocheck";
 
@@ -24,7 +28,15 @@ namespace GTDCompanion.Helpers
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "GTDCompanion", "GpuGameHistory.json");
 
-        private static readonly HashSet<string> sentHistory = new(StringComparer.OrdinalIgnoreCase);
+        // Mantém o histórico de executáveis já enviados para a API.
+        private class HistoryEntry
+        {
+            public string FileName { get; set; } = string.Empty;
+            public string FullPath { get; set; } = string.Empty;
+        }
+
+        private static readonly Dictionary<string, HistoryEntry> sentHistory =
+            new(StringComparer.OrdinalIgnoreCase);
 
         // Estrutura para guardar histórico
         private class GpuUsageEntry
@@ -47,11 +59,11 @@ namespace GTDCompanion.Helpers
                 if (File.Exists(HistoryPath))
                 {
                     var json = File.ReadAllText(HistoryPath);
-                    var list = JsonSerializer.Deserialize<List<string>>(json);
+                    var list = JsonSerializer.Deserialize<List<HistoryEntry>>(json);
                     if (list != null)
                     {
-                        foreach (var p in list)
-                            sentHistory.Add(p);
+                        foreach (var entry in list)
+                            sentHistory[entry.FullPath] = entry;
                     }
                 }
             }
@@ -65,7 +77,9 @@ namespace GTDCompanion.Helpers
                 var dir = Path.GetDirectoryName(HistoryPath)!;
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
-                var json = JsonSerializer.Serialize(sentHistory.ToList(), new JsonSerializerOptions { WriteIndented = true });
+
+                var list = sentHistory.Values.ToList();
+                var json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(HistoryPath, json);
             }
             catch { }
@@ -143,7 +157,7 @@ namespace GTDCompanion.Helpers
                                 FileName = exeName,
                                 FullPath = exePath,
                                 Pid = pid,
-                                Sent = sentHistory.Contains(exePath)
+                                Sent = sentHistory.ContainsKey(exePath)
                             };
                         }
 
@@ -156,7 +170,11 @@ namespace GTDCompanion.Helpers
                                 (now - usageHistory[pid].HighUsageStart.Value).TotalMinutes >= MINUTES_THRESHOLD)
                             {
                                 usageHistory[pid].Sent = true;
-                                sentHistory.Add(exePath);
+                                sentHistory[exePath] = new HistoryEntry
+                                {
+                                    FileName = exeName,
+                                    FullPath = exePath
+                                };
                                 SaveHistory();
                                 await SendUnknownGame(usageHistory[pid]);
                             }
