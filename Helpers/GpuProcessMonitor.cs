@@ -113,13 +113,30 @@ namespace GTDCompanion.Helpers
             {
                 using var searcher = new ManagementObjectSearcher(
                     "root\\CIMV2",
-                    "SELECT IDProcess, PercentGPUTime FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
+                    "SELECT * FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine");
+
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    if (obj["IDProcess"] == null || obj["PercentGPUTime"] == null)
+                    if (obj["IDProcess"] == null)
                         continue;
-                    if (int.TryParse(obj["IDProcess"].ToString(), out int pid) &&
-                        double.TryParse(obj["PercentGPUTime"].ToString(), out double pct))
+
+                    if (!int.TryParse(obj["IDProcess"].ToString(), out int pid))
+                        continue;
+
+                    double pct = 0;
+
+                    if (obj.Properties["PercentGPUTime"] != null &&
+                        double.TryParse(obj["PercentGPUTime"].ToString(), out var p1))
+                    {
+                        pct = p1;
+                    }
+                    else if (obj.Properties["UtilizationPercentage"] != null &&
+                        double.TryParse(obj["UtilizationPercentage"].ToString(), out var p2))
+                    {
+                        pct = p2;
+                    }
+
+                    if (pct > 0)
                     {
                         if (!result.ContainsKey(pid))
                             result[pid] = 0;
@@ -127,7 +144,18 @@ namespace GTDCompanion.Helpers
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                try
+                {
+                    var logDir = Path.GetDirectoryName(StorePath)!;
+                    if (!Directory.Exists(logDir))
+                        Directory.CreateDirectory(logDir);
+                    File.AppendAllText(Path.Combine(logDir, "GpuMonitor.log"), $"{DateTime.Now:u} {ex}\n");
+                }
+                catch { }
+            }
+
             return result;
         }
 
