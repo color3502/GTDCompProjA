@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
 using GTDCompanion.Helpers;
+using System.Linq;
 
 namespace GTDCompanion
 {
@@ -95,8 +96,11 @@ namespace GTDCompanion
             StartUpdateTimer();
             GlobalHotkeyService.Register();
 
-            if (GTDConfigHelper.GetBool("Behavior", "StartMinimized", true))
+            if (Environment.GetCommandLineArgs().Any(a =>
+                a.Equals("minimized", StringComparison.OrdinalIgnoreCase)))
+            {
                 this.Hide();
+            }
         }
 
         private void MenuInicio_Click(object? sender, RoutedEventArgs e)
