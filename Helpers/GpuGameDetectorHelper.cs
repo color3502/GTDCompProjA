@@ -20,6 +20,12 @@ namespace GTDCompanion.Helpers
 
         private static readonly string ApiUrl = "https://gametrydivision.com/api/gtdcompanion/getexetocheck";
 
+        private static readonly string HistoryPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "GTDCompanion", "GpuGameHistory.json");
+
+        private static readonly HashSet<string> sentHistory = new(StringComparer.OrdinalIgnoreCase);
+
         // Estrutura para guardar histórico
         private class GpuUsageEntry
         {
@@ -33,9 +39,45 @@ namespace GTDCompanion.Helpers
         private static readonly Dictionary<int, GpuUsageEntry> usageHistory = new();
         private static Timer? timer;
 
+        private static void LoadHistory()
+        {
+            try
+            {
+                if (File.Exists(HistoryPath))
+                {
+                    var json = File.ReadAllText(HistoryPath);
+                    var list = JsonSerializer.Deserialize<List<string>>(json);
+                    if (list != null)
+                    {
+                        foreach (var p in list)
+                            sentHistory.Add(p);
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private static void SaveHistory()
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(HistoryPath)!;
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                var json = JsonSerializer.Serialize(sentHistory.ToList(), new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(HistoryPath, json);
+            }
+            catch { }
+        }
+
         // Inicializador público: chama uma vez só!
         public static void Start()
         {
+            if (!OperatingSystem.IsWindows())
+                return;
+            if (timer != null)
+                return;
+            LoadHistory();
             timer = new Timer(async _ => await MonitorAndSend(), null, 0, MONITOR_INTERVAL_SECONDS * 1000);
         }
 
@@ -83,7 +125,8 @@ namespace GTDCompanion.Helpers
                             {
                                 FileName = exeName,
                                 FullPath = exePath,
-                                Pid = pid
+                                Pid = pid,
+                                Sent = sentHistory.Contains(exePath)
                             };
                         }
 
@@ -96,6 +139,8 @@ namespace GTDCompanion.Helpers
                                 (now - usageHistory[pid].HighUsageStart.Value).TotalMinutes >= MINUTES_THRESHOLD)
                             {
                                 usageHistory[pid].Sent = true;
+                                sentHistory.Add(exePath);
+                                SaveHistory();
                                 await SendUnknownGame(usageHistory[pid]);
                             }
                         }
