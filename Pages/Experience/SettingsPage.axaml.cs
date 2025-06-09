@@ -22,8 +22,7 @@ namespace GTDCompanion.Pages
                 StartMinimizedBox.IsEnabled = false;
             }
 
-            StartMinimizedBox.Checked += OnStartMinimizedChanged;
-            StartMinimizedBox.Unchecked += OnStartMinimizedChanged;
+            StartMinimizedBox.IsCheckedChanged += OnStartMinimizedChanged;
         }
 
         private void OnStartMinimizedChanged(object? sender, RoutedEventArgs e)
@@ -50,6 +49,9 @@ namespace GTDCompanion.Pages
 
         private static bool IsStartupEnabled()
         {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return false;
+
             using var key = Registry.CurrentUser.OpenSubKey(
                 "Software\\Microsoft\\Windows\\CurrentVersion\\Run", writable: false);
             if (key == null)
