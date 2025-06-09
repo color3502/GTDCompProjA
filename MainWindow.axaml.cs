@@ -94,6 +94,9 @@ namespace GTDCompanion
             MainContent.Content = _homePage;
             StartUpdateTimer();
             GlobalHotkeyService.Register();
+
+            if (GTDConfigHelper.GetBool("Experience", "StartMinimized", true))
+                this.Hide();
         }
 
         private void MenuInicio_Click(object? sender, RoutedEventArgs e)
@@ -131,6 +134,11 @@ namespace GTDCompanion
         private void MacroPage_Click(object? sender, RoutedEventArgs e)
         {
             MainContent.Content = new MacroPage();
+        }
+
+        private void ExperiencePage_Click(object? sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new ExperiencePage();
         }
 
         private void KeyboardMouseStatsPage_Click(object? sender, RoutedEventArgs e)

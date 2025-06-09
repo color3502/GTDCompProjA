@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="GTDCompanion.Pages.ExperiencePage"
+             Background="#23272A">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20" Spacing="12">
+            <TextBlock Text="Experiência" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold"/>
+            <StackPanel>
+                <TextBlock Text="Comportamento do Aplicativo" FontSize="18" Foreground="White" Margin="0,8,0,4"/>
+                <CheckBox x:Name="StartMinimizedBox" Content="Inicializar Minimizado com o Windows" IsChecked="True"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
