@@ -23,27 +23,6 @@
                     </TextBlock>
                 </StackPanel>
             </Border>
-
-            <TextBlock Text="Recursos Principais" FontSize="20" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center"/>
-            <WrapPanel HorizontalAlignment="Center" Spacing="20">
-                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
-                    <TextBlock Text="🖥" FontSize="32" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Overlays de Benchmark" Foreground="White" TextAlignment="Center" FontSize="14"/>
-                </StackPanel>
-                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
-                    <TextBlock Text="🌐" FontSize="32" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Tradução por IA" Foreground="White" TextAlignment="Center" FontSize="14"/>
-                </StackPanel>
-                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
-                    <TextBlock Text="📝" FontSize="32" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Notas Rápidas" Foreground="White" TextAlignment="Center" FontSize="14"/>
-                </StackPanel>
-                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
-                    <TextBlock Text="⚙" FontSize="32" HorizontalAlignment="Center"/>
-                    <TextBlock Text="Macros e Automações" Foreground="White" TextAlignment="Center" FontSize="14"/>
-                </StackPanel>
-            </WrapPanel>
-
             <Border Background="#3A3D41" CornerRadius="10" Padding="10" Margin="0,10,0,0">
                 <TextBlock TextWrapping="Wrap" Foreground="White" TextAlignment="Center">
                     Junte-se a nós no Discord para contribuir, relatar problemas e obter ajuda da comunidade.
