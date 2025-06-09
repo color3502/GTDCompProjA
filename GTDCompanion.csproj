@@ -30,6 +30,7 @@
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
     <PackageReference Include="InputSimulatorStandard" Version="1.0.0" />
     <PackageReference Include="LibreHardwareMonitorLib" Version="0.9.4" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.5" />
     <PackageReference Include="System.Management" Version="9.0.5" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
     <PackageReference Include="System.Reactive.Windows.Forms" Version="6.0.1" />

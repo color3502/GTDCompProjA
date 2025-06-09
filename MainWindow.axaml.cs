@@ -24,6 +24,8 @@ namespace GTDCompanion
         {
             InitializeComponent();
 
+            GTDCompanion.Helpers.GpuGameDetectorHelper.Start();
+
             // Custom barra de título: eventos de arrastar, minimizar, fechar
             var customTitleBar = this.FindControl<Border>("CustomTitleBar");
             var closeBtn = this.FindControl<Button>("CloseButton");
