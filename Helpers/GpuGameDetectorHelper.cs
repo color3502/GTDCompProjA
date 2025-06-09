@@ -37,6 +37,7 @@ namespace GTDCompanion.Helpers
         }
 
         private static readonly Dictionary<int, GpuUsageEntry> usageHistory = new();
+        private static readonly Dictionary<string, PerformanceCounter> counters = new();
         private static Timer? timer;
 
         private static void LoadHistory()
@@ -90,17 +91,33 @@ namespace GTDCompanion.Helpers
 
                 var now = DateTime.UtcNow;
 
+                // remove counters that no longer exist
+                var missing = counters.Keys.Except(instances).ToList();
+                foreach (var m in missing)
+                {
+                    counters[m].Dispose();
+                    counters.Remove(m);
+                }
+
                 // Pega só os que são "engtype_3D"
                 foreach (var instance in instances)
                 {
                     if (!instance.Contains("engtype_3D")) continue;
+
+                    if (!counters.TryGetValue(instance, out var counter))
+                    {
+                        counter = new PerformanceCounter("GPU Engine", "Utilization Percentage", instance);
+                        counters[instance] = counter;
+                        // prime the counter and skip this cycle
+                        counter.NextValue();
+                        continue;
+                    }
 
                     int pid;
                     try
                     {
                         var pidStr = instance.Split('_').FirstOrDefault(s => s.StartsWith("pid"))?.Replace("pid_", "");
                         if (!int.TryParse(pidStr, out pid)) continue;
-                        var counter = new PerformanceCounter("GPU Engine", "Utilization Percentage", instance);
                         float value = counter.NextValue();
 
                         // Ignora valores negativos/bizarros
