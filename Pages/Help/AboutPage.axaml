@@ -1,22 +1,55 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="GTDCompanion.Pages.AboutPage"
-             Background="#2C2F33">
+             x:Class="GTDCompanion.Pages.AboutPage">
+    <UserControl.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#2C2F33" Offset="0"/>
+            <GradientStop Color="#23272A" Offset="1"/>
+        </LinearGradientBrush>
+    </UserControl.Background>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="20" Spacing="12">
-            <Image Source="avares://GTDCompanion/Assets/logo.png"
-                   Width="120" HorizontalAlignment="Center"/>
-            <TextBlock Text="Sobre o GTD Companion" FontSize="24" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center" Margin="0,10"/>
-            <TextBlock TextWrapping="Wrap" Foreground="White">
-                A Comunidade GTD (Game Try Division) é um grupo de entusiastas focados em integrar ferramentas,
-                overlays e automações que melhoram a experiência gamer. O GTD Companion reúne diversas dessas
-                funcionalidades em um único aplicativo para tornar sua vida mais simples.
-            </TextBlock>
-            <TextBlock TextWrapping="Wrap" Foreground="White">
-                Este projeto é mantido coletivamente pela comunidade e está em constante evolução. Fique à vontade
-                para participar do nosso Discord e colaborar com ideias, feedbacks e testes.
-            </TextBlock>
-            <TextBlock x:Name="VersionText" HorizontalAlignment="Center" Margin="0,20,0,0" Foreground="#AAAAAA"/>
+        <StackPanel Margin="20" Spacing="16">
+            <StackPanel HorizontalAlignment="Center" Spacing="8">
+                <Image Source="avares://GTDCompanion/Assets/logo.png" Width="140"/>
+                <TextBlock Text="Sobre o GTD Companion" FontSize="28" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <Border Background="#3A3D41" CornerRadius="10" Padding="14">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" Foreground="White">
+                        A Comunidade GTD (Game Try Division) é um grupo de entusiastas focados em integrar ferramentas, overlays e automações que melhoram a experiência gamer. O GTD Companion reúne diversas dessas funcionalidades em um único aplicativo para tornar sua vida mais simples.
+                    </TextBlock>
+                    <TextBlock TextWrapping="Wrap" Foreground="White">
+                        Este projeto é mantido coletivamente pela comunidade e está em constante evolução. Fique à vontade para participar do nosso Discord e colaborar com ideias, feedbacks e testes.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Recursos Principais" FontSize="20" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center"/>
+            <WrapPanel HorizontalAlignment="Center" Spacing="20">
+                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
+                    <TextBlock Text="🖥" FontSize="32" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Overlays de Benchmark" Foreground="White" TextAlignment="Center" FontSize="14"/>
+                </StackPanel>
+                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
+                    <TextBlock Text="🌐" FontSize="32" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Tradução por IA" Foreground="White" TextAlignment="Center" FontSize="14"/>
+                </StackPanel>
+                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
+                    <TextBlock Text="📝" FontSize="32" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Notas Rápidas" Foreground="White" TextAlignment="Center" FontSize="14"/>
+                </StackPanel>
+                <StackPanel Width="150" Spacing="4" HorizontalAlignment="Center">
+                    <TextBlock Text="⚙" FontSize="32" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Macros e Automações" Foreground="White" TextAlignment="Center" FontSize="14"/>
+                </StackPanel>
+            </WrapPanel>
+
+            <Border Background="#3A3D41" CornerRadius="10" Padding="10" Margin="0,10,0,0">
+                <TextBlock TextWrapping="Wrap" Foreground="White" TextAlignment="Center">
+                    Junte-se a nós no Discord para contribuir, relatar problemas e obter ajuda da comunidade.
+                </TextBlock>
+            </Border>
+            <TextBlock x:Name="VersionText" HorizontalAlignment="Center" Margin="0,10,0,0" Foreground="#AAAAAA"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
