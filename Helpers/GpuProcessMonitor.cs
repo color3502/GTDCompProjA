@@ -117,10 +117,11 @@ namespace GTDCompanion.Helpers
 
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    if (obj["IDProcess"] == null)
+                    var idProp = obj.Properties["IDProcess"];
+                    if (idProp == null || idProp.Value == null)
                         continue;
 
-                    if (!int.TryParse(obj["IDProcess"].ToString(), out int pid))
+                    if (!int.TryParse(idProp.Value.ToString(), out int pid))
                         continue;
 
                     double pct = 0;
