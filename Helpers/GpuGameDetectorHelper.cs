@@ -15,7 +15,7 @@ namespace GTDCompanion.Helpers
     {
         // Configurações ajustáveis
         private const float GPU_USAGE_THRESHOLD = 10f;     // mínimo % GPU para considerar (ajuste)
-        private const int MINUTES_THRESHOLD = 5;           // minutos seguidos acima do threshold
+        private const int MINUTES_THRESHOLD = 2;           // minutos seguidos acima do threshold
         private const int MONITOR_INTERVAL_SECONDS = 1;   // frequência de checagem
 
         private static readonly string ApiUrl = "https://gametrydivision.com/api/gtdcompanion/getexetocheck";
