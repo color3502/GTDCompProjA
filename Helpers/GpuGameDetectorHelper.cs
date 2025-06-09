@@ -23,11 +23,11 @@ namespace GTDCompanion.Helpers
         // Estrutura para guardar histórico
         private class GpuUsageEntry
         {
-            public string FileName { get; set; }
-            public string FullPath { get; set; }
+            public string FileName { get; set; } = string.Empty;
+            public string FullPath { get; set; } = string.Empty;
             public int Pid { get; set; }
-            public List<DateTime> HighUsageTimestamps { get; set; } = new();
-            public bool Sent { get; set; } = false;
+            public DateTime? HighUsageStart { get; set; }
+            public bool Sent { get; set; }
         }
 
         private static readonly Dictionary<int, GpuUsageEntry> usageHistory = new();
@@ -87,25 +87,21 @@ namespace GTDCompanion.Helpers
                             };
                         }
 
-                        // Só registra se acima do threshold
                         if (value >= GPU_USAGE_THRESHOLD)
                         {
-                            usageHistory[pid].HighUsageTimestamps.Add(now);
-                        }
+                            if (usageHistory[pid].HighUsageStart == null)
+                                usageHistory[pid].HighUsageStart = now;
 
-                        // Remove timestamps antigos (manter só últimos 10min para economia de memória)
-                        usageHistory[pid].HighUsageTimestamps.RemoveAll(dt => (now - dt).TotalMinutes > 10);
-
-                        // Checa se processo já pode ser reportado (usou GPU por mais de X minutos)
-                        if (!usageHistory[pid].Sent)
-                        {
-                            var recentCount = usageHistory[pid].HighUsageTimestamps.Count(dt => (now - dt).TotalMinutes <= MINUTES_THRESHOLD);
-                            if (recentCount >= (MINUTES_THRESHOLD * (60 / MONITOR_INTERVAL_SECONDS) * 0.8)) // cerca de 80% do tempo
+                            if (!usageHistory[pid].Sent &&
+                                (now - usageHistory[pid].HighUsageStart.Value).TotalMinutes >= MINUTES_THRESHOLD)
                             {
-                                // Marca como enviado
                                 usageHistory[pid].Sent = true;
                                 await SendUnknownGame(usageHistory[pid]);
                             }
+                        }
+                        else
+                        {
+                            usageHistory[pid].HighUsageStart = null;
                         }
                     }
                     catch { continue; }
