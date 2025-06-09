@@ -117,22 +117,20 @@ namespace GTDCompanion.Helpers
 
                 foreach (ManagementObject obj in searcher.Get())
                 {
-                    var idProp = obj.Properties["IDProcess"];
-                    if (idProp == null || idProp.Value == null)
-                        continue;
-
-                    if (!int.TryParse(idProp.Value.ToString(), out int pid))
+                    var idVal = GetPropertySafe(obj, "IDProcess");
+                    if (idVal == null || !int.TryParse(idVal.ToString(), out int pid))
                         continue;
 
                     double pct = 0;
 
-                    if (obj.Properties["PercentGPUTime"] != null &&
-                        double.TryParse(obj["PercentGPUTime"].ToString(), out var p1))
+                    var p1Val = GetPropertySafe(obj, "PercentGPUTime");
+                    var p2Val = GetPropertySafe(obj, "UtilizationPercentage");
+
+                    if (p1Val != null && double.TryParse(p1Val.ToString(), out var p1))
                     {
                         pct = p1;
                     }
-                    else if (obj.Properties["UtilizationPercentage"] != null &&
-                        double.TryParse(obj["UtilizationPercentage"].ToString(), out var p2))
+                    else if (p2Val != null && double.TryParse(p2Val.ToString(), out var p2))
                     {
                         pct = p2;
                     }
@@ -158,6 +156,17 @@ namespace GTDCompanion.Helpers
             }
 
             return result;
+        }
+
+        private static object? GetPropertySafe(ManagementBaseObject obj, string name)
+        {
+            try
+            {
+                if (obj.Properties.PropertyNames.Cast<string>().Contains(name))
+                    return obj[name];
+            }
+            catch { }
+            return null;
         }
 
         private static (string exe, string path)? GetProcessInfo(int pid)
