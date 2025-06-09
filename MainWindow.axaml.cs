@@ -186,6 +186,11 @@ namespace GTDCompanion
             Process.Start(psi);
         }
 
+        private void MenuAjudaSobre_Click(object? sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new AboutPage();
+        }
+
 
         private void StartUpdateTimer()
         {

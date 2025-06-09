@@ -96,6 +96,9 @@
                 <MenuItem Header="A GTD" Click="MenuSobre_Click"/>
                 <MenuItem Header="Suporte" Click="MenuSuporte_Click"/>
             </MenuItem>
+            <MenuItem Header="Ajuda">
+                <MenuItem Header="Sobre" Click="MenuAjudaSobre_Click"/>
+            </MenuItem>
         </Menu>
         <!-- Conteúdo central dinâmico -->
         <ContentControl x:Name="MainContent" Margin="0,1,0,0"/>
