@@ -88,8 +88,8 @@
             <MenuItem Header="WTF?!">
                 <MenuItem Header="Estatísticas Teclado/Mouse" Click="KeyboardMouseStatsPage_Click"/>
             </MenuItem>
-            <MenuItem Header="Configurações">
-                <MenuItem Header="Experiência" Click="ExperiencePage_Click"/>
+            <MenuItem Header="Experiência">
+                <MenuItem Header="Configurações" Click="SetingsPago_Click"/>
             </MenuItem>
             <MenuItem Header="Links">
                 <MenuItem Header="Acessar Discord" Click="AcessarDiscord_Click"/>

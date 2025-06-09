@@ -3,12 +3,12 @@ using Avalonia.Interactivity;
 
 namespace GTDCompanion.Pages
 {
-    public partial class ExperiencePage : UserControl
+    public partial class SettingsPage : UserControl
     {
-        public ExperiencePage()
+        public SettingsPage()
         {
             InitializeComponent();
-            StartMinimizedBox.IsChecked = GTDConfigHelper.GetBool("Experience", "StartMinimized", true);
+            StartMinimizedBox.IsChecked = GTDConfigHelper.GetBool("Behavior", "StartMinimized", true);
             StartMinimizedBox.Checked += OnStartMinimizedChanged;
             StartMinimizedBox.Unchecked += OnStartMinimizedChanged;
         }
@@ -16,7 +16,7 @@ namespace GTDCompanion.Pages
         private void OnStartMinimizedChanged(object? sender, RoutedEventArgs e)
         {
             var isChecked = StartMinimizedBox.IsChecked ?? false;
-            GTDConfigHelper.Set("Experience", "StartMinimized", isChecked ? "true" : "false");
+            GTDConfigHelper.Set("Behavior", "StartMinimized", isChecked ? "true" : "false");
         }
     }
 }

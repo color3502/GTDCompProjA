@@ -79,22 +79,6 @@ namespace GTDCompanion.Helpers
             }
             catch { }
 
-            // Fallback to old config if json not found
-            Stats.KeyPresses = GTDConfigHelper.GetInt("Stats", "KeyPresses", 0);
-            Stats.LeftClicks = GTDConfigHelper.GetInt("Stats", "LeftClicks", 0);
-            Stats.RightClicks = GTDConfigHelper.GetInt("Stats", "RightClicks", 0);
-            Stats.ScrollTicks = Math.Abs(GTDConfigHelper.GetInt("Stats", "ScrollTicks", 0));
-            var jsonOld = GTDConfigHelper.Get("Stats", "KeyCounts", "{}");
-            try
-            {
-                var dict = JsonSerializer.Deserialize<Dictionary<int, int>>(jsonOld);
-                if (dict != null)
-                {
-                    foreach (var kv in dict)
-                        Stats.KeyCounts[kv.Key] = kv.Value;
-                }
-            }
-            catch { }
         }
 
         private static void Save()
