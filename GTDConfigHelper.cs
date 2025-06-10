@@ -19,6 +19,15 @@ namespace GTDCompanion
                 IdiomaAlterado?.Invoke();
             }
     }
+
+    public class StreamerConfig
+    {
+        public string Platform { get; set; } = "YouTube";
+        public string YoutubeLink { get; set; } = string.Empty;
+        public string TwitchSlug { get; set; } = string.Empty;
+        public double OverlayOpacity { get; set; } = 0.9;
+        public int FontSize { get; set; } = 12;
+    }
     public static class GTDConfigHelper
         {
 
@@ -153,6 +162,28 @@ namespace GTDCompanion
                 PosX = GetInt(section, "PosX", -1),
                 PosY = GetInt(section, "PosY", -1)
             };
+        }
+
+        // ---- Streamer Chat ----
+        public static StreamerConfig LoadStreamerConfig()
+        {
+            return new StreamerConfig
+            {
+                Platform = GetString("Streamer", "Platform", "YouTube"),
+                YoutubeLink = GetString("Streamer", "YoutubeLink", string.Empty),
+                TwitchSlug = GetString("Streamer", "TwitchSlug", string.Empty),
+                OverlayOpacity = GetDouble("Streamer", "OverlayOpacity", 0.9),
+                FontSize = GetInt("Streamer", "FontSize", 12)
+            };
+        }
+
+        public static void SaveStreamerConfig(StreamerConfig cfg)
+        {
+            Set("Streamer", "Platform", cfg.Platform);
+            Set("Streamer", "YoutubeLink", cfg.YoutubeLink);
+            Set("Streamer", "TwitchSlug", cfg.TwitchSlug);
+            Set("Streamer", "OverlayOpacity", cfg.OverlayOpacity.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            Set("Streamer", "FontSize", cfg.FontSize.ToString());
         }
     }
 }

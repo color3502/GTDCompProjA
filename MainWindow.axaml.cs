@@ -135,6 +135,11 @@ namespace GTDCompanion
             MainContent.Content = new StickerNotesPage();
         }
 
+        private void StreamerPage_Click(object? sender, RoutedEventArgs e)
+        {
+            MainContent.Content = new StreamerPage();
+        }
+
         private void MacroPage_Click(object? sender, RoutedEventArgs e)
         {
             MainContent.Content = new MacroPage();
