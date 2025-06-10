@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Management;
 using System.Runtime.InteropServices;
+using LibreHardwareMonitor.Hardware;
 
 namespace GTDCompanion.Pages
 {
@@ -104,18 +105,10 @@ namespace GTDCompanion.Pages
                 userSpecs["HD Total"] = $"{totalDisk} GB";
                 apiSpecs["disk"] = $"{totalDisk} GB";
 
-                // GPU(s)
-                var gpus = GetWmiAll("Win32_VideoController", "Name");
-                var gpuStr = gpus.Count > 0 ? string.Join(" | ", gpus) : "Desconhecida";
+                // GPU(s) e VRAM
+                GetGpuInfo(out var gpuStr, out var vramStr);
                 userSpecs["GPU(s)"] = gpuStr;
                 apiSpecs["gpu"] = gpuStr;
-
-                // VRAM (pega maior encontrada)
-                var vrams = GetWmiAll("Win32_VideoController", "AdapterRAM")
-                    .Select(x => double.TryParse(x, out var v) ? v : 0)
-                    .ToList();
-                double maxVram = vrams.Count > 0 ? vrams.Max() : 0;
-                var vramStr = maxVram > 0 ? $"{Math.Round(maxVram / 1024 / 1024 / 1024, 2)} GB" : "";
                 userSpecs["VRAM"] = vramStr;
                 apiSpecs["vram"] = vramStr;
 
@@ -132,6 +125,57 @@ namespace GTDCompanion.Pages
                 userSpecs["Erro"] = $"Falha ao coletar specs: {ex.Message}";
                 apiSpecs.Clear();
             }
+        }
+
+        private void GetGpuInfo(out string gpuStr, out string vramStr)
+        {
+            var names = new List<string>();
+            double maxVram = 0;
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                try
+                {
+                    var comp = new Computer { IsGpuEnabled = true };
+                    comp.Open();
+                    foreach (var hw in comp.Hardware)
+                    {
+                        if (hw.HardwareType == HardwareType.GpuNvidia || hw.HardwareType == HardwareType.GpuAmd || hw.HardwareType == HardwareType.GpuIntel)
+                        {
+                            names.Add(hw.Name);
+                            hw.Update();
+                            foreach (var s in hw.Sensors)
+                            {
+                                if ((s.SensorType == SensorType.SmallData || s.SensorType == SensorType.Data) &&
+                                    s.Name.ToLower().Contains("memory") && s.Name.ToLower().Contains("total") && s.Value.HasValue)
+                                {
+                                    maxVram = Math.Max(maxVram, s.Value.Value);
+                                }
+                            }
+                        }
+                    }
+                    comp.Close();
+                }
+                catch
+                {
+                    // Ignored
+                }
+            }
+
+            if (names.Count == 0)
+                names.AddRange(GetWmiAll("Win32_VideoController", "Name"));
+
+            if (maxVram <= 0)
+            {
+                var vrams = GetWmiAll("Win32_VideoController", "AdapterRAM")
+                    .Select(x => double.TryParse(x, out var v) ? v / 1024 / 1024 / 1024 : 0)
+                    .ToList();
+                if (vrams.Count > 0)
+                    maxVram = vrams.Max();
+            }
+
+            gpuStr = names.Count > 0 ? string.Join(" | ", names.Distinct()) : "Desconhecida";
+            vramStr = maxVram > 0 ? $"{Math.Round(maxVram, 2)} GB" : string.Empty;
         }
 
         private string GetWmi(string className, string prop)
