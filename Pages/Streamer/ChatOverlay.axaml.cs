@@ -32,7 +32,7 @@ namespace GTDCompanion.Pages
         {
             _config = cfg;
             InitializeComponent();
-            MessagesList.Items = _messages;
+            MessagesList.ItemsSource = _messages;
             Opacity = cfg.OverlayOpacity;
             Height = 400;
             FontSize = cfg.FontSize;
