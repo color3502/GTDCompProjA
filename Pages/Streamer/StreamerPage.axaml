@@ -4,20 +4,19 @@
   <Border Background="#222" CornerRadius="12" Padding="20">
     <StackPanel Spacing="12" Width="420">
       <TextBlock Text="Leitor de Chat para Lives" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
-      <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <TextBlock Text="Plataforma:" Foreground="White" VerticalAlignment="Center"/>
-        <ComboBox Name="PlatformCombo" Width="120">
-          <ComboBoxItem Content="YouTube"/>
-          <ComboBoxItem Content="Twitch"/>
-        </ComboBox>
-      </StackPanel>
       <StackPanel Spacing="4">
-        <TextBlock Name="YoutubeLabel" Text="Link da Live do YouTube:" Foreground="White"/>
+        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="Link da Live do YouTube:" Foreground="White"/>
+          <CheckBox Name="UseYoutubeCheck" Content="Ativar"/>
+        </StackPanel>
         <TextBox Name="YoutubeLinkBox"/>
         <TextBlock Name="YoutubeError" Foreground="Red" FontSize="12"/>
       </StackPanel>
       <StackPanel Spacing="4">
-        <TextBlock Name="TwitchLabel" Text="Slug do canal Twitch:" Foreground="White"/>
+        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <TextBlock Text="Slug do canal Twitch:" Foreground="White"/>
+          <CheckBox Name="UseTwitchCheck" Content="Ativar"/>
+        </StackPanel>
         <TextBox Name="TwitchSlugBox"/>
         <TextBlock Name="TwitchError" Foreground="Red" FontSize="12"/>
       </StackPanel>

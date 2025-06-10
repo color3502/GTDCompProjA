@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System;
-using System.Threading;
 
 namespace GTDCompanion.Pages
 {
@@ -13,14 +12,17 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
             var cfg = GTDConfigHelper.LoadStreamerConfig();
-            PlatformCombo.SelectedIndex = cfg.Platform.Equals("Twitch", StringComparison.OrdinalIgnoreCase) ? 1 : 0;
+            UseYoutubeCheck.IsChecked = cfg.UseYouTube;
+            UseTwitchCheck.IsChecked = cfg.UseTwitch;
             YoutubeLinkBox.Text = cfg.YoutubeLink;
             TwitchSlugBox.Text = cfg.TwitchSlug;
             OpacitySlider.Value = cfg.OverlayOpacity;
             FontSizeSlider.Value = cfg.FontSize;
-            UpdateVisibility();
 
-            PlatformCombo.SelectionChanged += (_, __) => { Save(); UpdateVisibility(); };
+            UseYoutubeCheck.Checked += (_, __) => Save();
+            UseYoutubeCheck.Unchecked += (_, __) => Save();
+            UseTwitchCheck.Checked += (_, __) => Save();
+            UseTwitchCheck.Unchecked += (_, __) => Save();
             YoutubeLinkBox.PropertyChanged += (_, e) => { if (e.Property.Name == "Text") Save(); };
             TwitchSlugBox.PropertyChanged += (_, e) => { if (e.Property.Name == "Text") Save(); };
             OpacitySlider.PropertyChanged += (_, e) => { if (e.Property.Name == "Value") Save(); };
@@ -29,22 +31,12 @@ namespace GTDCompanion.Pages
             OpenOverlayButton.Click += OpenOverlayButton_Click;
         }
 
-        private void UpdateVisibility()
-        {
-            bool twitch = PlatformCombo.SelectedIndex == 1;
-            YoutubeLabel.IsVisible = !twitch;
-            YoutubeLinkBox.IsVisible = !twitch;
-            YoutubeError.IsVisible = false;
-            TwitchLabel.IsVisible = twitch;
-            TwitchSlugBox.IsVisible = twitch;
-            TwitchError.IsVisible = false;
-        }
-
         private void Save()
         {
             var cfg = new StreamerConfig
             {
-                Platform = PlatformCombo.SelectedIndex == 1 ? "Twitch" : "YouTube",
+                UseYouTube = UseYoutubeCheck.IsChecked ?? false,
+                UseTwitch = UseTwitchCheck.IsChecked ?? false,
                 YoutubeLink = YoutubeLinkBox.Text ?? string.Empty,
                 TwitchSlug = TwitchSlugBox.Text ?? string.Empty,
                 OverlayOpacity = OpacitySlider.Value,

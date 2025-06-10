@@ -20,6 +20,7 @@
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="local:ChatMessage">
               <StackPanel Orientation="Horizontal" Margin="0,2">
+                <TextBlock Text="{Binding SourceIcon}" Margin="0,0,4,0" Foreground="White"/>
                 <TextBlock Text="{Binding User}" FontWeight="Bold" Margin="0,0,4,0" Foreground="White">
                   <TextBlock.Effect>
                     <DropShadowEffect Color="Gold" BlurRadius="10" Opacity="{Binding DonationShadow}"/>
