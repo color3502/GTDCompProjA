@@ -8,7 +8,7 @@ obj/
 # Envolving files
 .env
 .changelog
-AppConfig.json
+# AppConfig.json
 
 # Avalonia build results
 AppPackages/

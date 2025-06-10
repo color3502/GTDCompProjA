@@ -7,9 +7,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <Platforms>x64</Platforms>
-    <Version>0.4.103</Version>
-    <FileVersion>0.4.103</FileVersion>
-    <AssemblyVersion>0.4.103</AssemblyVersion>
+    <Version>0.5.118</Version>
+    <FileVersion>0.5.118</FileVersion>
+    <AssemblyVersion>0.5.118</AssemblyVersion>
     <Product>GTD Companion</Product>
     <Company>Game Try Division</Company>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>

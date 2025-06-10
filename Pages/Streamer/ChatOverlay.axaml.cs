@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Media.Effects;
+using Avalonia.Media;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;

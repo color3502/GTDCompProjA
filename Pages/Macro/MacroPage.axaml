@@ -2,42 +2,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="GTDCompanion.Pages.MacroPage"
              Background="#222">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10" Spacing="8">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="Macro Experience" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
+                <TextBlock Text="Sequências de cliques e teclas/combos" FontSize="13" Foreground="#CCC"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <ComboBox Name="StepTypeCombo" Width="150">
+                    <ComboBoxItem Content="Clique" IsSelected="True"/>
+                    <ComboBoxItem Content="Tecla/Combo"/>
+                </ComboBox>
+                <Button Name="AddStepButton" Content="Adicionar Passo"/>
+                <Button Name="RemoveStepButton" Content="Remover Passo"/>
+                <Button Name="MoveUpButton" Content="Mover Cima"/>
+                <Button Name="MoveDownButton" Content="Mover Baixo"/>
+            </StackPanel>
 
-    <StackPanel Margin="10" Spacing="8">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="Macro Experience" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
-            <TextBlock Text="Sequências de cliques e teclas/combos" FontSize="13" Foreground="#CCC"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Spacing="8">
-            <ComboBox Name="StepTypeCombo" Width="150">
-                <ComboBoxItem Content="Clique" IsSelected="True"/>
-                <ComboBoxItem Content="Tecla/Combo"/>
-            </ComboBox>
-            <Button Name="AddStepButton" Content="Adicionar Passo"/>
-            <Button Name="RemoveStepButton" Content="Remover Passo"/>
-            <Button Name="MoveUpButton" Content="Mover Cima"/>
-            <Button Name="MoveDownButton" Content="Mover Baixo"/>
-        </StackPanel>
+            <ListBox Name="StepListBox" Height="250" Background="#333" Foreground="White"/>
 
-        <ListBox Name="StepListBox" Height="300" Background="#333" Foreground="White"/>
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <TextBlock Text="Repetições:" Foreground="White" VerticalAlignment="Center"/>
+                <TextBox Name="RepeatCountTextBox" Width="60" Text="1"/>
+                <TextBlock Text="Delay entre exec (s):" Foreground="White" VerticalAlignment="Center"/>
+                <TextBox Name="RepeatDelayTextBox" Width="60" Text="0"/>
+            </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-            <TextBlock Text="Repetições:" Foreground="White" VerticalAlignment="Center"/>
-            <TextBox Name="RepeatCountTextBox" Width="60" Text="1"/>
-            <TextBlock Text="Delay entre exec (s):" Foreground="White" VerticalAlignment="Center"/>
-            <TextBox Name="RepeatDelayTextBox" Width="60" Text="0"/>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Name="SaveMacroButton" Content="Salvar Macro"/>
+                <Button Name="LoadMacroButton" Content="Importar Macro"/>
+                <Button Name="ExecuteMacroButton" Content="Executar Macro"/>
+                <Button Name="ResetMacroButton" Content="Resetar Macros"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
+                <TextBlock Text="Pressione F8 para executar/parar a macro" Foreground="#CCC" Margin="0,4,0,0"/>
+            </StackPanel>        
         </StackPanel>
-
-        <StackPanel Orientation="Horizontal" Spacing="8">
-            <Button Name="SaveMacroButton" Content="Salvar Macro"/>
-            <Button Name="LoadMacroButton" Content="Importar Macro"/>
-            <Button Name="ExecuteMacroButton" Content="Executar Macro"/>
-            <Button Name="ResetMacroButton" Content="Resetar Macros"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,25" HorizontalAlignment="Center">
-            <TextBlock Text="Pressione F8 para executar/parar a macro" Foreground="#CCC" Margin="0,4,0,0"/>
-        </StackPanel>        
-    </StackPanel>
+    </ScrollViewer> 
 </UserControl>
