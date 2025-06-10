@@ -26,6 +26,7 @@ namespace GTDCompanion
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
+                LocalizationManager.LoadCulture(null);
                 desktop.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
                 desktop.MainWindow = new MainWindow();
                 desktop.MainWindow.Closed += (_, __) =>
