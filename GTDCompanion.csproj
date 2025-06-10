@@ -26,6 +26,7 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.3.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
+    <PackageReference Include="CodingSeb.Localization.Avalonia" Version="1.4.1" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="InputSimulatorCore" Version="1.0.5" />
     <PackageReference Include="InputSimulatorStandard" Version="1.0.0" />
@@ -42,10 +43,7 @@
     <AvaloniaResource Include="Assets\logo.png" />
     <AvaloniaResource Include="Assets\icon.ico" />
     <EmbeddedResource Include="AppConfig.json" />
-    <EmbeddedResource Include="Resources\Resources.resx" />
-    <EmbeddedResource Include="Resources\Resources.en-US.resx" />
-    <EmbeddedResource Include="Resources\Resources.es-ES.resx" />
-    <EmbeddedResource Include="Resources\Resources.it-IT.resx" />
+
     <AvaloniaResource Include=".changelog" />
 
     <Reference Include="RTSSSharedMemoryNET">
