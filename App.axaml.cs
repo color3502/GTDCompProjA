@@ -41,6 +41,8 @@ namespace GTDCompanion
                 StatsTracker.Start();
 
                 AppConfig.PopulateEnvironment();
+                var lang = GTDConfigHelper.GetString("General", "language", "pt-BR");
+                LocalizationManager.SetCulture(lang);
 
 
 
