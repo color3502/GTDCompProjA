@@ -22,7 +22,8 @@ namespace GTDCompanion
 
     public class StreamerConfig
     {
-        public string Platform { get; set; } = "YouTube";
+        public bool UseYouTube { get; set; } = true;
+        public bool UseTwitch { get; set; } = false;
         public string YoutubeLink { get; set; } = string.Empty;
         public string TwitchSlug { get; set; } = string.Empty;
         public double OverlayOpacity { get; set; } = 0.9;
@@ -167,19 +168,29 @@ namespace GTDCompanion
         // ---- Streamer Chat ----
         public static StreamerConfig LoadStreamerConfig()
         {
-            return new StreamerConfig
+            var cfg = new StreamerConfig
             {
-                Platform = GetString("Streamer", "Platform", "YouTube"),
+                UseYouTube = GetBool("Streamer", "UseYouTube", true),
+                UseTwitch = GetBool("Streamer", "UseTwitch", false),
                 YoutubeLink = GetString("Streamer", "YoutubeLink", string.Empty),
                 TwitchSlug = GetString("Streamer", "TwitchSlug", string.Empty),
                 OverlayOpacity = GetDouble("Streamer", "OverlayOpacity", 0.9),
                 FontSize = GetInt("Streamer", "FontSize", 12)
             };
+            // Backwards compatibility with old "Platform" field
+            string platform = GetString("Streamer", "Platform", string.Empty);
+            if (!string.IsNullOrWhiteSpace(platform))
+            {
+                cfg.UseTwitch = platform.Equals("Twitch", StringComparison.OrdinalIgnoreCase);
+                cfg.UseYouTube = platform.Equals("YouTube", StringComparison.OrdinalIgnoreCase);
+            }
+            return cfg;
         }
 
         public static void SaveStreamerConfig(StreamerConfig cfg)
         {
-            Set("Streamer", "Platform", cfg.Platform);
+            Set("Streamer", "UseYouTube", cfg.UseYouTube ? "1" : "0");
+            Set("Streamer", "UseTwitch", cfg.UseTwitch ? "1" : "0");
             Set("Streamer", "YoutubeLink", cfg.YoutubeLink);
             Set("Streamer", "TwitchSlug", cfg.TwitchSlug);
             Set("Streamer", "OverlayOpacity", cfg.OverlayOpacity.ToString(System.Globalization.CultureInfo.InvariantCulture));

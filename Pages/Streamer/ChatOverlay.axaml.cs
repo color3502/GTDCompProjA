@@ -112,18 +112,23 @@ namespace GTDCompanion.Pages
         private async Task StartAsync()
         {
             _cts = new CancellationTokenSource();
-            try
+            bool any = false;
+            if (_config.UseTwitch)
             {
-                if (_config.Platform.Equals("Twitch", StringComparison.OrdinalIgnoreCase))
-                    await RunTwitchAsync(_config.TwitchSlug, _cts.Token);
-                else
-                    await RunYoutubeAsync(_config.YoutubeLink, _cts.Token);
+                any = true;
+                _ = Task.Run(() => RunTwitchAsync(_config.TwitchSlug, _cts.Token));
             }
-            catch
+            if (_config.UseYouTube)
             {
-                ConnectionFailed?.Invoke(_config.Platform);
+                any = true;
+                _ = Task.Run(() => RunYoutubeAsync(_config.YoutubeLink, _cts.Token));
+            }
+            if (!any)
+            {
+                ConnectionFailed?.Invoke("None");
                 Close();
             }
+            await Task.CompletedTask;
         }
 
         private string NormalizeTwitchSlug(string slug)
@@ -151,7 +156,6 @@ namespace GTDCompanion.Pages
             if (string.IsNullOrWhiteSpace(slug))
             {
                 ConnectionFailed?.Invoke("Twitch");
-                Close();
                 return;
             }
             try
@@ -183,7 +187,7 @@ namespace GTDCompanion.Pages
                             var msg = line[(line.IndexOf(':', idx) + 1)..];
                             bool donation = msg.Contains("cheer", StringComparison.OrdinalIgnoreCase) ||
                                             msg.Contains("subscribed", StringComparison.OrdinalIgnoreCase);
-                            AddMessage(user, msg, donation);
+                            AddMessage(user, msg, donation, "Twitch");
                         }
                     }
                 }, token);
@@ -191,7 +195,6 @@ namespace GTDCompanion.Pages
             catch
             {
                 ConnectionFailed?.Invoke("Twitch");
-                Close();
             }
         }
 
@@ -218,14 +221,12 @@ namespace GTDCompanion.Pages
             if (string.IsNullOrWhiteSpace(link) || string.IsNullOrWhiteSpace(apiKey))
             {
                 ConnectionFailed?.Invoke("YouTube");
-                Close();
                 return;
             }
             string? videoId = ExtractVideoId(link);
             if (videoId == null)
             {
                 ConnectionFailed?.Invoke("YouTube");
-                Close();
                 return;
             }
             using var http = new HttpClient();
@@ -238,7 +239,6 @@ namespace GTDCompanion.Pages
                 if (string.IsNullOrWhiteSpace(liveId))
                 {
                     ConnectionFailed?.Invoke("YouTube");
-                    Close();
                     return;
                 }
                 string pageToken = string.Empty;
@@ -255,7 +255,7 @@ namespace GTDCompanion.Pages
                         var msg = item.GetProperty("snippet").GetProperty("displayMessage").GetString() ?? "";
                         bool donation = item.GetProperty("snippet").TryGetProperty("superChatDetails", out _) ||
                                         item.GetProperty("snippet").TryGetProperty("superStickerDetails", out _);
-                        AddMessage(author, msg, donation);
+                        AddMessage(author, msg, donation, "YouTube");
                     }
                     await Task.Delay(2000, token);
                 }
@@ -263,17 +263,17 @@ namespace GTDCompanion.Pages
             catch
             {
                 ConnectionFailed?.Invoke("YouTube");
-                Close();
             }
         }
 
-        private void AddMessage(string user, string text, bool donation)
+        private void AddMessage(string user, string text, bool donation, string source)
         {
             var msg = new ChatMessage
             {
                 User = user,
                 Text = text,
-                DonationShadow = donation ? 1.0 : 0.0
+                DonationShadow = donation ? 1.0 : 0.0,
+                SourceIcon = source == "Twitch" ? "🟣" : "🔴"
             };
             Dispatcher.UIThread.Post(() =>
             {
@@ -288,5 +288,6 @@ namespace GTDCompanion.Pages
         public string User { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
         public double DonationShadow { get; set; } = 0.0;
+        public string SourceIcon { get; set; } = string.Empty;
     }
 }
