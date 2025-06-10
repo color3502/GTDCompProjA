@@ -24,7 +24,36 @@ namespace GTDCompanion.Helpers
 
     public static class StatsTracker
     {
-        public static KeyboardMouseStats Stats { get; } = new();
+        private static KeyboardMouseStats LoadStats()
+        {
+            try
+            {
+                if (File.Exists(StatsPath))
+                {
+                    var json = File.ReadAllText(StatsPath);
+                    var loaded = JsonSerializer.Deserialize<KeyboardMouseStats>(json);
+                    if (loaded != null)
+                        return loaded;
+                }
+            }
+            catch { }
+            return new KeyboardMouseStats();
+        }
+
+        private static void SaveStats(KeyboardMouseStats stats)
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(StatsPath)!;
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                var json = JsonSerializer.Serialize(stats, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(StatsPath, json);
+            }
+            catch { }
+        }
+
+        public static KeyboardMouseStats Stats => LoadStats();
 
         private static readonly string StatsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -44,70 +73,23 @@ namespace GTDCompanion.Helpers
 
         public static void Load()
         {
-            try
-            {
-                if (File.Exists(StatsPath))
-                {
-                    var json = File.ReadAllText(StatsPath);
-                    var loaded = JsonSerializer.Deserialize<KeyboardMouseStats>(json);
-                    if (loaded != null)
-                    {
-                        Stats.KeyPresses = loaded.KeyPresses;
-                        Stats.LeftClicks = loaded.LeftClicks;
-                        Stats.RightClicks = loaded.RightClicks;
-                        Stats.ScrollTicks = loaded.ScrollTicks;
-                        Stats.MousePixelsMoved = loaded.MousePixelsMoved;
-                        Stats.IdleTime = loaded.IdleTime;
-                        Stats.ActiveTime = loaded.ActiveTime;
-                        if (loaded.LastMaintenance != DateTime.MinValue)
-                            Stats.LastMaintenance = loaded.LastMaintenance;
-                        Stats.KeyCounts.Clear();
-                        foreach (var kv in loaded.KeyCounts)
-                            Stats.KeyCounts[kv.Key] = kv.Value;
-                        Stats.DailyClicks.Clear();
-                        foreach (var kv in loaded.DailyClicks)
-                            Stats.DailyClicks[kv.Key] = kv.Value;
-                        Stats.DailyKeyPresses.Clear();
-                        if (loaded.DailyKeyPresses != null)
-                        {
-                            foreach (var kv in loaded.DailyKeyPresses)
-                                Stats.DailyKeyPresses[kv.Key] = kv.Value;
-                        }
-                        return;
-                    }
-                }
-            }
-            catch { }
-
+            // No caching - stats are read directly from the JSON file when needed
         }
 
-        private static void Save()
-        {
-            try
-            {
-                var dir = Path.GetDirectoryName(StatsPath)!;
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                var json = JsonSerializer.Serialize(Stats, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(StatsPath, json);
-            }
-            catch { }
-        }
-
-        private static void IncrementDailyClicks()
+        private static void IncrementDailyClicks(KeyboardMouseStats stats)
         {
             var key = DateTime.Now.ToString("yyyy-MM-dd");
-            if (!Stats.DailyClicks.ContainsKey(key))
-                Stats.DailyClicks[key] = 0;
-            Stats.DailyClicks[key]++;
+            if (!stats.DailyClicks.ContainsKey(key))
+                stats.DailyClicks[key] = 0;
+            stats.DailyClicks[key]++;
         }
 
-        private static void IncrementDailyKeyPresses()
+        private static void IncrementDailyKeyPresses(KeyboardMouseStats stats)
         {
             var key = DateTime.Now.ToString("yyyy-MM-dd");
-            if (!Stats.DailyKeyPresses.ContainsKey(key))
-                Stats.DailyKeyPresses[key] = 0;
-            Stats.DailyKeyPresses[key]++;
+            if (!stats.DailyKeyPresses.ContainsKey(key))
+                stats.DailyKeyPresses[key] = 0;
+            stats.DailyKeyPresses[key]++;
         }
 
         public static void Start()
@@ -124,11 +106,12 @@ namespace GTDCompanion.Helpers
             _mouseHook = SetWindowsHookEx(WH_MOUSE_LL, _mouseProc, GetModuleHandle(null), 0);
             _timer = new System.Timers.Timer(60000);
             _timer.Elapsed += (_, __) => {
+                var s = LoadStats();
                 if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(5))
-                    Stats.IdleTime += TimeSpan.FromMinutes(1);
+                    s.IdleTime += TimeSpan.FromMinutes(1);
                 else
-                    Stats.ActiveTime += TimeSpan.FromMinutes(1);
-                Save();
+                    s.ActiveTime += TimeSpan.FromMinutes(1);
+                SaveStats(s);
                 StatsUpdated?.Invoke();
             };
             _timer.AutoReset = true;
@@ -159,8 +142,9 @@ namespace GTDCompanion.Helpers
 
         public static void ResetMaintenance()
         {
-            Stats.LastMaintenance = DateTime.Now;
-            Save();
+            var s = LoadStats();
+            s.LastMaintenance = DateTime.Now;
+            SaveStats(s);
             StatsUpdated?.Invoke();
         }
 
@@ -169,13 +153,14 @@ namespace GTDCompanion.Helpers
             const int WM_KEYUP = 0x0101;
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP)
             {
+                var s = LoadStats();
                 var info = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
-                Stats.KeyPresses++;
-                if (!Stats.KeyCounts.ContainsKey(info.vkCode))
-                    Stats.KeyCounts[info.vkCode] = 0;
-                Stats.KeyCounts[info.vkCode]++;
-                IncrementDailyKeyPresses();
-                Save();
+                s.KeyPresses++;
+                if (!s.KeyCounts.ContainsKey(info.vkCode))
+                    s.KeyCounts[info.vkCode] = 0;
+                s.KeyCounts[info.vkCode]++;
+                IncrementDailyKeyPresses(s);
+                SaveStats(s);
                 StatsUpdated?.Invoke();
             }
             return CallNextHookEx(_keyboardHook, nCode, wParam, lParam);
@@ -185,22 +170,23 @@ namespace GTDCompanion.Helpers
         {
             if (nCode >= 0)
             {
+                var s = LoadStats();
                 switch ((int)wParam)
                 {
                     case WM_LBUTTONDOWN:
-                        Stats.LeftClicks++;
-                        IncrementDailyClicks();
+                        s.LeftClicks++;
+                        IncrementDailyClicks(s);
                         _lastMouseMove = DateTime.Now;
                         break;
                     case WM_RBUTTONDOWN:
-                        Stats.RightClicks++;
-                        IncrementDailyClicks();
+                        s.RightClicks++;
+                        IncrementDailyClicks(s);
                         _lastMouseMove = DateTime.Now;
                         break;
                     case WM_MOUSEWHEEL:
                         var m = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
                         int delta = (short)((m.mouseData >> 16) & 0xffff);
-                        Stats.ScrollTicks += Math.Abs(delta) / 120;
+                        s.ScrollTicks += Math.Abs(delta) / 120;
                         _lastMouseMove = DateTime.Now;
                         break;
                     case WM_MOUSEMOVE:
@@ -210,14 +196,14 @@ namespace GTDCompanion.Helpers
                             int dx = mm.pt.x - _lastPoint.x;
                             int dy = mm.pt.y - _lastPoint.y;
                             double dist = Math.Sqrt(dx * dx + dy * dy);
-                            Stats.MousePixelsMoved += dist;
+                            s.MousePixelsMoved += dist;
                         }
                         _lastPoint = mm.pt;
                         _hasLastPoint = true;
                         _lastMouseMove = DateTime.Now;
                         break;
                 }
-                Save();
+                SaveStats(s);
                 StatsUpdated?.Invoke();
             }
             return CallNextHookEx(_mouseHook, nCode, wParam, lParam);
