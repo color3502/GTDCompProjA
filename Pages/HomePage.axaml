@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:GTDCompanion.Helpers"
              x:Class="GTDCompanion.Pages.HomePage"
              Background="#2C2F33">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="18">
@@ -10,8 +11,8 @@
                HorizontalAlignment="Center"
                Margin="0,0,0,8"/>
         <TextBlock Text="GTD Companion" FontSize="30" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBlock Text="Sua central gamer para overlays, automações e integrações." FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
-        <TextBlock Text="Selecione uma funcionalidade no menu acima para começar." FontSize="16" Foreground="#cccccc" HorizontalAlignment="Center"/>
+        <TextBlock Text="{l:Tr Home_Tagline, Default='Sua central gamer para overlays, automações e integrações.'}" FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
+        <TextBlock Text="{l:Tr Home_SelectFeature, Default='Selecione uma funcionalidade no menu acima para começar.'}" FontSize="16" Foreground="#cccccc" HorizontalAlignment="Center"/>
         <TextBlock x:Name="VersionText"
                    Grid.Row="1"
                    HorizontalAlignment="Center"
@@ -22,7 +23,7 @@
                    FontWeight="Normal"/>
         <StackPanel x:Name="UpdatePanel" IsVisible="False" Spacing="4" HorizontalAlignment="Center">
             <TextBlock x:Name="UpdateText" Foreground="#ccc" FontSize="13" TextAlignment="Center"/>
-            <Button x:Name="UpdateButton" Content="Atualizar" Click="UpdateButton_Click"  HorizontalAlignment="Center"/>
+            <Button x:Name="UpdateButton" Content="{l:Tr Update_Button, Default='Atualizar'}" Click="UpdateButton_Click"  HorizontalAlignment="Center"/>
             <TextBlock x:Name="UpdateProgress" Foreground="#ccc" FontSize="13" TextAlignment="Center" IsVisible="False"/>
         </StackPanel>
     </StackPanel>

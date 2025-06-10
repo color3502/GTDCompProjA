@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:GTDCompanion.Helpers"
              x:Class="GTDCompanion.Pages.AboutPage">
     <UserControl.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -11,7 +12,7 @@
         <StackPanel Margin="20" Spacing="16">
             <StackPanel HorizontalAlignment="Center" Spacing="8">
                 <Image Source="avares://GTDCompanion/Assets/logo.png" Width="140"/>
-                <TextBlock Text="Sobre o GTD Companion" FontSize="28" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center"/>
+                <TextBlock Text="{l:Tr About_Title, Default='Sobre o GTD Companion'}" FontSize="28" FontWeight="Bold" Foreground="#FE6A0A" HorizontalAlignment="Center"/>
             </StackPanel>
             <Border Background="#3A3D41" CornerRadius="10" Padding="14">
                 <StackPanel Spacing="6">

@@ -3,6 +3,7 @@ using Avalonia.Interactivity;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using GTDCompanion.Helpers;
 
 namespace GTDCompanion.Pages
 {
@@ -23,6 +24,14 @@ namespace GTDCompanion.Pages
             }
 
             StartMinimizedBox.IsCheckedChanged += OnStartMinimizedChanged;
+
+            string lang = GTDConfigHelper.GetString("General", "language", "pt-BR");
+            foreach (var item in LangCombo.Items!)
+            {
+                if (item is ComboBoxItem cbi && (cbi.Tag as string) == lang)
+                    LangCombo.SelectedItem = item;
+            }
+            LangCombo.SelectionChanged += LangCombo_SelectionChanged;
         }
 
         private void OnStartMinimizedChanged(object? sender, RoutedEventArgs e)
@@ -58,6 +67,15 @@ namespace GTDCompanion.Pages
                 return false;
             var value = key.GetValue("GTDCompanion") as string;
             return !string.IsNullOrWhiteSpace(value);
+        }
+
+        private void LangCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+        {
+            if (LangCombo.SelectedItem is ComboBoxItem cbi && cbi.Tag is string lang)
+            {
+                GTDConfigHelper.Set("General", "language", lang);
+                LocalizationManager.SetCulture(lang);
+            }
         }
     }
 }

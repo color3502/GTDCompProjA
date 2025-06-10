@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:GTDCompanion.Helpers"
              x:Class="GTDCompanion.Pages.TranslatorPage">
   <Border Background="#222" CornerRadius="12" Padding="20">
     <StackPanel Spacing="12">
@@ -26,7 +27,7 @@
         <Button Name="TranslateButton" Content="Traduzir" Width="90"/>
       </StackPanel>
       <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-        <Button Name="OpenOverlayButton" Content="Abrir Overlay de Tradução" Width="200"/>
+        <Button Name="OpenOverlayButton" Content="{l:Tr Translator_OpenOverlay, Default='Abrir Overlay de Tradução'}" Width="200"/>
       </StackPanel>
     </StackPanel>
   </Border>

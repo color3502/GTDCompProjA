@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Menu_Home" xml:space="preserve">
+    <value>Início</value>
+  </data>
+  <data name="Menu_Features" xml:space="preserve">
+    <value>Funcionalidades</value>
+  </data>
+  <data name="Menu_MySetup" xml:space="preserve">
+    <value>Meu Setup</value>
+  </data>
+  <data name="Menu_Benchmark" xml:space="preserve">
+    <value>Benchmark</value>
+  </data>
+  <data name="Menu_Crosshair" xml:space="preserve">
+    <value>Mira Overlay</value>
+  </data>
+  <data name="Menu_Translator" xml:space="preserve">
+    <value>Tradução IA Overlay</value>
+  </data>
+  <data name="Menu_Notes" xml:space="preserve">
+    <value>Sticker Notes</value>
+  </data>
+  <data name="Menu_Macro" xml:space="preserve">
+    <value>Macro Experience</value>
+  </data>
+  <data name="Menu_WTF" xml:space="preserve">
+    <value>WTF?!</value>
+  </data>
+  <data name="Menu_KbmStats" xml:space="preserve">
+    <value>Estatísticas Teclado/Mouse</value>
+  </data>
+  <data name="Menu_Experience" xml:space="preserve">
+    <value>Experiência</value>
+  </data>
+  <data name="Menu_Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="Menu_Links" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Menu_Discord" xml:space="preserve">
+    <value>Acessar Discord</value>
+  </data>
+  <data name="Menu_GTD" xml:space="preserve">
+    <value>A GTD</value>
+  </data>
+  <data name="Menu_Support" xml:space="preserve">
+    <value>Suporte</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="Menu_About" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="Home_Tagline" xml:space="preserve">
+    <value>Sua central gamer para overlays, automações e integrações.</value>
+  </data>
+  <data name="Home_SelectFeature" xml:space="preserve">
+    <value>Selecione uma funcionalidade no menu acima para começar.</value>
+  </data>
+  <data name="Update_Button" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Comportamento do GTD Companion</value>
+  </data>
+  <data name="Settings_AppBehavior" xml:space="preserve">
+    <value>Comportamento do Aplicativo</value>
+  </data>
+  <data name="Settings_StartMinimized" xml:space="preserve">
+    <value>Inicializar Minimizado com o Windows</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>Sobre o GTD Companion</value>
+  </data>
+  <data name="Translator_OpenOverlay" xml:space="preserve">
+    <value>Abrir Overlay de Tradução</value>
+  </data>
+</root>

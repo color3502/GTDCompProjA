@@ -1,13 +1,23 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:l="clr-namespace:GTDCompanion.Helpers"
              x:Class="GTDCompanion.Pages.SettingsPage"
              Background="#23272A">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20" Spacing="12">
-            <TextBlock Text="Comportamento do GTD Companion" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold"/>
+            <TextBlock Text="{l:Tr Settings_Title, Default='Comportamento do GTD Companion'}" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold"/>
             <StackPanel>
-                <TextBlock Text="Comportamento do Aplicativo" FontSize="18" Foreground="White" Margin="0,8,0,4"/>
-                <CheckBox x:Name="StartMinimizedBox" Content="Inicializar Minimizado com o Windows" IsChecked="True"/>
+                <TextBlock Text="{l:Tr Settings_AppBehavior, Default='Comportamento do Aplicativo'}" FontSize="18" Foreground="White" Margin="0,8,0,4"/>
+                <CheckBox x:Name="StartMinimizedBox" Content="{l:Tr Settings_StartMinimized, Default='Inicializar Minimizado com o Windows'}" IsChecked="True"/>
+            </StackPanel>
+            <StackPanel Margin="0,8,0,0">
+                <TextBlock Text="{l:Tr Settings_Language, Default='Idioma'}" FontSize="18" Foreground="White" Margin="0,8,0,4"/>
+                <ComboBox x:Name="LangCombo" Width="200">
+                    <ComboBoxItem Content="Português (Brasil)" Tag="pt-BR"/>
+                    <ComboBoxItem Content="English" Tag="en-US"/>
+                    <ComboBoxItem Content="Español" Tag="es-ES"/>
+                    <ComboBoxItem Content="Italiano" Tag="it-IT"/>
+                </ComboBox>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
