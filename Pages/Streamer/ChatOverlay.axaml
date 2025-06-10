@@ -1,5 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:GTDCompanion.Pages"
         x:Class="GTDCompanion.Pages.ChatOverlay"
         Width="300" Height="400"
         ShowInTaskbar="False"
@@ -17,12 +18,12 @@
       <ScrollViewer Name="Scroll" Height="330">
         <ItemsControl Name="MessagesList">
           <ItemsControl.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="local:ChatMessage">
               <StackPanel Orientation="Horizontal" Margin="0,2">
                 <TextBlock Text="{Binding User}" FontWeight="Bold" Margin="0,0,4,0" Foreground="White">
-                  <TextBlock.Effects>
+                  <TextBlock.Effect>
                     <DropShadowEffect Color="Gold" BlurRadius="10" Opacity="{Binding DonationShadow}"/>
-                  </TextBlock.Effects>
+                  </TextBlock.Effect>
                 </TextBlock>
                 <TextBlock Text=": " Foreground="White"/>
                 <TextBlock Text="{Binding Text}" Foreground="White"/>
