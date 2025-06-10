@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Input;
 using System;
+using System.Globalization;
 
 namespace GTDCompanion.Pages
 {
@@ -39,6 +40,9 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
             AppConfig.PopulateEnvironment();
+            LocalizationManager.CultureChanged += ApplyTranslations;
+            this.DetachedFromVisualTree += (_, __) => LocalizationManager.CultureChanged -= ApplyTranslations;
+            ApplyTranslations();
             InitCombos();
             CopyOnTranslateCheck.IsChecked = GTDConfigHelper.GetBool("Translator", "copy_on_translate", true);
 
@@ -113,7 +117,7 @@ namespace GTDCompanion.Pages
             string from = fromItem.Key != null ? fromItem.Key : "PT-BR";
             string to = toItem.Key != null ? toItem.Key : "EN";
 
-            OutputTextBox.Text = "Traduzindo...";
+            OutputTextBox.Text = LocalizationManager.Get("translator_translating");
             string translated = await TranslateAsync(text, to);
             OutputTextBox.Text = translated;
 
@@ -184,6 +188,16 @@ namespace GTDCompanion.Pages
             {
                 _ = TranslateAndShowAsync();
             }
+        }
+
+        private void ApplyTranslations()
+        {
+            TitleText.Text = LocalizationManager.Get("translator_title");
+            InputTextBox.Watermark = LocalizationManager.Get("translator_watermark");
+            CopyOnTranslateCheck.Content = LocalizationManager.Get("translator_copy");
+            PasteAndTranslateButton.Content = LocalizationManager.Get("translator_paste_translate");
+            TranslateButton.Content = LocalizationManager.Get("translator_translate_btn");
+            OpenOverlayButton.Content = LocalizationManager.Get("translator_open_overlay");
         }
     }
 }

@@ -26,6 +26,7 @@ namespace GTDCompanion
 
             // Aplica traduções no menu
             SetMenuTranslations();
+            LocalizationManager.CultureChanged += () => SetMenuTranslations();
 
             // Custom barra de título: eventos de arrastar, minimizar, fechar
             var customTitleBar = this.FindControl<Border>("CustomTitleBar");

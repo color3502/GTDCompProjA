@@ -10,8 +10,8 @@
                HorizontalAlignment="Center"
                Margin="0,0,0,8"/>
         <TextBlock Text="GTD Companion" FontSize="30" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
-        <TextBlock Text="Sua central gamer para overlays, automações e integrações." FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
-        <TextBlock Text="Selecione uma funcionalidade no menu acima para começar." FontSize="16" Foreground="#cccccc" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="Slogan1Text" Text="Sua central gamer para overlays, automações e integrações." FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="Slogan2Text" Text="Selecione uma funcionalidade no menu acima para começar." FontSize="16" Foreground="#cccccc" HorizontalAlignment="Center"/>
         <TextBlock x:Name="VersionText"
                    Grid.Row="1"
                    HorizontalAlignment="Center"

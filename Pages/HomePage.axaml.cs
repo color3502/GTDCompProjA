@@ -4,6 +4,7 @@ using Avalonia.Interactivity;
 using GTDCompanion.Helpers;
 using System.Threading.Tasks;
 using System; // Needed for Progress<T>
+using System.Globalization;
 
 namespace GTDCompanion.Pages
 {
@@ -16,19 +17,24 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
 
+            LocalizationManager.CultureChanged += ApplyTranslations;
+            this.DetachedFromVisualTree += (_, __) => LocalizationManager.CultureChanged -= ApplyTranslations;
+
+            ApplyTranslations();
+
             // Pegando a versão FileVersion de forma segura
             var exePath = Process.GetCurrentProcess().MainModule?.FileName;
             if (!string.IsNullOrWhiteSpace(exePath))
             {
                 var version = FileVersionInfo.GetVersionInfo(exePath).FileVersion;
-                VersionText.Text = $"Versão {version}";
+                VersionText.Text = string.Format(LocalizationManager.Get("home_version"), version);
             }
         }
 
         public void ShowOptionalUpdate(string version, string url)
         {
             _updateUrl = url;
-            UpdateText.Text = $"Nova versão {version} disponível";
+            UpdateText.Text = string.Format(LocalizationManager.Get("home_new_version"), version);
             UpdatePanel.IsVisible = true;
         }
 
@@ -50,7 +56,7 @@ namespace GTDCompanion.Pages
                 UpdateButton.IsEnabled = false;
                 var progress = new Progress<double>(p => UpdateProgress.Text = $"{p:0}%");
                 _downloadedFile = await UpdateDownloader.DownloadAsync(_updateUrl, progress);
-                UpdateButton.Content = "Instalar Atualização";
+                UpdateButton.Content = LocalizationManager.Get("btn_install_update");
                 UpdateButton.IsEnabled = true;
             }
             catch
@@ -67,6 +73,13 @@ namespace GTDCompanion.Pages
             var psi = new ProcessStartInfo { FileName = _downloadedFile, UseShellExecute = true };
             Process.Start(psi);
             Environment.Exit(0);
+        }
+
+        private void ApplyTranslations()
+        {
+            Slogan1Text.Text = LocalizationManager.Get("home_slogan1");
+            Slogan2Text.Text = LocalizationManager.Get("home_slogan2");
+            UpdateButton.Content = LocalizationManager.Get("btn_update");
         }
     }
 }

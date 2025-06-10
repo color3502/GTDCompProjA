@@ -37,6 +37,9 @@ namespace GTDCompanion.Pages
 
             AppConfig.PopulateEnvironment();
 
+            LocalizationManager.CultureChanged += ApplyTranslations;
+            this.Closed += (_, __) => LocalizationManager.CultureChanged -= ApplyTranslations;
+
             GTDTranslatorEvents.IdiomaAlterado += OnIdiomaAlterado;
 
             OverlayCopyOnTranslateCheck.IsChecked = GTDConfigHelper.GetBool("Translator", "copy_on_translate", true);
@@ -91,6 +94,8 @@ namespace GTDCompanion.Pages
 
             _originalHeight = Height;
             this.PointerPressed += OnPointerPressedTitleBar;
+
+            ApplyTranslations();
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -179,7 +184,7 @@ namespace GTDCompanion.Pages
             string from = OverlayFromLangCombo.Text ?? "PT-BR";
             string to   = OverlayToLangCombo.Text ?? "EN";
 
-            OverlayOutputTextBox.Text = "Traduzindo...";
+            OverlayOutputTextBox.Text = LocalizationManager.Get("translator_translating");
             string translated = await TranslateAsync(text, to);
             OverlayOutputTextBox.Text = translated;
 
@@ -260,6 +265,15 @@ namespace GTDCompanion.Pages
                 var screenPos = this.PointToScreen(e.GetPosition(this));
                 Position = new PixelPoint(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y);
             }
+        }
+
+        private void ApplyTranslations()
+        {
+            TitleText.Text = LocalizationManager.Get("translator_title_overlay");
+            OverlayInputTextBox.Watermark = LocalizationManager.Get("translator_watermark");
+            OverlayCopyOnTranslateCheck.Content = LocalizationManager.Get("translator_copy");
+            OverlayPasteAndTranslateButton.Content = LocalizationManager.Get("translator_paste_translate");
+            OverlayTranslateButton.Content = LocalizationManager.Get("translator_translate_btn");
         }
 
         private const int GWL_EXSTYLE = -20;

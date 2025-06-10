@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System;
+using System.Globalization;
 
 namespace GTDCompanion.Pages
 {
@@ -18,6 +19,11 @@ namespace GTDCompanion.Pages
         {
             InitializeComponent();
             AppConfig.PopulateEnvironment();
+
+            LocalizationManager.CultureChanged += ApplyTranslations;
+            this.DetachedFromVisualTree += (_, __) => LocalizationManager.CultureChanged -= ApplyTranslations;
+
+            ApplyTranslations();
         }
 
         private async void OnVerifyClick(object? sender, RoutedEventArgs e)
@@ -25,11 +31,11 @@ namespace GTDCompanion.Pages
             var licence = LicenseBox.Text?.Trim();
             if (string.IsNullOrWhiteSpace(licence))
             {
-                StatusText.Text = "Por favor, insira o GTD ID.";
+                StatusText.Text = LocalizationManager.Get("license_enter_id");
                 return;
             }
 
-            StatusText.Text = "Verificando...";
+            StatusText.Text = LocalizationManager.Get("license_checking");
             StatusText.Foreground = Brushes.Yellow;
 
             var urlApiGtd = Environment.GetEnvironmentVariable("URL_GTD_API") ?? "";
@@ -52,13 +58,13 @@ namespace GTDCompanion.Pages
                 else
                 {
                     var errorObj = JsonSerializer.Deserialize<JsonElement>(respContent);
-                    StatusText.Text = errorObj.TryGetProperty("message", out var msg) ? msg.GetString() : "Erro desconhecido.";
+                    StatusText.Text = errorObj.TryGetProperty("message", out var msg) ? msg.GetString() : LocalizationManager.Get("license_unknown_error");
                     StatusText.Foreground = Brushes.OrangeRed;
                 }
             }
             catch (Exception ex)
             {
-                StatusText.Text = $"Erro: {ex.Message}";
+                StatusText.Text = $"{LocalizationManager.Get("error")}: {ex.Message}";
                 StatusText.Foreground = Brushes.OrangeRed;
             }
         }
@@ -81,6 +87,13 @@ namespace GTDCompanion.Pages
             {
                 return false;
             }
+        }
+
+        private void ApplyTranslations()
+        {
+            LicenseTitle.Text = LocalizationManager.Get("license_title");
+            LicenseBox.Watermark = LocalizationManager.Get("license_watermark");
+            VerifyButton.Content = LocalizationManager.Get("license_verify_btn");
         }
     }
 }

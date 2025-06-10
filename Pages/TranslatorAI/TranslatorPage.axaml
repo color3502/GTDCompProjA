@@ -4,7 +4,7 @@
   <Border Background="#222" CornerRadius="12" Padding="20">
     <StackPanel Spacing="12">
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock Text="Tradução Overlay por IA" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="TitleText" Text="Tradução Overlay por IA" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold" HorizontalAlignment="Center"/>
       </StackPanel>
       <TextBlock Text="" FontSize="22" Foreground="#FF9800"/>
       <TextBox Name="InputTextBox"
