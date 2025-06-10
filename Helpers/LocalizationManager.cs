@@ -1,10 +1,10 @@
+using Avalonia.Data;
+using Avalonia.Markup.Xaml;
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using Avalonia;
-using Avalonia.Data;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 
 namespace GTDCompanion.Helpers
 {
@@ -15,10 +15,7 @@ namespace GTDCompanion.Helpers
 
         public static event Action? LanguageChanged;
 
-        public static CultureInfo CurrentCulture
-        {
-            get => _culture;
-        }
+        public static CultureInfo CurrentCulture => _culture;
 
         public static void SetCulture(string name)
         {
@@ -40,33 +37,47 @@ namespace GTDCompanion.Helpers
         }
     }
 
-    public class LocalizedBinding : IBinding, IDisposable
-    {
-        private readonly string _key;
-        private readonly string? _default;
-        private event Action? _valueChanged;
-        public LocalizedBinding(string key, string? def)
-        {
-            _key = key;
-            _default = def;
-            LocalizationManager.LanguageChanged += OnChanged;
-        }
-        public InstancedBinding? Initiate(AvaloniaObject target, AvaloniaProperty? targetProperty, object? anchor = null, bool enableDataValidation = false)
-        {
-            return InstancedBinding.OneWay(GetValue(), _ => { _valueChanged = _; });
-        }
-        private object GetValue() => LocalizationManager.Translate(_key, _default);
-        private void OnChanged() => _valueChanged?.Invoke();
-        public void Dispose() => LocalizationManager.LanguageChanged -= OnChanged;
-    }
+    // REMOVE the old LocalizedBinding class
 
-    public class TrExtension : MarkupExtension
+    // REPLACE the old TrExtension with this implementation
+    public class TrExtension : MarkupExtension, INotifyPropertyChanged
     {
         public string Key { get; set; } = string.Empty;
         public string? Default { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        /// <summary>
+        /// The property that the UI will bind to. It always returns the current translation.
+        /// </summary>
+        public string Value => LocalizationManager.Translate(Key, Default);
+
+        public TrExtension(string key)
+        {
+            Key = key;
+        }
+
+        public TrExtension() { }
+
+        /// <summary>
+        /// Returns a binding to this extension's 'Value' property.
+        /// </summary>
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            return new LocalizedBinding(Key, Default);
+            // Subscribe to language changes to notify the UI.
+            LocalizationManager.LanguageChanged += OnLanguageChanged;
+
+            // The binding system holds a reference to this extension instance, keeping it alive.
+            return new Binding(nameof(Value)) { Source = this, Mode = BindingMode.OneWay };
+        }
+
+        /// <summary>
+        /// When the language changes, this method fires the PropertyChanged event,
+        /// telling the binding to update its value.
+        /// </summary>
+        private void OnLanguageChanged()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
         }
     }
 }
