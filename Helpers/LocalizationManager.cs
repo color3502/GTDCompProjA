@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using Avalonia;
 using Avalonia.Data;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 
@@ -50,7 +51,7 @@ namespace GTDCompanion.Helpers
             _default = def;
             LocalizationManager.LanguageChanged += OnChanged;
         }
-        public InstancedBinding? Initiate(Avalonia.AvaloniaObject target, Avalonia.AvaloniaProperty property, object? anchor, bool enableDataValidation)
+        public InstancedBinding? Initiate(AvaloniaObject target, AvaloniaProperty? targetProperty, object? anchor = null, bool enableDataValidation = false)
         {
             return InstancedBinding.OneWay(GetValue(), _ => { _valueChanged = _; });
         }
