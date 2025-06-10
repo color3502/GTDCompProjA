@@ -21,6 +21,15 @@ namespace GTDCompanion.Pages
         private readonly StreamerConfig _config;
         private readonly ObservableCollection<ChatMessage> _messages = new();
         private CancellationTokenSource? _cts;
+        
+        public void UpdateAppearance(double opacity, int fontSize)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                Opacity = opacity;
+                FontSize = fontSize;
+            });
+        }
         private bool dragging;
         private PixelPoint dragOffset;
         private bool _collapsed;
@@ -117,8 +126,28 @@ namespace GTDCompanion.Pages
             }
         }
 
+        private string NormalizeTwitchSlug(string slug)
+        {
+            slug = slug.Trim();
+            if (slug.Contains("twitch.tv", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    var uri = new Uri(slug);
+                    slug = uri.AbsolutePath.Trim('/');
+                }
+                catch { }
+            }
+            if (slug.StartsWith("@"))
+                slug = slug.Substring(1);
+            if (slug.StartsWith("#"))
+                slug = slug.Substring(1);
+            return slug;
+        }
+
         private async Task RunTwitchAsync(string slug, CancellationToken token)
         {
+            slug = NormalizeTwitchSlug(slug);
             if (string.IsNullOrWhiteSpace(slug))
             {
                 ConnectionFailed?.Invoke("Twitch");

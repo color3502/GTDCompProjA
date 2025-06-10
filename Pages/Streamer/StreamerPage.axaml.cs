@@ -51,6 +51,7 @@ namespace GTDCompanion.Pages
                 FontSize = (int)FontSizeSlider.Value
             };
             GTDConfigHelper.SaveStreamerConfig(cfg);
+            _overlay?.UpdateAppearance(cfg.OverlayOpacity, cfg.FontSize);
         }
 
         private void OpenOverlayButton_Click(object? sender, RoutedEventArgs e)
