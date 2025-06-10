@@ -24,6 +24,9 @@ namespace GTDCompanion
         {
             InitializeComponent();
 
+            // Aplica traduções no menu
+            SetMenuTranslations();
+
             // Custom barra de título: eventos de arrastar, minimizar, fechar
             var customTitleBar = this.FindControl<Border>("CustomTitleBar");
             var closeBtn = this.FindControl<Button>("CloseButton");
@@ -189,6 +192,28 @@ namespace GTDCompanion
         private void MenuAjudaSobre_Click(object? sender, RoutedEventArgs e)
         {
             MainContent.Content = new AboutPage();
+        }
+
+        private void SetMenuTranslations()
+        {
+            this.FindControl<MenuItem>("MenuInicio").Header = LocalizationManager.Get("menu_home");
+            this.FindControl<MenuItem>("MenuFuncionalidades").Header = LocalizationManager.Get("menu_features");
+            this.FindControl<MenuItem>("MenuMeuSetup").Header = LocalizationManager.Get("menu_setup");
+            this.FindControl<MenuItem>("MenuBenchmark").Header = LocalizationManager.Get("menu_benchmark");
+            this.FindControl<MenuItem>("MenuMiraOverlay").Header = LocalizationManager.Get("menu_mira_overlay");
+            this.FindControl<MenuItem>("MenuTranslatorOverlay").Header = LocalizationManager.Get("menu_translator_overlay");
+            this.FindControl<MenuItem>("MenuStickerNotes").Header = LocalizationManager.Get("menu_sticker_notes");
+            this.FindControl<MenuItem>("MenuMacroExperience").Header = LocalizationManager.Get("menu_macro_experience");
+            this.FindControl<MenuItem>("MenuWtf").Header = LocalizationManager.Get("menu_wtf");
+            this.FindControl<MenuItem>("MenuKeyboardMouseStats").Header = LocalizationManager.Get("menu_keyboard_mouse_stats");
+            this.FindControl<MenuItem>("MenuExperience").Header = LocalizationManager.Get("menu_experience");
+            this.FindControl<MenuItem>("MenuSettings").Header = LocalizationManager.Get("menu_settings");
+            this.FindControl<MenuItem>("MenuLinks").Header = LocalizationManager.Get("menu_links");
+            this.FindControl<MenuItem>("MenuDiscord").Header = LocalizationManager.Get("menu_access_discord");
+            this.FindControl<MenuItem>("MenuAGTD").Header = LocalizationManager.Get("menu_about");
+            this.FindControl<MenuItem>("MenuSupport").Header = LocalizationManager.Get("menu_support");
+            this.FindControl<MenuItem>("MenuAjuda").Header = LocalizationManager.Get("menu_help");
+            this.FindControl<MenuItem>("MenuAjudaSobre").Header = LocalizationManager.Get("menu_about_help");
         }
 
 

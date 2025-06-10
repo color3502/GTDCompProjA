@@ -42,6 +42,7 @@
     <AvaloniaResource Include="Assets\logo.png" />
     <AvaloniaResource Include="Assets\icon.ico" />
     <EmbeddedResource Include="AppConfig.json" />
+    <EmbeddedResource Include="Locales\*.json" />
     <AvaloniaResource Include=".changelog" />
 
     <Reference Include="RTSSSharedMemoryNET">

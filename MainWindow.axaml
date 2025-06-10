@@ -76,28 +76,28 @@
         </Border>
         <!-- Menu superior -->
         <Menu x:Name="MainMenuBox" DockPanel.Dock="Top" Background="#36393F" Foreground="White" >
-            <MenuItem Header="Início" Click="MenuInicio_Click"/>
-            <MenuItem Header="Funcionalidades">
-                <MenuItem Header="Meu Setup" Click="CheckMySetup_Page"/>
-                <MenuItem Header="Benchmark" Click="BenchmarkOverlayPage_Click"/>
-                <MenuItem Header="Mira Overlay" Click="MenuMira_Click"/>
-                <MenuItem Header="Tradução IA Overlay" Click="TranslatorOverlay_Click"/>
-                <MenuItem Header="Sticker Notes" Click="StickerNotesPage_Click"/>
-                <MenuItem Header="Macro Experience" Click="MacroPage_Click"/>
-            </MenuItem>            
-            <MenuItem Header="WTF?!">
-                <MenuItem Header="Estatísticas Teclado/Mouse" Click="KeyboardMouseStatsPage_Click"/>
+            <MenuItem x:Name="MenuInicio" Header="Início" Click="MenuInicio_Click"/>
+            <MenuItem x:Name="MenuFuncionalidades" Header="Funcionalidades">
+                <MenuItem x:Name="MenuMeuSetup" Header="Meu Setup" Click="CheckMySetup_Page"/>
+                <MenuItem x:Name="MenuBenchmark" Header="Benchmark" Click="BenchmarkOverlayPage_Click"/>
+                <MenuItem x:Name="MenuMiraOverlay" Header="Mira Overlay" Click="MenuMira_Click"/>
+                <MenuItem x:Name="MenuTranslatorOverlay" Header="Tradução IA Overlay" Click="TranslatorOverlay_Click"/>
+                <MenuItem x:Name="MenuStickerNotes" Header="Sticker Notes" Click="StickerNotesPage_Click"/>
+                <MenuItem x:Name="MenuMacroExperience" Header="Macro Experience" Click="MacroPage_Click"/>
             </MenuItem>
-            <MenuItem Header="Experiência">
-                <MenuItem Header="Configurações" Click="SetingsPago_Click"/>
+            <MenuItem x:Name="MenuWtf" Header="WTF?!">
+                <MenuItem x:Name="MenuKeyboardMouseStats" Header="Estatísticas Teclado/Mouse" Click="KeyboardMouseStatsPage_Click"/>
             </MenuItem>
-            <MenuItem Header="Links">
-                <MenuItem Header="Acessar Discord" Click="AcessarDiscord_Click"/>
-                <MenuItem Header="A GTD" Click="MenuSobre_Click"/>
-                <MenuItem Header="Suporte" Click="MenuSuporte_Click"/>
+            <MenuItem x:Name="MenuExperience" Header="Experiência">
+                <MenuItem x:Name="MenuSettings" Header="Configurações" Click="SetingsPago_Click"/>
             </MenuItem>
-            <MenuItem Header="Ajuda">
-                <MenuItem Header="Sobre" Click="MenuAjudaSobre_Click"/>
+            <MenuItem x:Name="MenuLinks" Header="Links">
+                <MenuItem x:Name="MenuDiscord" Header="Acessar Discord" Click="AcessarDiscord_Click"/>
+                <MenuItem x:Name="MenuAGTD" Header="A GTD" Click="MenuSobre_Click"/>
+                <MenuItem x:Name="MenuSupport" Header="Suporte" Click="MenuSuporte_Click"/>
+            </MenuItem>
+            <MenuItem x:Name="MenuAjuda" Header="Ajuda">
+                <MenuItem x:Name="MenuAjudaSobre" Header="Sobre" Click="MenuAjudaSobre_Click"/>
             </MenuItem>
         </Menu>
         <!-- Conteúdo central dinâmico -->
