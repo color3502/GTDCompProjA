@@ -27,6 +27,16 @@ namespace GTDCompanion.Helpers
             "GTDCompanion", "KnownProcesses.json");
 
         private static readonly HashSet<string> Known = new(StringComparer.OrdinalIgnoreCase);
+
+        private static readonly string[] GraphicsLibraries = new[]
+        {
+            "d3d9.dll",
+            "d3d10.dll",
+            "d3d11.dll",
+            "d3d12.dll",
+            "vulkan-1.dll",
+            "opengl32.dll"
+        };
         private static Timer? _timer;
 
         static ProcessMonitor()
@@ -80,6 +90,26 @@ namespace GTDCompanion.Helpers
             return proc.ProcessName;
         }
 
+        private static bool ProcessUsesGraphics(Process proc)
+        {
+            try
+            {
+                foreach (ProcessModule module in proc.Modules)
+                {
+                    var name = module.ModuleName;
+                    if (string.IsNullOrEmpty(name))
+                        continue;
+                    foreach (var lib in GraphicsLibraries)
+                    {
+                        if (string.Equals(name, lib, StringComparison.OrdinalIgnoreCase))
+                            return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+
         public static void Start()
         {
             if (!OperatingSystem.IsWindows())
@@ -110,6 +140,8 @@ namespace GTDCompanion.Helpers
                             continue;
                         var path = proc.MainModule?.FileName ?? string.Empty;
                         if (string.IsNullOrWhiteSpace(path))
+                            continue;
+                        if (!ProcessUsesGraphics(proc))
                             continue;
                         if (Known.Contains(path))
                             continue;
