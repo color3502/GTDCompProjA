@@ -8,6 +8,8 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+using GTDCompanion; // for GTDConfigHelper
+
 namespace GTDCompanion.Helpers
 {
     public static class ProcessMonitor
@@ -17,6 +19,7 @@ namespace GTDCompanion.Helpers
             public string ProcessName { get; set; } = string.Empty;
             public string FileName { get; set; } = string.Empty;
             public string FilePath { get; set; } = string.Empty;
+            public string? GtdId { get; set; }
         }
 
         private static readonly string KnownPath = Path.Combine(
@@ -65,6 +68,18 @@ namespace GTDCompanion.Helpers
             catch { }
         }
 
+        private static string GetDisplayName(Process proc)
+        {
+            try
+            {
+                var desc = proc.MainModule?.FileVersionInfo?.FileDescription;
+                if (!string.IsNullOrWhiteSpace(desc))
+                    return desc;
+            }
+            catch { }
+            return proc.ProcessName;
+        }
+
         public static void Start()
         {
             if (!OperatingSystem.IsWindows())
@@ -83,6 +98,8 @@ namespace GTDCompanion.Helpers
         private static void CheckProcesses()
         {
             var newList = new List<ProcInfo>();
+            var gtdIdValue = GTDConfigHelper.LoadGtdId();
+            string? gtdId = string.IsNullOrWhiteSpace(gtdIdValue) ? null : gtdIdValue;
             try
             {
                 foreach (var proc in Process.GetProcesses())
@@ -98,9 +115,10 @@ namespace GTDCompanion.Helpers
                             continue;
                         var info = new ProcInfo
                         {
-                            ProcessName = proc.ProcessName,
+                            ProcessName = GetDisplayName(proc),
                             FileName = Path.GetFileName(path),
-                            FilePath = path
+                            FilePath = path,
+                            GtdId = gtdId
                         };
                         Known.Add(path);
                         newList.Add(info);
