@@ -72,12 +72,13 @@ namespace GTDCompanion.Pages
             TimeSpan up = DateTime.Now - StatsTracker.StartTime;
             UptimeText.Text = $"Tempo de atividade: {FormatTimeSpan(up)}";
             IdleText.Text = $"Tempo ocioso: {FormatTimeSpan(s.IdleTime)}";
-            ActiveTimeText.Text = $"Ativo geral: {FormatTimeSpan(s.ActiveTime)}";
+            var totalActive = StatsTracker.GetTotalActiveTime();
+            ActiveTimeText.Text = $"Ativo geral: {FormatTimeSpan(totalActive, false)}";
             TimeSpan sinceMaint = DateTime.Now - s.LastMaintenance;
             MaintenanceText.Text = $"Desde manutenção: {FormatTimeSpan(sinceMaint)}";
         }
 
-        private static string FormatTimeSpan(TimeSpan ts)
+        private static string FormatTimeSpan(TimeSpan ts, bool showSeconds = true)
         {
             var parts = new System.Collections.Generic.List<string>();
             if (ts.Days > 0)
@@ -86,7 +87,7 @@ namespace GTDCompanion.Pages
                 parts.Add($"{ts.Hours}h");
             if (ts.Minutes > 0)
                 parts.Add($"{ts.Minutes}m");
-            if (parts.Count == 0 || ts.Seconds > 0)
+            if (showSeconds && (parts.Count == 0 || ts.Seconds > 0))
                 parts.Add($"{ts.Seconds}s");
             return string.Join(" ", parts);
         }
