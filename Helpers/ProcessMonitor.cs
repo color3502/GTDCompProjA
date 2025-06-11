@@ -110,6 +110,34 @@ namespace GTDCompanion.Helpers
             return false;
         }
 
+        private static double GetProcessGpuUsagePercent(int pid)
+        {
+            try
+            {
+                if (!PerformanceCounterCategory.Exists("GPU Engine"))
+                    return 0;
+
+                double total = 0;
+                var category = new PerformanceCounterCategory("GPU Engine");
+                foreach (var inst in category.GetInstanceNames())
+                {
+                    if (!inst.Contains($"pid_{pid}", StringComparison.OrdinalIgnoreCase))
+                        continue;
+                    try
+                    {
+                        using var pc = new PerformanceCounter("GPU Engine", "Utilization Percentage", inst);
+                        total += pc.NextValue();
+                    }
+                    catch { }
+                }
+                return total;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public static void Start()
         {
             if (!OperatingSystem.IsWindows())
@@ -138,10 +166,15 @@ namespace GTDCompanion.Helpers
                     {
                         if (proc.WorkingSet64 < 10 * 1024 * 1024)
                             continue;
+                        if (DateTime.Now - proc.StartTime < TimeSpan.FromMinutes(1))
+                            continue;
                         var path = proc.MainModule?.FileName ?? string.Empty;
                         if (string.IsNullOrWhiteSpace(path))
                             continue;
                         if (!ProcessUsesGraphics(proc))
+                            continue;
+                        var gpuUsage = GetProcessGpuUsagePercent(proc.Id);
+                        if (gpuUsage < 5)
                             continue;
                         if (Known.Contains(path))
                             continue;
