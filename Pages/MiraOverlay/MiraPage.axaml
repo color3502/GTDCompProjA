@@ -46,11 +46,11 @@
         <StackPanel Orientation="Horizontal" Spacing="22" HorizontalAlignment="Center">
             <StackPanel Width="120">
                 <TextBlock Text="Tamanho:" Foreground="White"/>
-                <Slider x:Name="TamanhoSlider" Minimum="10" Maximum="300" Value="60"/>
+                <Slider x:Name="TamanhoSlider" Minimum="2" Maximum="50" Value="60"/>
             </StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Espessura:" Foreground="White"/>
-                <Slider x:Name="EspessuraSlider" Minimum="1" Maximum="32" Value="4"/>
+                <Slider x:Name="EspessuraSlider" Minimum="1" Maximum="15" Value="4"/>
             </StackPanel>
             <StackPanel Width="120">
                 <TextBlock Text="Transparência:" Foreground="White"/>
