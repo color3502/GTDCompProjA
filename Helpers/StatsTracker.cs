@@ -69,6 +69,9 @@ namespace GTDCompanion.Helpers
         private static DateTime _lastMouseMove = DateTime.Now;
         public static DateTime StartTime { get; private set; } = DateTime.Now;
 
+        private static TimeSpan _sessionActive = TimeSpan.Zero;
+        private static TimeSpan _sessionIdle = TimeSpan.Zero;
+
         public static event Action? StatsUpdated;
 
         public static void Load()
@@ -99,6 +102,8 @@ namespace GTDCompanion.Helpers
             if (_keyboardHook != IntPtr.Zero)
                 return;
             StartTime = DateTime.Now;
+            _sessionActive = TimeSpan.Zero;
+            _sessionIdle = TimeSpan.Zero;
             _lastMouseMove = DateTime.Now;
             _keyboardProc = KeyboardHookCallback;
             _mouseProc = MouseHookCallback;
@@ -108,9 +113,15 @@ namespace GTDCompanion.Helpers
             _timer.Elapsed += (_, __) => {
                 var s = LoadStats();
                 if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(5))
+                {
                     s.IdleTime += TimeSpan.FromMinutes(1);
+                    _sessionIdle += TimeSpan.FromMinutes(1);
+                }
                 else
+                {
                     s.ActiveTime += TimeSpan.FromMinutes(1);
+                    _sessionActive += TimeSpan.FromMinutes(1);
+                }
                 SaveStats(s);
                 StatsUpdated?.Invoke();
             };
@@ -146,6 +157,24 @@ namespace GTDCompanion.Helpers
             s.LastMaintenance = DateTime.Now;
             SaveStats(s);
             StatsUpdated?.Invoke();
+        }
+
+        public static TimeSpan GetTotalActiveTime()
+        {
+            var s = LoadStats();
+            return s.ActiveTime + GetPartialActiveTime();
+        }
+
+        private static TimeSpan GetPartialActiveTime()
+        {
+            TimeSpan sessionDuration = DateTime.Now - StartTime;
+            TimeSpan recorded = _sessionActive + _sessionIdle;
+            TimeSpan partial = sessionDuration - recorded;
+            if (partial < TimeSpan.Zero)
+                partial = TimeSpan.Zero;
+            if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(5))
+                return TimeSpan.Zero;
+            return partial;
         }
 
         private static IntPtr KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
