@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using System.Threading.Tasks;
+using GTDCompanion.Helpers;
 
 namespace GTDCompanion.Pages
 {
