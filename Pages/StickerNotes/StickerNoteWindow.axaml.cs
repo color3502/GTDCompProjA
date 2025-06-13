@@ -22,6 +22,11 @@ namespace GTDCompanion.Pages
             this.index = index;
             InitializeComponent();
 
+            if (this.FindControl<Button>("CopyButton") is Button copyBtn)
+            {
+                copyBtn.Click += CopyButton_Click;
+            }
+
             lineHeight = NoteTextBox.Height / 4;
             windowOffset = Height - NoteTextBox.Height;
 
@@ -100,6 +105,12 @@ namespace GTDCompanion.Pages
                 var screenPos = this.PointToScreen(e.GetPosition(this));
                 Position = new PixelPoint(screenPos.X - dragOffset.X, screenPos.Y - dragOffset.Y);
             }
+        }
+
+        private async void CopyButton_Click(object? sender, RoutedEventArgs e)
+        {
+            if (this.Clipboard != null)
+                await this.Clipboard.SetTextAsync(NoteTextBox.Text ?? string.Empty);
         }
 
         private void UpdateWindowTitle(string text)

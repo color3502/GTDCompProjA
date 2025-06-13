@@ -7,7 +7,7 @@
             <TextBlock Text="Comportamento do GTD Companion" FontSize="24" Foreground="#FE6A0A" FontWeight="Bold"/>
             <StackPanel>
                 <TextBlock Text="Comportamento do Aplicativo" FontSize="18" Foreground="White" Margin="0,8,0,4"/>
-                <CheckBox x:Name="StartMinimizedBox" Content="Inicializar Minimizado com o Windows" IsChecked="True"/>
+                <CheckBox x:Name="StartMinimizedBox" Content="Inicializar com o Windows" IsChecked="True"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
