@@ -39,7 +39,7 @@ namespace GTDCompanion.Pages
             if (isChecked)
             {
                 var exePath = Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty;
-                key.SetValue("GTDCompanion", $"\"{exePath}\" minimized");
+                key.SetValue("GTDCompanion", $"\"{exePath}\"");
             }
             else
             {
