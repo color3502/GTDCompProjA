@@ -24,6 +24,9 @@ namespace GTDCompanion.Helpers
 
     public static class StatsTracker
     {
+        private static KeyboardMouseStats _cache = new();
+        private static System.Timers.Timer? _flushTimer;
+
         private static KeyboardMouseStats LoadStats()
         {
             try
@@ -53,7 +56,55 @@ namespace GTDCompanion.Helpers
             catch { }
         }
 
-        public static KeyboardMouseStats Stats => LoadStats();
+        private static void MergeInto(KeyboardMouseStats target, KeyboardMouseStats src)
+        {
+            target.KeyPresses += src.KeyPresses;
+            target.LeftClicks += src.LeftClicks;
+            target.RightClicks += src.RightClicks;
+            target.ScrollTicks += src.ScrollTicks;
+            target.MousePixelsMoved += src.MousePixelsMoved;
+            target.IdleTime += src.IdleTime;
+            target.ActiveTime += src.ActiveTime;
+            foreach (var kv in src.KeyCounts)
+            {
+                if (!target.KeyCounts.ContainsKey(kv.Key))
+                    target.KeyCounts[kv.Key] = 0;
+                target.KeyCounts[kv.Key] += kv.Value;
+            }
+            foreach (var kv in src.DailyClicks)
+            {
+                if (!target.DailyClicks.ContainsKey(kv.Key))
+                    target.DailyClicks[kv.Key] = 0;
+                target.DailyClicks[kv.Key] += kv.Value;
+            }
+            foreach (var kv in src.DailyKeyPresses)
+            {
+                if (!target.DailyKeyPresses.ContainsKey(kv.Key))
+                    target.DailyKeyPresses[kv.Key] = 0;
+                target.DailyKeyPresses[kv.Key] += kv.Value;
+            }
+        }
+
+        private static void ClearCache() => _cache = new KeyboardMouseStats();
+
+        private static void FlushCache()
+        {
+            var s = LoadStats();
+            MergeInto(s, _cache);
+            SaveStats(s);
+            ClearCache();
+            StatsUpdated?.Invoke();
+        }
+
+        public static KeyboardMouseStats Stats
+        {
+            get
+            {
+                var s = LoadStats();
+                MergeInto(s, _cache);
+                return s;
+            }
+        }
 
         private static readonly string StatsPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -105,28 +156,32 @@ namespace GTDCompanion.Helpers
             _sessionActive = TimeSpan.Zero;
             _sessionIdle = TimeSpan.Zero;
             _lastMouseMove = DateTime.Now;
+            ClearCache();
             _keyboardProc = KeyboardHookCallback;
             _mouseProc = MouseHookCallback;
             _keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, _keyboardProc, GetModuleHandle(null), 0);
             _mouseHook = SetWindowsHookEx(WH_MOUSE_LL, _mouseProc, GetModuleHandle(null), 0);
             _timer = new System.Timers.Timer(60000);
             _timer.Elapsed += (_, __) => {
-                var s = LoadStats();
                 if (DateTime.Now - _lastMouseMove >= TimeSpan.FromMinutes(5))
                 {
-                    s.IdleTime += TimeSpan.FromMinutes(1);
+                    _cache.IdleTime += TimeSpan.FromMinutes(1);
                     _sessionIdle += TimeSpan.FromMinutes(1);
                 }
                 else
                 {
-                    s.ActiveTime += TimeSpan.FromMinutes(1);
+                    _cache.ActiveTime += TimeSpan.FromMinutes(1);
                     _sessionActive += TimeSpan.FromMinutes(1);
                 }
-                SaveStats(s);
                 StatsUpdated?.Invoke();
             };
             _timer.AutoReset = true;
             _timer.Start();
+
+            _flushTimer = new System.Timers.Timer(TimeSpan.FromMinutes(10).TotalMilliseconds);
+            _flushTimer.Elapsed += (_, __) => FlushCache();
+            _flushTimer.AutoReset = true;
+            _flushTimer.Start();
         }
 
         public static void Stop()
@@ -149,6 +204,13 @@ namespace GTDCompanion.Helpers
                 _timer.Dispose();
                 _timer = null;
             }
+            if (_flushTimer != null)
+            {
+                _flushTimer.Stop();
+                _flushTimer.Dispose();
+                _flushTimer = null;
+            }
+            FlushCache();
         }
 
         public static void ResetMaintenance()
@@ -161,7 +223,7 @@ namespace GTDCompanion.Helpers
 
         public static TimeSpan GetTotalActiveTime()
         {
-            var s = LoadStats();
+            var s = Stats;
             return s.ActiveTime + GetPartialActiveTime();
         }
 
@@ -182,14 +244,12 @@ namespace GTDCompanion.Helpers
             const int WM_KEYUP = 0x0101;
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYUP)
             {
-                var s = LoadStats();
                 var info = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
-                s.KeyPresses++;
-                if (!s.KeyCounts.ContainsKey(info.vkCode))
-                    s.KeyCounts[info.vkCode] = 0;
-                s.KeyCounts[info.vkCode]++;
-                IncrementDailyKeyPresses(s);
-                SaveStats(s);
+                _cache.KeyPresses++;
+                if (!_cache.KeyCounts.ContainsKey(info.vkCode))
+                    _cache.KeyCounts[info.vkCode] = 0;
+                _cache.KeyCounts[info.vkCode]++;
+                IncrementDailyKeyPresses(_cache);
                 StatsUpdated?.Invoke();
             }
             return CallNextHookEx(_keyboardHook, nCode, wParam, lParam);
@@ -199,23 +259,22 @@ namespace GTDCompanion.Helpers
         {
             if (nCode >= 0)
             {
-                var s = LoadStats();
                 switch ((int)wParam)
                 {
                     case WM_LBUTTONDOWN:
-                        s.LeftClicks++;
-                        IncrementDailyClicks(s);
+                        _cache.LeftClicks++;
+                        IncrementDailyClicks(_cache);
                         _lastMouseMove = DateTime.Now;
                         break;
                     case WM_RBUTTONDOWN:
-                        s.RightClicks++;
-                        IncrementDailyClicks(s);
+                        _cache.RightClicks++;
+                        IncrementDailyClicks(_cache);
                         _lastMouseMove = DateTime.Now;
                         break;
                     case WM_MOUSEWHEEL:
                         var m = Marshal.PtrToStructure<MSLLHOOKSTRUCT>(lParam);
                         int delta = (short)((m.mouseData >> 16) & 0xffff);
-                        s.ScrollTicks += Math.Abs(delta) / 120;
+                        _cache.ScrollTicks += Math.Abs(delta) / 120;
                         _lastMouseMove = DateTime.Now;
                         break;
                     case WM_MOUSEMOVE:
@@ -225,14 +284,13 @@ namespace GTDCompanion.Helpers
                             int dx = mm.pt.x - _lastPoint.x;
                             int dy = mm.pt.y - _lastPoint.y;
                             double dist = Math.Sqrt(dx * dx + dy * dy);
-                            s.MousePixelsMoved += dist;
+                            _cache.MousePixelsMoved += dist;
                         }
                         _lastPoint = mm.pt;
                         _hasLastPoint = true;
                         _lastMouseMove = DateTime.Now;
                         break;
                 }
-                SaveStats(s);
                 StatsUpdated?.Invoke();
             }
             return CallNextHookEx(_mouseHook, nCode, wParam, lParam);
