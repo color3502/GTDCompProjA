@@ -17,6 +17,8 @@ namespace GTDCompanion.Pages
         private readonly double lineHeight;
         private readonly double windowOffset;
 
+        private TextBlock? titleBlock;
+
         public StickerNoteWindow(int index)
         {
             this.index = index;
@@ -27,12 +29,19 @@ namespace GTDCompanion.Pages
                 copyBtn.Click += CopyButton_Click;
             }
 
+            if (this.FindControl<Button>("CloseButton") is Button closeBtn)
+            {
+                closeBtn.Click += (_, __) => this.Close();
+            }
+
+            titleBlock = this.FindControl<TextBlock>("TitleText");
+
             lineHeight = NoteTextBox.Height / 4;
             windowOffset = Height - NoteTextBox.Height;
 
             var cfg = StickerNoteStorage.Load(index);
             NoteTextBox.Text = cfg.Text;
-            UpdateWindowTitle(cfg.Text);
+            SetTitle(string.IsNullOrWhiteSpace(cfg.Title) ? $"Nota {index}" : cfg.Title);
             Opacity = cfg.Opacity;
             TransparencySlider.Value = cfg.Opacity;
             if (cfg.PosX >= 0 && cfg.PosY >= 0)
@@ -52,7 +61,6 @@ namespace GTDCompanion.Pages
             NoteTextBox.GetObservable(TextBox.TextProperty).Subscribe(text =>
             {
                 SaveConfig();
-                UpdateWindowTitle(text ?? string.Empty);
                 AdjustSize(text ?? string.Empty);
             });
 
@@ -75,7 +83,8 @@ namespace GTDCompanion.Pages
                 Text = NoteTextBox.Text ?? string.Empty,
                 Opacity = Opacity,
                 PosX = Position.X,
-                PosY = Position.Y
+                PosY = Position.Y,
+                Title = titleBlock?.Text ?? string.Empty
             };
             StickerNoteStorage.Save(index, data);
         }
@@ -113,12 +122,11 @@ namespace GTDCompanion.Pages
                 await this.Clipboard.SetTextAsync(NoteTextBox.Text ?? string.Empty);
         }
 
-        private void UpdateWindowTitle(string text)
+        public void SetTitle(string title)
         {
-            var sanitized = text.Replace("\n", " ").Replace("\r", " ");
-            if (sanitized.Length > 20)
-                sanitized = sanitized.Substring(0, 20);
-            Title = sanitized;
+            titleBlock!.Text = title;
+            Title = title;
+            SaveConfig();
         }
 
         private void CustomTitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -163,11 +171,4 @@ namespace GTDCompanion.Pages
         }
     }
 
-    public class StickerNoteConfig
-    {
-        public string Text { get; set; } = string.Empty;
-        public double Opacity { get; set; } = 0.9;
-        public int PosX { get; set; } = -1;
-        public int PosY { get; set; } = -1;
-    }
 }

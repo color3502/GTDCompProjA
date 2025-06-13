@@ -11,8 +11,11 @@
   <Border CornerRadius="12" Background="#DD23272A" Padding="10,7,10,10">
     <StackPanel Spacing="6">
       <DockPanel Margin="0,0,0,5"  VerticalAlignment="Center" Name="CustomTitleBar" Height="30" HorizontalAlignment="Stretch" PointerPressed="CustomTitleBar_PointerPressed">
-        <TextBlock Text="Sticker Note" Foreground="#FF9800" FontSize="14" VerticalAlignment="Center" DockPanel.Dock="Left"/>
-        <Button Name="CopyButton" Content="⧉" Background="#333" Foreground="White" HorizontalAlignment="Right" DockPanel.Dock="Right"/>
+        <TextBlock Name="TitleText" Text="Sticker Note" Foreground="#FF9800" FontSize="14" VerticalAlignment="Center" DockPanel.Dock="Left"/>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+          <Button Name="CloseButton" Content="X" Background="#600" Foreground="White" Margin="0,0,4,0"/>
+          <Button Name="CopyButton" Content="⧉" Background="#333" Foreground="White"/>
+        </StackPanel>
       </DockPanel>
       <TextBox Name="NoteTextBox" AcceptsReturn="True" TextWrapping="Wrap" Height="100" Background="#333" Foreground="White"/>
       <Slider Name="TransparencySlider" Minimum="0.3" Maximum="1" Value="0.9"/>

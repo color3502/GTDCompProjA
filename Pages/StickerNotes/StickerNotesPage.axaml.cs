@@ -1,13 +1,14 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using System.Threading.Tasks;
 
 namespace GTDCompanion.Pages
 {
     public partial class StickerNotesPage : UserControl
     {
-        private static readonly StickerNoteWindow?[] windows = new StickerNoteWindow?[5];
-        private readonly IBrush?[] defaultBackgrounds = new IBrush?[5];
+        private static readonly StickerNoteWindow?[] windows = new StickerNoteWindow?[10];
+        private readonly IBrush?[] defaultBackgrounds = new IBrush?[10];
         private readonly IBrush openBrush = new SolidColorBrush(Color.Parse("#FE6A0A"));
 
         private void UpdateButtonStates()
@@ -22,16 +23,26 @@ namespace GTDCompanion.Pages
         public StickerNotesPage()
         {
             InitializeComponent();
-            defaultBackgrounds[0] = Note1Button.Background;
-            defaultBackgrounds[1] = Note2Button.Background;
-            defaultBackgrounds[2] = Note3Button.Background;
-            defaultBackgrounds[3] = Note4Button.Background;
-            defaultBackgrounds[4] = Note5Button.Background;
-            Note1Button.Click += (_, __) => ToggleWindow(0);
-            Note2Button.Click += (_, __) => ToggleWindow(1);
-            Note3Button.Click += (_, __) => ToggleWindow(2);
-            Note4Button.Click += (_, __) => ToggleWindow(3);
-            Note5Button.Click += (_, __) => ToggleWindow(4);
+            var buttons = new Button[]
+            {
+                Note1Button, Note2Button, Note3Button, Note4Button, Note5Button,
+                Note6Button, Note7Button, Note8Button, Note9Button, Note10Button
+            };
+            var configButtons = new Button[]
+            {
+                Config1Button, Config2Button, Config3Button, Config4Button, Config5Button,
+                Config6Button, Config7Button, Config8Button, Config9Button, Config10Button
+            };
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                int idx = i;
+                defaultBackgrounds[i] = buttons[i].Background;
+                buttons[i].Click += (_, __) => ToggleWindow(idx);
+                var data = StickerNoteStorage.Load(idx + 1);
+                buttons[i].Content = string.IsNullOrWhiteSpace(data.Title) ? $"Nota {idx + 1}" : data.Title;
+                configButtons[i].Click += async (_, __) => await OpenConfig(idx);
+            }
 
             UpdateButtonStates();
         }
@@ -42,7 +53,12 @@ namespace GTDCompanion.Pages
             1 => Note2Button,
             2 => Note3Button,
             3 => Note4Button,
-            _ => Note5Button,
+            4 => Note5Button,
+            5 => Note6Button,
+            6 => Note7Button,
+            7 => Note8Button,
+            8 => Note9Button,
+            _ => Note10Button,
         };
 
         private void ToggleWindow(int idx)
@@ -65,6 +81,29 @@ namespace GTDCompanion.Pages
             }
 
             UpdateButtonStates();
+        }
+
+        private async Task OpenConfig(int idx)
+        {
+            var data = StickerNoteStorage.Load(idx + 1);
+            var dlg = new NoteNameDialog(string.IsNullOrWhiteSpace(data.Title) ? $"Nota {idx + 1}" : data.Title);
+            await dlg.ShowDialog((Window)VisualRoot!);
+
+            if (dlg.IsCleared)
+            {
+                data.Title = string.Empty;
+                data.Text = string.Empty;
+                StickerNoteStorage.Save(idx + 1, data);
+                GetButton(idx).Content = $"Nota {idx + 1}";
+                windows[idx]?.SetTitle($"Nota {idx + 1}");
+            }
+            else if (dlg.ResultName != null)
+            {
+                data.Title = dlg.ResultName;
+                StickerNoteStorage.Save(idx + 1, data);
+                GetButton(idx).Content = string.IsNullOrWhiteSpace(data.Title) ? $"Nota {idx + 1}" : data.Title;
+                windows[idx]?.SetTitle(string.IsNullOrWhiteSpace(data.Title) ? $"Nota {idx + 1}" : data.Title);
+            }
         }
     }
 }
