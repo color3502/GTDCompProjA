@@ -8,30 +8,30 @@
       </StackPanel>
       <TextBlock Text="Crie notas rápidas que ficam sobre todas as janelas." Foreground="#CCC" HorizontalAlignment="Center"/>
       <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-        <Button Name="Note1Button" Content="Nota 1" Width="90" Height="30" Margin="4" Grid.Row="0" Grid.Column="0"/>
-        <Button Name="Config1Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="0" Grid.Column="1"/>
-        <Button Name="Note6Button" Content="Nota 6" Width="90" Height="30" Margin="4" Grid.Row="0" Grid.Column="2"/>
-        <Button Name="Config6Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="0" Grid.Column="3"/>
+        <Button Name="Note1Button" Content="Nota 1" Width="160" Height="30" Margin="4" Grid.Row="0" Grid.Column="0"/>
+        <Button Name="Config1Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="0" Grid.Column="1"/>
+        <Button Name="Note6Button" Content="Nota 6" Width="160" Height="30" Margin="4" Grid.Row="0" Grid.Column="2"/>
+        <Button Name="Config6Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="0" Grid.Column="3"/>
 
-        <Button Name="Note2Button" Content="Nota 2" Width="90" Height="30" Margin="4" Grid.Row="1" Grid.Column="0"/>
-        <Button Name="Config2Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="1" Grid.Column="1"/>
-        <Button Name="Note7Button" Content="Nota 7" Width="90" Height="30" Margin="4" Grid.Row="1" Grid.Column="2"/>
-        <Button Name="Config7Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="1" Grid.Column="3"/>
+        <Button Name="Note2Button" Content="Nota 2" Width="160" Height="30" Margin="4" Grid.Row="1" Grid.Column="0"/>
+        <Button Name="Config2Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="1" Grid.Column="1"/>
+        <Button Name="Note7Button" Content="Nota 7" Width="160" Height="30" Margin="4" Grid.Row="1" Grid.Column="2"/>
+        <Button Name="Config7Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="1" Grid.Column="3"/>
 
-        <Button Name="Note3Button" Content="Nota 3" Width="90" Height="30" Margin="4" Grid.Row="2" Grid.Column="0"/>
-        <Button Name="Config3Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="2" Grid.Column="1"/>
-        <Button Name="Note8Button" Content="Nota 8" Width="90" Height="30" Margin="4" Grid.Row="2" Grid.Column="2"/>
-        <Button Name="Config8Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="2" Grid.Column="3"/>
+        <Button Name="Note3Button" Content="Nota 3" Width="160" Height="30" Margin="4" Grid.Row="2" Grid.Column="0"/>
+        <Button Name="Config3Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="2" Grid.Column="1"/>
+        <Button Name="Note8Button" Content="Nota 8" Width="160" Height="30" Margin="4" Grid.Row="2" Grid.Column="2"/>
+        <Button Name="Config8Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="2" Grid.Column="3"/>
 
-        <Button Name="Note4Button" Content="Nota 4" Width="90" Height="30" Margin="4" Grid.Row="3" Grid.Column="0"/>
-        <Button Name="Config4Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="3" Grid.Column="1"/>
-        <Button Name="Note9Button" Content="Nota 9" Width="90" Height="30" Margin="4" Grid.Row="3" Grid.Column="2"/>
-        <Button Name="Config9Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="3" Grid.Column="3"/>
+        <Button Name="Note4Button" Content="Nota 4" Width="160" Height="30" Margin="4" Grid.Row="3" Grid.Column="0"/>
+        <Button Name="Config4Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="3" Grid.Column="1"/>
+        <Button Name="Note9Button" Content="Nota 9" Width="160" Height="30" Margin="4" Grid.Row="3" Grid.Column="2"/>
+        <Button Name="Config9Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="3" Grid.Column="3"/>
 
-        <Button Name="Note5Button" Content="Nota 5" Width="90" Height="30" Margin="4" Grid.Row="4" Grid.Column="0"/>
-        <Button Name="Config5Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="4" Grid.Column="1"/>
-        <Button Name="Note10Button" Content="Nota 10" Width="90" Height="30" Margin="4" Grid.Row="4" Grid.Column="2"/>
-        <Button Name="Config10Button" Content="⚙" Width="30" Height="30" Margin="4" Grid.Row="4" Grid.Column="3"/>
+        <Button Name="Note5Button" Content="Nota 5" Width="160" Height="30" Margin="4" Grid.Row="4" Grid.Column="0"/>
+        <Button Name="Config5Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="4" Grid.Column="1"/>
+        <Button Name="Note10Button" Content="Nota 10" Width="160" Height="30" Margin="4" Grid.Row="4" Grid.Column="2"/>
+        <Button Name="Config10Button" Content="⚙" Width="35" Height="30" Margin="4" Grid.Row="4" Grid.Column="3"/>
       </Grid>
     </StackPanel>
   </Border>
